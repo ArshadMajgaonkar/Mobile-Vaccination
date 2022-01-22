@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Mobile Vaccination</title>
+</head>
+<body>
+
+    <form method="post" th:if="${!showOtpForm}" th:object="${accountInstance}" th:action="@{/generate-otp}" >
+        <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number"
+               th:value="${accountInstance.mobileNumber}"/>
+        <input type="submit" id="get-otp" name="submit" value="Get Otp">
+    </form>
+
+    <div th:if="${showOtpForm}">
+        <p th:text="${'Mobile Number: ' + accountInstance.mobileNumber}"></p>
+
+        <form method="post" th:object="${accountInstance}" th:action="@{/user/login}" >
+            <input type="hidden" name="mobileNumber" th:value="${accountInstance.mobileNumber}" />
+            <input type="text" name="otp" th:value="${accountInstance.otp}" placeholder="otp" />
+            <input type="submit" id="submit"  name="submit" value="Submit" />
+        </form>
+    </div>
+
+</body>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+        $('#get-otp').click( function() {
+            $.ajax({
+                url: '/get-otp',
+                type: 'POST',
+                data: {
+                    mobileNumber: $('mobileNumber').val(),
+                }
+                success: function showOtpSentMessage() {
+                    alert('OTP sent on your mobile number!');
+                }
+            });
+        });
+    </script>-->
+</html>
