@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class GeneralUserDetailService implements UserDetailsService {
     @Autowired
@@ -22,4 +24,16 @@ public class GeneralUserDetailService implements UserDetailsService {
         }
         return new GeneralUserDetails(account);
     }
+
+    public void updateLastLogin(Account account) {
+        account.setLastLogin(account.getCurrentLogin());
+        account.setCurrentLogin(new Date());
+        accountRepository.save(account);
+    }
+
+    public void updateOtp(Account account) {
+        account.setOtpGeneratedAt(new Date());
+        accountRepository.save(account);
+    }
+
 }

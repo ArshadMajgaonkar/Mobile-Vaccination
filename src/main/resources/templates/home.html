@@ -5,8 +5,12 @@
     <title>Home</title>
 </head>
 <body>
+    <div th:insert="fragments/header::header"></div>
+
     <h1>Home Page</h1>
     <a th:href="@{/user/login}">Log In</a></br>
     <a th:href="@{/staff/login}">Staff Log In</a>
+
+    <div th:insert="fragments/footer::footer"></div>
 </body>
 </html>

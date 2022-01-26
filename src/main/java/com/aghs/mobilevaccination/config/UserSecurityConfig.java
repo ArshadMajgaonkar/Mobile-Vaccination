@@ -78,6 +78,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("mobileNumber")
                 .passwordParameter("otp").permitAll()
                 .failureForwardUrl("/user/login").permitAll()
+                .successForwardUrl("/user/login").permitAll()
                 .defaultSuccessUrl("/user/dashboard")
                 // logout processing
                 .and()
