@@ -1,28 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login | Mobile Vaccination</title>
 </head>
 <body>
 
-    <form method="post" th:if="${!showOtpForm}" th:object="${accountInstance}" th:action="@{/generate-otp}" >
-        <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number"
-               th:value="${accountInstance.mobileNumber}"/>
-        <input type="submit" id="get-otp" name="submit" value="Get Otp">
-    </form>
+    <div layout:fragment="content">
 
-    <div th:if="${showOtpForm}">
-        <p th:text="${'Mobile Number: ' + accountInstance.mobileNumber}"></p>
-
-        <form method="post" th:object="${accountInstance}" th:action="@{/user/login}" >
-            <input type="hidden" name="mobileNumber" th:value="${accountInstance.mobileNumber}" />
-            <input type="text" name="otp" th:value="${accountInstance.otp}" placeholder="otp" />
-            <input type="submit" id="submit"  name="submit" value="Submit" />
+        <form method="post" th:if="${!showOtpForm}" th:object="${accountInstance}" th:action="@{/generate-otp}" >
+            <input type="text" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number"
+                   th:value="${accountInstance.mobileNumber}"/>
+            <input type="submit" id="get-otp" name="submit" value="Get Otp">
         </form>
-    </div>
 
-    <div th:insert="fragments/footer::footer"></div>
+        <div th:if="${showOtpForm}">
+            <p th:text="${'Mobile Number: ' + accountInstance.mobileNumber}"></p>
+
+            <form method="post" th:object="${accountInstance}" th:action="@{/user/login}" >
+                <input type="hidden" name="mobileNumber" th:value="${accountInstance.mobileNumber}" />
+                <input type="text" name="otp" th:value="${accountInstance.otp}" placeholder="otp" />
+                <input type="submit" id="submit"  name="submit" value="Submit" />
+            </form>
+        </div>
+
+    </div>
 
 </body>
 

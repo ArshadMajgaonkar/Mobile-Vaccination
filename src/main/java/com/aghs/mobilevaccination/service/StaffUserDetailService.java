@@ -3,11 +3,12 @@ package com.aghs.mobilevaccination.service;
 import com.aghs.mobilevaccination.auth.StaffDetails;
 import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.repository.StaffRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class StaffUserDetailService implements UserDetailsService {
@@ -25,5 +26,11 @@ public class StaffUserDetailService implements UserDetailsService {
         }
         System.out.println("Staff fetched in Service: " + staff.getUsername());
         return new StaffDetails(staff);
+    }
+
+    public Staff updateCurrentAndLastLogin(Staff staff) {
+        staff.setLastLogin(staff.getCurrentLogin());
+        staff.setCurrentLogin(new Date());
+        return staffRepository.save(staff);
     }
 }

@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Staff Login</title>
 </head>
 <body>
-    <form method="post" th:object="${staffInstance}" th:action="@{/staff/login}">
-        <input type="text" id="username" name="username" placeholder="Username" th:value="${staffInstance.username}"/>
-        <br/>
-        <input type="password" id="password" name="password" placeholder="Password" th:value="${staffInstance.password}" />
-        <br/>
-        <input type="submit" name="submit" value="Submit" />
-    </form>
+
+    <div layout:fragment="content">
+
+        <form method="post" th:object="${staffInstance}" th:action="@{/staff/process-login}">
+            <input type="text" id="username" name="username" placeholder="Username" th:value="${staffInstance.username}"/>
+            <br/>
+            <input type="password" id="password" name="password" placeholder="Password" th:value="${staffInstance.password}" />
+            <br/>
+            <input type="submit" name="submit" value="Submit" />
+        </form>
+
+    </div>
+
 </body>
 </html>

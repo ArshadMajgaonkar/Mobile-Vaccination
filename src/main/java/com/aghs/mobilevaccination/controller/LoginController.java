@@ -5,6 +5,7 @@ import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.repository.AccountRepository;
 import com.aghs.mobilevaccination.data.repository.StaffRepository;
 import com.aghs.mobilevaccination.service.GeneralUserDetailService;
+import com.aghs.mobilevaccination.service.StaffUserDetailService;
 import com.aghs.mobilevaccination.service.TwilioMessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,8 @@ public class LoginController {
     private TwilioMessagingService messagingService;
     @Autowired
     private GeneralUserDetailService generalUserService;
+    @Autowired
+    private StaffUserDetailService staffService;
 
     @GetMapping("/")
     public String homePage() {
@@ -70,15 +73,15 @@ public class LoginController {
                 System.out.println("Creating Account: " + account.getMobileNumber());
             }
             fetchedAccount.generateOtp();
-            String errorMessage = messagingService.sendOtpMessage(fetchedAccount.getMobileNumber(), fetchedAccount.getOtp());
+            /*String errorMessage = messagingService.sendOtpMessage(fetchedAccount.getMobileNumber(), fetchedAccount.getOtp());
             if(errorMessage != null)
                 messages.add(errorMessage);
-            else {                                                               // Saves OTP in the database
+            else {*/                                                               // Saves OTP in the database
                 generalUserService.updateOtp(fetchedAccount);
                 model.addAttribute("showOtpForm", true);
                 messages.add("OTP sent successfully");
                 System.out.println("OTP: " + fetchedAccount.getOtp());
-            }
+            //}
         }
         else {
             messages.add("Mobile Number cannot be empty.");
@@ -92,14 +95,16 @@ public class LoginController {
         return "staff-login";
     }
 
-    @PostMapping("/staff/login")
+    @PostMapping("/staff/process-login")
     public String staffLogin(Model model, @ModelAttribute("staffInstance") Staff staff) {
         Staff fetchedStaff = staffRepository.findByUsername(staff.getUsername());
         if(fetchedStaff != null){
             //TODO: handle success login && update login time
             System.out.println("Account exists. Username=" + fetchedStaff.getUsername());
+            fetchedStaff = staffService.updateCurrentAndLastLogin(fetchedStaff);
             model.addAttribute("staffInstance", staff);
-            //return "redirect:/staff/dashboard";
+            System.out.println("Current & Last login updated");
+            return "redirect:/staff/dashboard";
         }
         return "staff-login";
     }

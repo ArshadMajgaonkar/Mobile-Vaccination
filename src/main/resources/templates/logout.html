@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login | Mobile Vaccination</title>
 </head>
 <body>
-    <h3>You have been logged out successfully.</h3>
-    <a th:href="@{/}">Back to Home</a>
+    <div layout:fragment="content">
+        <h3>You have been logged out successfully.</h3>
+        <a th:href="@{/}">Back to Home</a>
+    </div>
 </body>
 </html>

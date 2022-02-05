@@ -65,7 +65,8 @@ public class StaffSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/staff/login").permitAll()
-                .defaultSuccessUrl("/staff/dashboard")
+                .loginProcessingUrl("/staff/process-login").permitAll()
+                //.defaultSuccessUrl("/staff/dashboard")
                 // logout processing
                 .and()
                 .logout()
