@@ -37,7 +37,7 @@ public class Account {
 
     private static final String COUNTRY_CODE = "+91";
     private static final int OTP_LENGTH = 6;
-    private static final int OTP_EXPIRE_IN_MIN = 2;
+    private static final int OTP_EXPIRE_IN_MIN = 10;
 
     public Account() {
     }
@@ -109,6 +109,8 @@ public class Account {
         if(!mobileNumber.startsWith("+91"))
             mobileNumber = COUNTRY_CODE + mobileNumber;
     }
+
+
 
     public void generateOtp() {
         StringBuilder otp = new StringBuilder();

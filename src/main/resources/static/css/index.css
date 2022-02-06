@@ -5,7 +5,7 @@
     display: none;
     /* background-image: linear-gradient(to right, rgba(255,0,0,0), #548CFF); */
     /* background-image:linear-gradient(orange, white, green); */
-    background-image: url('../img/p4.jpg');
+    background-image: url('/img/p4.jpg');
     padding-top: 30vh;
     /* background-repeat: no-repeat; */
     /* background-attachment: fixed; */

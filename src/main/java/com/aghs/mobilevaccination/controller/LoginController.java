@@ -36,7 +36,7 @@ public class LoginController {
     @GetMapping("/user/login")
     public String getUserLoginPage(Model model) {
         model.addAttribute("showOtpForm", false);
-        return "user-login";
+        return "index";
     }
 
     @PostMapping("/user/process-login")
@@ -45,7 +45,7 @@ public class LoginController {
         model.addAttribute("messages", messages);
         model.addAttribute("accountInstance", account);
         model.addAttribute("showOtpForm", false);
-        Account fetchedAccount = accountRepository.findByMobileNumber(account.getMobileNumber());
+        Account fetchedAccount = accountRepository.findByMobileNumber("+91"+account.getMobileNumber());
         if(fetchedAccount == null)
             messages.add("No account exist with " + account.getMobileNumber());
         else if( !account.isOtpValid()) {
@@ -59,7 +59,7 @@ public class LoginController {
             generalUserService.updateLastLogin(fetchedAccount);
             return "redirect:/user/dashboard";
         }
-        return "user-login";
+        return "index";
     }
 
     @PostMapping("/generate-otp")
@@ -68,8 +68,8 @@ public class LoginController {
         model.addAttribute("messages", messages);
         model.addAttribute("accountInstance", account);
         if(account.isMobileNumberValid()) {
-            account.addCountryCodeToMobileNumberIfNotPresent();
-            Account fetchedAccount = accountRepository.findByMobileNumber(account.getMobileNumber());
+            //account.addCountryCodeToMobileNumberIfNotPresent();
+            Account fetchedAccount = accountRepository.findByMobileNumber("+91"+account.getMobileNumber());
             if(fetchedAccount == null){
                 // account.setOtp("4567");
                 fetchedAccount = accountRepository.save(account);
@@ -91,7 +91,7 @@ public class LoginController {
             messages.add("Mobile Number cannot be empty.");
             model.addAttribute("showOtpForm", false);
         }
-        return "user-login";
+        return "index";
     }
 
     @GetMapping("/staff/login")

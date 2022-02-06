@@ -10,12 +10,13 @@ lang="en">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="/css/index.css">
     <title>Hello, world!</title>
     
   </head>
   <body>
     <div class="row m-0 p-0" layout:fragment="content">
+
         <div class="d-none d-md-block box1 col-md-6 ">
             <div class="d-flex flex-column align-items-center">
               <!-- <h5 class="text-uppercase">Links</h5>
@@ -36,21 +37,24 @@ lang="en">
           </ul> -->
             </div>
         </div>
-        
-        <div class="container box2 col-10 col-md-6">
+
+        <!--Mobile Number Form-->
+        <div class="container box2 col-10 col-md-6" th:if="${!showOtpForm}">
             <div class="d-flex justify-content-center align-items-center login-container">
-                <form class="login-form text-center " method="post" action="">
-                    <h3 style="color:whsite;" style="font-family:verdana;" 
+                <form class="login-form text-center " method="post"
+                      th:action="@{/generate-otp}" th:object="${accountInstance}">
+                    <h3 style="color:white; font-family:verdana;"
                     class="mb-3 font-weight-light text-muted">Mobile Vaccination</h3>
-                    <h1 style="color:whsite;" style="font-family:verdana;" 
+                    <h1 style="color:white; font-family:verdana;"
                     class="mb-4 font-weight-light text-uppercase">Login</h1>
                     <div class="form-group">
                       <div class="input-group mb-2">
                         <div class="input-group-prepend">
                           <div class="input-group-text rounded-pill">+91</div>
                         </div>
-                          <input type="number" class="form-control rounded-pill  form-control-lg" name="contactNo" 
-                          placeholder="Enter mobile number" required>
+                          <input type="number" class="form-control rounded-pill  form-control-lg" name="mobileNumber"
+                                 placeholder="Enter mobile number" maxlength="10" required
+                                 th:value="${accountInstance.mobileNumber}">
                       </div>  
                     </div>
                       
@@ -61,17 +65,59 @@ lang="en">
 
                     <div class="form-group">
                       <button type="submit" name="submitbtn" value="submit" 
-                      class="btn mt-5 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Log in</button>
-                      <p class="text-muted m-2">OR</p>
-                      <a href="register.html" class="form-control form-control-lg text-uppercase rounded-pill">Register</a>
+                      class="btn mt-5 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Get OTP</button>
                   </div>
-                    
-                    
                 </form>
             </div>
-            
-            
         </div>
+
+        <!--OTP form-->
+        <div class="container box2 col-10 col-md-6" th:if="${showOtpForm}">
+            <div class="d-flex justify-content-center align-items-center login-container">
+                <form class="login-form text-center " method="post"
+                      th:action="@{/user/process-login}" th:object="${accountInstance}">
+                    <h3 style="color:whsite; font-family:verdana;"
+                        class="mb-3 font-weight-light text-muted">Mobile Vaccination</h3>
+                    <h1 style="color:whsite; font-family:verdana;"
+                        class="mb-4 font-weight-light text-uppercase">Login</h1>
+
+                    <!--Mobile Number disabled input-->
+                    <div class="form-group">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text rounded-pill">+91</div>
+                            </div>
+                            <input type="number" class="form-control rounded-pill  form-control-lg" name="mobileNumber"
+                                   placeholder="Enter mobile number" readonly th:value="${accountInstance.mobileNumber}">
+                        </div>
+                    </div>
+
+                    <!--OTP field-->
+                    <div class="form-group">
+                        <div class="input-group mb-2">
+                            <input type="number" class="form-control rounded-pill  form-control-lg" name="otp"
+                                   placeholder="Enter otp" required th:value="${accountInstance.otp}">
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group">
+                        <input type="password" class="form-control rounded-pill form-control-lg" name="password"
+                         placeholder="Password" required>
+                    </div> -->
+
+                    <!--TODO: Add message about otp is valid for 10 mins-->
+                    <!--TODO: Add Resend OTP Button with counter-->
+
+                    <div class="form-group">
+                        <button type="submit" name="submitbtn" value="submit"
+                                class="btn mt-5 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Log in</button>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
     </div>
 
     <!-- Optional JavaScript -->
