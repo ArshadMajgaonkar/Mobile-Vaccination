@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+
+.box1{
+    height: 100vh;
+    display: none;
+    /* background-image: linear-gradient(to right, rgba(255,0,0,0), #548CFF); */
+    /* background-image:linear-gradient(orange, white, green); */
+    background-image: url('../img/p4.jpg');
+    padding-top: 30vh;
+    /* background-repeat: no-repeat; */
+    /* background-attachment: fixed; */
+    /* background-image: url('https://source.unsplash.com/WEQbe2jBg40/600x1200'); */
+  background-size: cover;
+  background-position: center;
+  border-radius: 100px 0px 100px 0px;
+}
+
+.login-box{
+    /* margin-bottom: auto;
+    margin-top: 200px; */
+    background-color: brown;
+    display: block;
+}
+
+
+
+body{
+  font-family: 'Poppins',sans-serif;
+  font-size: 16px;
+  /* background-image: url('../img/bg2.jpg'); */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+.login-container{
+  height: 100vh;
+  width: 100%;
+}
+.login-form{
+  margin: auto;
+  width: 370px;
+  padding: 30px;
+  max-width: 100%;
+  background-color: whitesmoke;
+  box-shadow: 5px 5px 5px 5px #888888;
+  border-radius: 50px;
+}
+.login-form .form-control{
+  font-size: 15px;
+  min-height: 48px;
+  font-weight: 500;
+}
+.login-form a{
+  text-decoration: none;
+  color:#666;
+}
+.login-form a:hover{
+  color:#8B4513;
+}
+.forgot-link{
+  font-size: 13px;
+}
+
+.rounded-pill{
+  border-radius: 20px;
+}
+.form-control:focus{
+  border-color:#8B4513;
+  box-shadow: 0 0 0 0.2rem rgba(114,61,190,.25);
+}
+.btn-custom{
+  /* background: #8B4513; */
+  background-color: blue;
+  border-color:#8B4513;
+  color:#fff;
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 48px;
+}
+.btn-custom:focus,
+.btn-custom:hover,
+.btn-custom:active,
+.btn-custom:active:focus{
+  background: rgb(0,0,200);
+  border-color: #8B4513;
+  color:#fff;
+}
+.btn-custom:focus{
+  box-shadow: 0 0 0 0.2rem rgba(114,61,190,.25);
+}
+

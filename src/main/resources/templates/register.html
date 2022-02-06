@@ -1,0 +1,86 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layout/layout}"
+lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/index.css">
+    <title>Hello, world!</title>
+    
+  </head>
+  <body>
+    <div class="row m-0 p-0" layout:fragment="content">
+        <div class="d-sm-none d-md-block box1 col-md-6 bg-dark ">
+            
+        </div>
+        
+        <div class="container col-10 col-md-6">
+            <div class="d-flex justify-content-center align-items-center login-container">
+                <form class="login-form text-center " method="post" action="">
+                    <h3 style="color:whsite;" style="font-family:verdana;" 
+                    class="mb-3 font-weight-light text-muted">Mobile Vaccination</h3>
+                    <h1 style="color:whsite;" style="font-family:verdana;" 
+                    class="mb-4 font-weight-light text-uppercase">Registration</h1>
+                    <div class="form-group">
+                        <input type="email" class="form-control rounded-pill form-control-lg" name="fullName" 
+                        placeholder="Enter your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-2">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text rounded-pill">+91</div>
+                          </div>
+                            <input type="number" class="form-control rounded-pill  form-control-lg" name="contactNo" 
+                            placeholder="Enter mobile number" required>
+                        </div>  
+                      </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control rounded-pill form-control-lg" name="district"
+                         placeholder="District" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control rounded-pill form-control-lg" name="pinCode" 
+                        placeholder="Pin code" required>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="dob" class=" col-5">Date of birth</label>
+                        <input type="date" class=" col-6 ml-auto" name="dob" 
+                        placeholder="Date of birth" required>
+                    </div> -->
+                    <div class="form-group row">
+                        <label for="inputEmail3" class="col-sm-5 col-form-label">Date of Birth</label>
+                        <div class="col-sm-7">
+                          <input type="date" class="form-control rounded-pill" id="inputEmail3" placeholder="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-1">
+                        <button type="submit" name="submitbtn" value="submit" 
+                        class="btn mt-5 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Register</button>
+                        <p class="text-muted m-2">OR</p>
+                        <a href="index.html" class="form-control form-control-lg text-uppercase rounded-pill">Login</a>
+                    </div>
+                   
+                
+                </form>
+            </div>
+            
+            
+        </div>
+    </div>
+
+    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
