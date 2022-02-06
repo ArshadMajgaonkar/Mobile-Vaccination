@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout"
       lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Mobile Vaccination</title>
-</head>
-<body>
-    <div th:insert="fragments/header::header"></div>
+    <head>
+        <meta charset="UTF-8">
+        <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE">Mobile Vaccination</title>
+    </head>
+    <body>
+        <div th:insert="fragments/header::header"></div>
 
-    <div layout:fragment="content"></div>
+        <div>
+            <ul th:each="message: ${messages}">
+                <li th:text="${message}">MESSAGE</li>
+            </ul>
+        </div>
 
-    <div th:insert="fragments/footer::footer"></div>
-</body>
+        <div layout:fragment="content"></div>
+
+        <div th:insert="fragments/footer::footer"></div>
+
+        <script layout:fragment="script"></script>
+    </body>
 </html>

@@ -4,6 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -33,6 +37,7 @@ public class Account {
 
     private static final String COUNTRY_CODE = "+91";
     private static final int OTP_LENGTH = 6;
+    private static final int OTP_EXPIRE_IN_MIN = 2;
 
     public Account() {
     }
@@ -133,7 +138,17 @@ public class Account {
         return Pattern.matches(String.format("^[0-9]{%s}$", OTP_LENGTH), otp);
     }
 
-
+    /**
+     * Checks expiration time of the otp
+     *
+     * @return boolean true is otp is expired else false is returned.
+     */
+    public boolean isOtpExpired() {
+        LocalDateTime expiry = otpGeneratedAt.toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime()
+                .plusMinutes(OTP_EXPIRE_IN_MIN);
+        return expiry.compareTo(LocalDateTime.now()) < 0;
+    }
 
 
 }

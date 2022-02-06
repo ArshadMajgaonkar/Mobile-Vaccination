@@ -39,22 +39,26 @@ public class LoginController {
         return "user-login";
     }
 
-    // TODO: method which will be executed completely at Account login processing
-    @PostMapping("/user/login")
+    @PostMapping("/user/process-login")
     public String getUserLoginData(@ModelAttribute("accountInstance") Account account, Model model) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
+        model.addAttribute("accountInstance", account);
+        model.addAttribute("showOtpForm", false);
         Account fetchedAccount = accountRepository.findByMobileNumber(account.getMobileNumber());
-        if(fetchedAccount != null && account.isOtpValid()) {
-            // TODO: update last login time
-            System.out.println("Account exists. Username=" + fetchedAccount.getMobileNumber());
-            model.addAttribute("accountInstance", account);
-        }
-        else {
-            model.addAttribute("accountInstance", account);
+        if(fetchedAccount == null)
             messages.add("No account exist with " + account.getMobileNumber());
+        else if( !account.isOtpValid()) {
+            messages.add("OTP is invalid.");
+            model.addAttribute("showOtpForm", true);
         }
-        model.addAttribute("showOtpForm", true);
+        else if(fetchedAccount.isOtpExpired())
+            messages.add("OTP Expired!");
+        else {
+            System.out.println("Account exists. Username=" + fetchedAccount.getMobileNumber());
+            generalUserService.updateLastLogin(fetchedAccount);
+            return "redirect:/user/dashboard";
+        }
         return "user-login";
     }
 
@@ -99,7 +103,6 @@ public class LoginController {
     public String staffLogin(Model model, @ModelAttribute("staffInstance") Staff staff) {
         Staff fetchedStaff = staffRepository.findByUsername(staff.getUsername());
         if(fetchedStaff != null){
-            //TODO: handle success login && update login time
             System.out.println("Account exists. Username=" + fetchedStaff.getUsername());
             fetchedStaff = staffService.updateCurrentAndLastLogin(fetchedStaff);
             model.addAttribute("staffInstance", staff);
