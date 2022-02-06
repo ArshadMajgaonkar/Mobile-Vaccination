@@ -3,14 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <title>Footer</title>
+    <style>
+      .footer-links{
+          color: #bdb3b3;
+          margin-bottom: 1vh;
+        }
+
+        footer{
+          margin-top: 8vh;
+        }
+    </style>
 </head>
 <body>
 <div th:fragment="footer">
-  <h6>
-    Mobile Vaccination (2022)
-    <br/>
-    Built by Arshad, Gaurav, Harshad and Sanket
-  </h6>
+    <!-- Footer -->
+    <footer style="color:aliceblue;" class="page-footer font-small blue pt-4 bg-dark">
+
+        <!-- Footer Links -->
+        <div class="container-fluid text-center text-md-left">
+
+            <!-- Grid row -->
+            <div class="row">
+
+                <!-- Grid column -->
+                <div class="col-md-6 mt-md-0 mt-3">
+
+                    <!-- Content -->
+                    <h5 class="text-uppercase">Mobile Vaccination</h5>
+                    <p class="footer-links mt-4">A project made by Final year students</p>
+                    <p class="footer-links">Datta Meghe College of Engineering</p>
+                    <p class="footer-links">(Department of Computer Engineering)</p>
+
+                </div>
+                <!-- Grid column -->
+
+                <hr class="clearfix w-100 d-md-none pb-3">
+
+                <!-- Grid column -->
+                <div class="col-md-3 mb-md-0 mb-3">
+
+                    <!-- Links -->
+                    <h5 class="text-uppercase">Other Useful Links</h5>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#!">Universal Pass</a>
+                        </li>
+                        <li>
+                            <a href="#!">Co-Win Portal</a>
+                        </li>
+                        <li>
+                            <a href="https://verify.cowin.gov.in/">Verify Vaccination Certificate</a>
+                        </li>
+                        <li>
+                            <a href="https://www.worldometers.info/coronavirus/">Covid-19 cases</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-3 mb-md-0 mb-3">
+
+                    <!-- Links -->
+                    <h5 class="">Aadhar UIDAI</h5>
+
+                    <ul class="list-unstyled">
+                        <li>
+                            <a href="#!">UIDAI</a>
+                        </li>
+                        <li>
+                            <a href="https://myaadhaar.uidai.gov.in/verifyAadhaar">Verify Aadhar number</a>
+                        </li>
+                        <li>
+                            <a href="https://resident.uidai.gov.in/bank-mapper">Aadhaar Bank Linking Status</a>
+                        </li>
+                        <li>
+                            <a href="https://uidai.gov.in/about-uidai/unique-identification-authority-of-india/about.html">About UIDAI</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <!-- Grid column -->
+
+            </div>
+            <!-- Grid row -->
+
+        </div>
+        <!-- Footer Links -->
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3 mb-3">© 2022 Copyright:
+            <a href="https://mdbootstrap.com/"> dmce.ac.in</a>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+    <!-- Footer -->
 </div>
 </body>
 </html>
