@@ -25,19 +25,18 @@ lang="en">
       </div>
       <div class="modal-body">
         <div class="d-flex flex-column align-items-center col-10 offset-1">
-          <
           <div class="p-2 bd-highlight col-12">
-              <form>
+              <form method="post" id="add-member-form" th:action="@{/user/add-member}" th:object="${memberInstance}" >
                   <div class="form-group">
                       <input type="text" class="form-control rounded-pill form-control-lg" name="fullName" 
                       placeholder="Name as per Aadhaar card" required>
                   </div>
                   <div class="form-group">
-                      <input type="number" class="form-control rounded-pill form-control-lg" name="contactNo" 
+                      <input type="number" class="form-control rounded-pill form-control-lg" name="aadharId"
                       placeholder="Aadhaar number" required>
                   </div>
                   <div class="form-group">
-                      <input type="number" class="form-control rounded-pill form-control-lg" name="contactNo" 
+                      <input type="number" class="form-control rounded-pill form-control-lg" name="birthYear"
                       placeholder="Enter Year of Birth" required>
                   </div>
               </form>
@@ -46,23 +45,33 @@ lang="en">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" onclick="submitAddMemberForm()">Save</button>
       </div>
     </div>
   </div>
 </div>
       
     <div class="d-flex flex-column align-items-center">
-        <div class="p-2 bd-highlight">
+        <!--Member listing-->
+        <div th:if="${members != null}">
+            <ul th:each="member: ${members}">
+                <li>
+                    <a href="#" th:text="${member.fullName}"></a>
+                </li>
+            </ul>
+        </div>
+        <!--for no member-->
+        <div class="p-2 bd-highlight" th:unless="${members != null}">
             <span style="font-size: 80px; color: gray;">
                 <i class="fas fa-user-plus"></i>
             </span>
         </div>
-        <div class="p-2 bd-highlight">
+        <div class="p-2 bd-highlight" th:unless="${members != null}">
             <p style="font-size: 30px;" class="text-center font-weight-bold">
                 No member found
             </p>
         </div>
+
         <div class="p-2 bd-highlight">
             <a href="#">
                 <button type="button" class="btn btn-outline-primary btn-lg text-uppercase" data-toggle="modal" data-target="#exampleModalCenter">
@@ -76,10 +85,13 @@ lang="en">
 
     <!-- footer -->
   
-    <script>
+    <script layout:fragment="script">
             $('#exampleModalCenter').on('shown.bs.modal', function () {
         $('#myInput').trigger('focus')
       })
+            function submitAddMemberForm() {
+                document.getElementById("add-member-form").submit();
+            }
     </script>
   </body>
 </html>
