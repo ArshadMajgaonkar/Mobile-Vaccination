@@ -19,12 +19,12 @@ public class Staff {
     private Date lastLogin;
     @Column
     private Date currentLogin;
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthGroup role;
-    @Column(unique = true, length = 11)
+    @Column(unique = true, length = 11/*, nullable = false*/)
     private String mobileNumber;
-    @Column(unique = true, length = 255)
+    @Column(unique = true, length = 255/*, nullable = false*/)
     private String emailId;
     @Column(nullable = false)
     private LocalDateTime addedAt;

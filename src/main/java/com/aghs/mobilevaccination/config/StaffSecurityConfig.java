@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(1)
 public class StaffSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -52,6 +55,14 @@ public class StaffSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    @Bean
+    public RoleHierarchy roleHierarchy() {
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy("ROLE_ADMIN > ROLE_STAFF");
+        return roleHierarchy;
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -65,7 +76,7 @@ public class StaffSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/staff/login").permitAll()
-                .loginProcessingUrl("/staff/process-login").permitAll()
+                .loginProcessingUrl("/staff/process-login")
                 // if following lines are not added, it executes method partially.
                 .successForwardUrl("/staff/process-login")
                 .failureForwardUrl("/staff/process-login")
@@ -73,8 +84,8 @@ public class StaffSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/staff/logout")
-                .invalidateHttpSession(true)
                 .clearAuthentication(true)
-                .logoutSuccessUrl("/logout-success").permitAll();
+                .invalidateHttpSession(true)
+                .logoutSuccessUrl("/logout-success");
     }
 }

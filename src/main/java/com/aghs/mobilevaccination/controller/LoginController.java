@@ -8,6 +8,7 @@ import com.aghs.mobilevaccination.service.GeneralUserDetailService;
 import com.aghs.mobilevaccination.service.StaffUserDetailService;
 import com.aghs.mobilevaccination.service.TwilioMessagingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class LoginController {
     }
 
     @GetMapping("/user/login")
+    @PreAuthorize("not isAuthenticated()")
     public String getUserLoginPage(Model model) {
         model.addAttribute("showOtpForm", false);
         return "index";
@@ -45,7 +47,7 @@ public class LoginController {
         model.addAttribute("messages", messages);
         model.addAttribute("accountInstance", account);
         model.addAttribute("showOtpForm", false);
-        Account fetchedAccount = accountRepository.findByMobileNumber("+91"+account.getMobileNumber());
+        Account fetchedAccount = accountRepository.findByMobileNumber(account.getMobileNumber());
         if(fetchedAccount == null)
             messages.add("No account exist with " + account.getMobileNumber());
         else if( !account.isOtpValid()) {
@@ -69,9 +71,8 @@ public class LoginController {
         model.addAttribute("accountInstance", account);
         if(account.isMobileNumberValid()) {
             //account.addCountryCodeToMobileNumberIfNotPresent();
-            Account fetchedAccount = accountRepository.findByMobileNumber("+91"+account.getMobileNumber());
+            Account fetchedAccount = accountRepository.findByMobileNumber(account.getMobileNumber());
             if(fetchedAccount == null){
-                // account.setOtp("4567");
                 fetchedAccount = accountRepository.save(account);
                 messages.add("New account created for " + account.getMobileNumber());
                 System.out.println("Creating Account: " + account.getMobileNumber());
@@ -95,6 +96,7 @@ public class LoginController {
     }
 
     @GetMapping("/staff/login")
+    @PreAuthorize("not isAuthenticated()")
     public String getStaffLogin() {
         return "staff-login";
     }

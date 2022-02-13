@@ -39,7 +39,8 @@
                         <a class="nav-link" href="#">Menu</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" href="#">Log out</a>
+                        <a class="nav-link" sec:authorize="hasRole('ROLE_STAFF')" th:href="@{/staff/logout}">Log out</a>
+                        <a class="nav-link" sec:authorize="hasRole('ROLE_USER')" th:href="@{/user/logout}">Log out</a>
                     </li>
                 </ul>
             </div>

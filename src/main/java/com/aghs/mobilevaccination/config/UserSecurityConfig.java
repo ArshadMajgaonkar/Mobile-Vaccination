@@ -76,7 +76,7 @@ public class UserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/user/login")
                 .usernameParameter("mobileNumber")
-                .passwordParameter("otp").permitAll()
+                .passwordParameter("otp")
                 .loginProcessingUrl("/user/process-login").permitAll()
                 // if following lines are not added, it executes method partially.
                 .successForwardUrl("/user/process-login")

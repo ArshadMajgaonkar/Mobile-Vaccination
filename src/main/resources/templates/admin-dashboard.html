@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h1>Welcome, admin</h1>
+    <a th:href="@{/staff/logout}">Log Out</a>
+</div>
+</body>
+</html>
