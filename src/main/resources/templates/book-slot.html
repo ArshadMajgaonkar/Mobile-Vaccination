@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <form id="location-form" th:action="@{/location/get-locations}" th:object="${locationDto}">
+            <label for="state-select">Select State/UT:</label>
+            <select id="state-select" onchange="submitLocationForm()">
+                <option th:each="state: ${states}" th:value="${locationDto.state}">STATE NAME</option>
+            </select>
+
+            <label for="district-select">Select District:</label>
+            <select id="district-select" onchange="submitLocationForm"
+            th:each="district: ${districts}">
+                <option th:value="${locationDto.district}">DISTRICT NAME</option>
+            </select>
+
+            <label for="city-text-input">Enter City/Village:</label>
+            <input type="text" id="city-text-input" th:value="${locationDto.city}"/>
+
+            <submit>Search</submit>
+        </form>
+    </div>
+
+    <script layout:fragment="script">
+        function submitLocationForm() {
+            document.getElementById('location-form').submit();
+        }
+    </script>
+</body>
+</html>
