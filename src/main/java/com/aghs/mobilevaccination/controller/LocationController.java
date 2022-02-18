@@ -41,14 +41,13 @@ public class LocationController {
         this.locationRepository = locationRepository;
     }
 
-    @GetMapping("/get-by-location")
+    @GetMapping("/get-by-city")
     public String getByLocation(Model model) {
         model.addAttribute("states", stateRepository.findAll());
-        model.addAttribute("formUrl", "");
-        return "slot-by-location";
+        return "slot-by-city";
     }
 
-    @PostMapping("/get-by-location")
+    @PostMapping("/get-by-city")
     public String postByLocation(Model model, @ModelAttribute("locationDto") LocationDTO locationDto) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("states", stateRepository.findAll());
@@ -75,7 +74,7 @@ public class LocationController {
         else {
             messages.add("Please select a state.");
         }
-        return "slot-by-location";
+        return "slot-by-city";
     }
 
     @GetMapping("get-by-pin-code")

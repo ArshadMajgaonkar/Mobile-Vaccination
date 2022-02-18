@@ -9,7 +9,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <form method="post" id="location-form" th:action="@{/location/get-by-location}" th:object="${locationDto}">
+        <form method="post" id="location-form" th:action="@{/location/get-by-city}" th:object="${locationDto}">
 
             <label for="state-select">Select State/UT:</label>
             <select id="state-select" name="state" onchange="submitLocationForm()" required>
@@ -53,11 +53,9 @@
             <ul th:if="${locations}" >
                 <li th:each="location: ${locations}" th:text="${location.ward}"></li>
             </ul>
-            <p th:if="${locations==null and locationDto.city!=null}">No locations available for above City.</p>
+            <p th:if="${locations==null and locationDto.city!=null}">No locations available for above city.</p>
         </div>
-        <div >
 
-        </div>
     </div>
 
     <script layout:fragment="script">
