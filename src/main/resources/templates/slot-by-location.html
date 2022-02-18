@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <form method="post" id="location-form" th:action="@{/location/get-by-location}" th:object="${locationDto}">
+
+            <label for="state-select">Select State/UT:</label>
+            <select id="state-select" name="state" onchange="submitLocationForm()" required>
+                <option value="" selected disabled>Select State</option>
+                <!--<option th:if="${locationDto.state!=null}" th:value="${locationDto.state}"
+                        th:text="${locationDto.state}" selected>
+                </option>-->
+                <span th:each="state: ${states}">
+                    <option th:if="${locationDto.state != state.name}" th:value="${state.name}"
+                            th:text="${state.name}"></option>
+                    <!--If condition is false-->
+                    <option th:unless="${locationDto.state != state.name}" th:value="${state.name}"
+                            th:text="${state.name}" selected></option>
+                </span>
+            </select>
+
+            <label for="district-select">Select District:</label>
+            <select id="district-select" name="district" onchange="submitLocationForm()">
+                <option selected disabled>Select District</option>
+                <span th:each="district: ${districts}">
+                    <option th:if="${locationDto.district!=district.name}" th:value="${district.name}"
+                            th:text="${district.name}"></option>
+                    <option th:unless="${locationDto.district!=district.name}" th:value="${district.name}"
+                            th:text="${district.name}" selected></option>
+                </span>
+            </select>
+
+            <label for="city-select">Select City/Village:</label>
+            <select id="city-select" name="city" onchange="submitLocationForm()">
+                <option selected disabled>Select City/Village</option>
+                <span th:each="city: ${cities}">
+                    <option th:if="${locationDto.city != city.name}" th:value="${city.name}" th:text="${city.name}"></option>
+                    <option th:unless="${locationDto.city != city.name}" th:value="${city.name}" th:text="${city.name}" selected></option>
+                </span>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="result">
+            <p>Locations:</p>
+            <ul th:if="${locations}" >
+                <li th:each="location: ${locations}" th:text="${location.ward}"></li>
+            </ul>
+            <p th:if="${locations==null and locationDto.city!=null}">No locations available for above City.</p>
+        </div>
+        <div >
+
+        </div>
+    </div>
+
+    <script layout:fragment="script">
+        function submitLocationForm() {
+            document.getElementById('location-form').submit();
+        }
+    </script>
+</body>
+</html>

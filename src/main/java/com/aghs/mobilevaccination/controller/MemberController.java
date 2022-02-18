@@ -20,6 +20,7 @@ public class MemberController {
     private AccountRepository accountRepository;
     @Autowired
     private MemberRepository memberRepository;
+
     @PostMapping("/user/add-member")
     public String addMember(@ModelAttribute("memberInstance")Member member, Model model) {
         // TODO: Member Validation with proper message
@@ -41,6 +42,7 @@ public class MemberController {
             member.processData();
             memberRepository.save(member);
             messages.add("New Member added.");
+            model.addAttribute("members", memberRepository.findByLinkedAccount(linkedAccount));
         }
         return "user-dashboard1";
     }

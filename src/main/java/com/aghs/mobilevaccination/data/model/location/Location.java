@@ -9,9 +9,9 @@ import java.util.Date;
 @Table
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column
-    private int id;
+    private long id;
     @Column
     private String ward;
     @Column
@@ -23,11 +23,11 @@ public class Location {
     @ManyToOne
     private Staff addedBy;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -69,5 +69,17 @@ public class Location {
 
     public void setAddedBy(Staff addedBy) {
         this.addedBy = addedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", ward='" + ward + '\'' +
+                ", pinCode='" + pinCode + '\'' +
+                ", city=" + city +
+                ", addedAt=" + addedAt +
+                ", addedBy=" + addedBy +
+                '}';
     }
 }

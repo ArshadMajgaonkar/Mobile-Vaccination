@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot By Pin Code</title>
+</head>
+<body>
+    <div layout:fragment="content">
+      <form method="post" th:action="@{/location/get-by-pin-code}" th:object="${pinCodeDto}">
+        <input type="number" name="pinCode" th:value="${pinCodeDto.pinCode}" required/>
+        <button type="submit">Search</button>
+      </form>
+
+        <div class="result">
+          <ul th:if="${locations}">
+            <li th:each="location: ${locations}" th:text="${location.ward}"></li>
+          </ul>
+            <p th:if="${locations==null and pinCodeDto.pinCode!=null}">No locations found for above Pin Code.</p>
+        </div>
+    </div>
+</body>
+</html>
