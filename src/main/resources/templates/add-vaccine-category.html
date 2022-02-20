@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vaccine Category</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3>Add Vaccine Category</h3>
+        <a th:href="@{/staff/vaccine/category}">Back to Vaccine Category List</a>
+        <form method="post"
+              th:action="@{/staff/vaccine/add-vaccine-category}" th:object="${vaccineCategoryInstance}">
+
+            <input type="text" name="name" placeholder="Category Name" required
+                   th:value="${vaccineCategoryInstance.name}" />
+
+            <label for="vaccine-select">Vaccine:</label>
+            <select name="vaccine" id="vaccine-select">
+                <span th:each="vaccine: ${vaccines}">
+                    <option selected th:value="${vaccine.name}" th:text="${vaccine.name}"
+                            th:if="${vaccine == vaccineCategoryInstance.vaccine}"></option>
+                    <option th:value="${vaccine.name}" th:text="${vaccine.name}"
+                            th:unless="${vaccine== vaccineCategoryInstance.vaccine}"></option>
+                </span>
+            </select>
+
+            <input type="number" name="minAgeLimit" placeholder="Minimum Age Limit"
+                   th:value="${vaccineCategoryInstance.minAgeLimit}" />
+
+            <input type="number" name="maxAgeLimit" placeholder="Maximum Age Limit"
+                   th:value="${vaccineCategoryInstance.maxAgeLimit}" />
+
+            <label for="prerequisite-select">Pre-requisite</label>
+            <select name="prerequisite" id="prerequisite-select">
+                <option selected>None</option>
+                <span th:each="vaccineCategory: ${vaccineCategories}">
+                    <option selected th:value="${vaccineCategory.name}" th:text="${vaccineCategory.name}"
+                            th:if="${vaccineCategory.name == vaccineCategoryInstance.name}"></option>
+                    <option th:value="${vaccineCategory.name}" th:text="${vaccineCategory.name}"
+                            th:unless="${vaccineCategory.name == vaccineCategoryInstance.name}"></option>
+                </span>
+            </select>
+
+            <input type="submit" value="Add Category" />
+        </form>
+    </div>
+</body>
+</html>

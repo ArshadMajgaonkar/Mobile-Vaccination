@@ -3,6 +3,7 @@ package com.aghs.mobilevaccination.service;
 import com.aghs.mobilevaccination.auth.StaffDetails;
 import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.repository.StaffRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,5 +33,14 @@ public class StaffUserDetailService implements UserDetailsService {
         staff.setLastLogin(staff.getCurrentLogin());
         staff.setCurrentLogin(new Date());
         return staffRepository.save(staff);
+    }
+
+    public Staff getStaff() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof StaffDetails) {
+            String username = ((StaffDetails) principal).getUsername();
+            return this.staffRepository.findByUsername(username);
+        }
+        return null;
     }
 }

@@ -11,15 +11,18 @@ public class VaccineCategory {
     @Id
     @Column
     private String name;
+    @ManyToOne(optional = false)
+    private Vaccine vaccine;
     @Column
     private int minAgeLimit;
     @Column
     private int maxAgeLimit;
-    @Column
-    private int maxDoseCount;
-    @Column
-    private Date addedAt;
     @ManyToOne
+    @JoinColumn
+    private VaccineCategory prerequisite;
+    @Column(nullable = false)
+    private Date addedAt;
+    @ManyToOne(optional = false)
     private Staff addedBy;
 
     public String getName() {
@@ -28,6 +31,14 @@ public class VaccineCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Vaccine getVaccine() {
+        return vaccine;
+    }
+
+    public void setVaccine(Vaccine vaccine) {
+        this.vaccine = vaccine;
     }
 
     public int getMinAgeLimit() {
@@ -46,12 +57,12 @@ public class VaccineCategory {
         this.maxAgeLimit = maxAgeLimit;
     }
 
-    public int getMaxDoseCount() {
-        return maxDoseCount;
+    public VaccineCategory getPrerequisite() {
+        return prerequisite;
     }
 
-    public void setMaxDoseCount(int maxDoseCount) {
-        this.maxDoseCount = maxDoseCount;
+    public void setPrerequisite(VaccineCategory prerequisite) {
+        this.prerequisite = prerequisite;
     }
 
     public Date getAddedAt() {

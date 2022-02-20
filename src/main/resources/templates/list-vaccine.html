@@ -23,7 +23,7 @@
             <tr th:each="vaccine: ${vaccines}">
                 <td th:text="${vaccine.name}"></td>
                 <td th:text="${vaccine.code}"></td>
-                <td th:text="${vaccine.addedBy.firstName + ' ' + vaccine.addedBy.}"></td>
+                <td th:text="${vaccine.addedBy.fullName}"></td>
                 <td th:text="${vaccine.addedAt}"></td>
             </tr>
         </table>

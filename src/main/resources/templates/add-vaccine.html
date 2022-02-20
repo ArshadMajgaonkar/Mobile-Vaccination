@@ -5,15 +5,18 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Vaccine</title>
 </head>
 <body>
     <div layout:fragment="content">
         <h3>Add Vaccine</h3>
-        <form method="post" th:action="@{/staff/vaccine/add-vaccine}" th:object="${vaccine}">
-            <input type="text" name="name" th:value="${vaccine.name}" required/>
-            <input type="text" name="code" th:value="${vaccine.code}" required/>
-            <input type="submit" th:value="Add Vaccine"/>
+        <a th:href="@{/staff/vaccine/}">Back</a>
+        <form method="post" th:action="@{/staff/vaccine/add-vaccine}" th:object="${vaccineInstance}">
+            <input type="text" name="name" placeholder="Vaccine Name"
+                   th:value="${vaccineInstance.name}" />
+            <input type="text" name="code" placeholder="Code"
+                   th:value="${vaccineInstance.code}" />
+            <input type="submit" value="Add Vaccine"/>
         </form>
     </div>
 </body>
