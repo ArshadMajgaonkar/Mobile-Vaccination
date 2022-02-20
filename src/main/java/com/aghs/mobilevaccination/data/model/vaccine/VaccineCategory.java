@@ -1,4 +1,6 @@
-package com.aghs.mobilevaccination.data.model;
+package com.aghs.mobilevaccination.data.model.vaccine;
+
+import com.aghs.mobilevaccination.data.model.Staff;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -16,6 +16,8 @@ public class Staff {
     @Column
     private String password;
     @Column
+    private String fullName;
+    @Column
     private Date lastLogin;
     @Column
     private Date currentLogin;
@@ -41,12 +43,14 @@ public class Staff {
     public Staff(
             String username,
             String password,
+            String fullName,
             AuthGroup role,
             String mobileNumber,
             String emailId,
             LocalDateTime addedAt) {
         this.username = username;
         this.password = password;
+        this.fullName = fullName;
         this.role = role;
         this.mobileNumber = mobileNumber;
         this.emailId = emailId;
@@ -67,6 +71,14 @@ public class Staff {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Date getLastLogin() {
