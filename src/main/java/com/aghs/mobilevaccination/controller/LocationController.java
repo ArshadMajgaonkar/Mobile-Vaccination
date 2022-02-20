@@ -89,7 +89,6 @@ public class LocationController {
         return "slot-by-pin-code";
     }
 
-
     @ModelAttribute("locationDto")
     public LocationDTO getLocationDTO() {
         return new LocationDTO();

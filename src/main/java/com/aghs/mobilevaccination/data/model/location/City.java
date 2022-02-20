@@ -47,5 +47,4 @@ public class City {
                 '}';
     }
 
-    // TODO: add validation to check if district is same state or city in mentioned district
 }

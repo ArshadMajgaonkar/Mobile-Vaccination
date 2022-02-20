@@ -10,4 +10,5 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     List<City> findByDistrict(District district);
     City findByNameAndDistrict(String name, District district);
+
 }
