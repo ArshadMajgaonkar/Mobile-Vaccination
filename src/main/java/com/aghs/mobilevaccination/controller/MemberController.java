@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +41,13 @@ public class MemberController {
             Account linkedAccount = accountRepository.findByMobileNumber(mobileNumber);
             member.setLinkedAccount(linkedAccount);
             member.processData();
-            memberRepository.save(member);
-            messages.add("New Member added.");
+            try{
+                memberRepository.save(member);
+                messages.add("New Member added.");
+            }
+            catch(Exception e){
+                messages.add("Member already exist with same Aaddhar Number.");
+            }
             model.addAttribute("members", memberRepository.findByLinkedAccount(linkedAccount));
         }
         return "user-dashboard1";

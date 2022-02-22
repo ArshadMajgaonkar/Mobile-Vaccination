@@ -1,8 +1,10 @@
 package com.aghs.mobilevaccination.data.model;
 
+import com.google.common.hash.Hashing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -19,7 +21,7 @@ public class Member {
     @Column
     @GeneratedValue(strategy=GenerationType.AUTO)
     private long userId;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 511)
     private String aadharId;
     @Column(nullable = false)
     private String aadharLast4Digit;
@@ -96,7 +98,7 @@ public class Member {
 
     public void processData() {
         aadharLast4Digit = aadharId.substring(8, 12);
-        aadharId = new BCryptPasswordEncoder(11).encode(aadharId);
+        aadharId = Hashing.sha512().hashString(aadharId, StandardCharsets.UTF_8).toString();
         addedAt = new Date();
     }
 

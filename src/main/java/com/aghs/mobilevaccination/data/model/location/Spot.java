@@ -7,20 +7,20 @@ import java.util.Date;
 
 @Entity
 @Table
-public class Location {
+public class Spot {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column
     private long id;
-    @Column
+    @Column(nullable = false)
     private String ward;
-    @Column
+    @Column(nullable = false)
     private String pinCode;
-    @OneToOne
+    @ManyToOne(optional = false)
     private City city;
-    @Column
+    @Column(nullable = false)
     private Date addedAt;
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Staff addedBy;
 
     public long getId() {

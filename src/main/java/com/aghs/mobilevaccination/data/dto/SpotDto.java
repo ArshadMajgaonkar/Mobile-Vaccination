@@ -1,6 +1,6 @@
 package com.aghs.mobilevaccination.data.dto;
 
-public class LocationDTO {
+public class SpotDto {
     private String state;
     private String district;
     private String city;

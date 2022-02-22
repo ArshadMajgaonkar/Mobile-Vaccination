@@ -9,16 +9,16 @@
 </head>
 <body>
     <div layout:fragment="content">
-      <form method="post" th:action="@{/location/get-by-pin-code}" th:object="${pinCodeDto}">
+      <form method="post" th:action="@{/spot/get-by-pin-code}" th:object="${pinCodeDto}">
         <input type="number" name="pinCode" th:value="${pinCodeDto.pinCode}" required/>
         <button type="submit">Search</button>
       </form>
 
         <div class="result">
-          <ul th:if="${locations}">
-            <li th:each="location: ${locations}" th:text="${location.ward}"></li>
+          <ul th:if="${spots}">
+            <li th:each="spot: ${spots}" th:text="${spot.ward}"></li>
           </ul>
-            <p th:if="${locations==null and pinCodeDto.pinCode!=null}">No locations found for above Pin Code.</p>
+            <p th:if="${spots==null and pinCodeDto.pinCode!=null}">No spots found for above Pin Code.</p>
         </div>
     </div>
 </body>

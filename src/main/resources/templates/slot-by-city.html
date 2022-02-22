@@ -9,58 +9,58 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <form method="post" id="location-form" th:action="@{/location/get-by-city}" th:object="${locationDto}">
+        <form method="post" id="spot-form" th:action="@{/spot/get-by-city}" th:object="${spotDto}">
 
             <label for="state-select">Select State/UT:</label>
-            <select id="state-select" name="state" onchange="submitLocationForm()" required>
+            <select id="state-select" name="state" onchange="submitspotForm()" required>
                 <option value="" selected disabled>Select State</option>
-                <!--<option th:if="${locationDto.state!=null}" th:value="${locationDto.state}"
-                        th:text="${locationDto.state}" selected>
+                <!--<option th:if="${spotDto.state!=null}" th:value="${spotDto.state}"
+                        th:text="${spotDto.state}" selected>
                 </option>-->
                 <span th:each="state: ${states}">
-                    <option th:if="${locationDto.state != state.name}" th:value="${state.name}"
+                    <option th:if="${spotDto.state != state.name}" th:value="${state.name}"
                             th:text="${state.name}"></option>
                     <!--If condition is false-->
-                    <option th:unless="${locationDto.state != state.name}" th:value="${state.name}"
+                    <option th:unless="${spotDto.state != state.name}" th:value="${state.name}"
                             th:text="${state.name}" selected></option>
                 </span>
             </select>
 
             <label for="district-select">Select District:</label>
-            <select id="district-select" name="district" onchange="submitLocationForm()">
+            <select id="district-select" name="district" onchange="submitspotForm()">
                 <option selected disabled>Select District</option>
                 <span th:each="district: ${districts}">
-                    <option th:if="${locationDto.district!=district.name}" th:value="${district.name}"
+                    <option th:if="${spotDto.district!=district.name}" th:value="${district.name}"
                             th:text="${district.name}"></option>
-                    <option th:unless="${locationDto.district!=district.name}" th:value="${district.name}"
+                    <option th:unless="${spotDto.district!=district.name}" th:value="${district.name}"
                             th:text="${district.name}" selected></option>
                 </span>
             </select>
 
             <label for="city-select">Select City/Village:</label>
-            <select id="city-select" name="city" onchange="submitLocationForm()">
+            <select id="city-select" name="city" onchange="submitspotForm()">
                 <option selected disabled>Select City/Village</option>
                 <span th:each="city: ${cities}">
-                    <option th:if="${locationDto.city != city.name}" th:value="${city.name}" th:text="${city.name}"></option>
-                    <option th:unless="${locationDto.city != city.name}" th:value="${city.name}" th:text="${city.name}" selected></option>
+                    <option th:if="${spotDto.city != city.name}" th:value="${city.name}" th:text="${city.name}"></option>
+                    <option th:unless="${spotDto.city != city.name}" th:value="${city.name}" th:text="${city.name}" selected></option>
                 </span>
             </select>
             <button type="submit">Search</button>
         </form>
 
         <div class="result">
-            <p>Locations:</p>
-            <ul th:if="${locations}" >
-                <li th:each="location: ${locations}" th:text="${location.ward}"></li>
+            <p>spots:</p>
+            <ul th:if="${spots}" >
+                <li th:each="spot: ${spots}" th:text="${spot.ward}"></li>
             </ul>
-            <p th:if="${locations==null and locationDto.city!=null}">No locations available for above city.</p>
+            <p th:if="${spots==null and spotDto.city!=null}">No spots available for above city.</p>
         </div>
 
     </div>
 
     <script layout:fragment="script">
-        function submitLocationForm() {
-            document.getElementById('location-form').submit();
+        function submitspotForm() {
+            document.getElementById('spot-form').submit();
         }
     </script>
 </body>

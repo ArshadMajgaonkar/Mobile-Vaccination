@@ -9,28 +9,28 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <form id="location-form" th:action="@{/location/get-locations}" th:object="${locationDto}">
+        <form id="spot-form" th:action="@{/spot/get-spots}" th:object="${spotDto}">
             <label for="state-select">Select State/UT:</label>
-            <select id="state-select" onchange="submitLocationForm()">
-                <option th:each="state: ${states}" th:value="${locationDto.state}">STATE NAME</option>
+            <select id="state-select" onchange="submitSpotForm()">
+                <option th:each="state: ${states}" th:value="${spotDto.state}">STATE NAME</option>
             </select>
 
             <label for="district-select">Select District:</label>
-            <select id="district-select" onchange="submitLocationForm"
+            <select id="district-select" onchange="submitSpotForm"
             th:each="district: ${districts}">
-                <option th:value="${locationDto.district}">DISTRICT NAME</option>
+                <option th:value="${spotDto.district}">DISTRICT NAME</option>
             </select>
 
             <label for="city-text-input">Enter City/Village:</label>
-            <input type="text" id="city-text-input" th:value="${locationDto.city}"/>
+            <input type="text" id="city-text-input" th:value="${spotDto.city}"/>
 
             <submit>Search</submit>
         </form>
     </div>
 
     <script layout:fragment="script">
-        function submitLocationForm() {
-            document.getElementById('location-form').submit();
+        function submitSpotForm() {
+            document.getElementById('spot-form').submit();
         }
     </script>
 </body>
