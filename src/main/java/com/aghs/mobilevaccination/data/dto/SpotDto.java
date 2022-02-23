@@ -1,31 +1,31 @@
 package com.aghs.mobilevaccination.data.dto;
 
 public class SpotDto {
-    private String state;
-    private String district;
-    private String city;
+    private String stateName;
+    private String districtName;
+    private String cityName;
 
-    public String getState() {
-        return state;
+    public String getStateName() {
+        return stateName;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStateName(String stateName) {
+        this.stateName = stateName;
     }
 
-    public String getDistrict() {
-        return district;
+    public String getDistrictName() {
+        return districtName;
     }
 
-    public void setDistrict(String district) {
-        this.district = district;
+    public void setDistrictName(String districtName) {
+        this.districtName = districtName;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }

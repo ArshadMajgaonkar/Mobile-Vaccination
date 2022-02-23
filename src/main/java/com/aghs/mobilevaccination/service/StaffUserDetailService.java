@@ -35,7 +35,7 @@ public class StaffUserDetailService implements UserDetailsService {
         return staffRepository.save(staff);
     }
 
-    public Staff getStaff() {
+    public Staff getCurrentStaff() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(principal instanceof StaffDetails) {
             String username = ((StaffDetails) principal).getUsername();

@@ -52,18 +52,18 @@ public class SpotController {
         model.addAttribute("states", stateRepository.findAll());
         model.addAttribute("spotDto", spotDto);
         model.addAttribute("messages", messages);
-        if(spotDto.getState() != null) {
-            State selectedState = stateRepository.findByName(spotDto.getState());
+        if(spotDto.getStateName() != null) {
+            State selectedState = stateRepository.findByName(spotDto.getStateName());
             List<District> districts = districtRepository.findByState(selectedState);
             model.addAttribute("districts", districts);
             districts.forEach(System.out::println);
-            if (spotDto.getDistrict() != null ) {
-                District selectedDistrict = districtRepository.findByNameAndState(spotDto.getDistrict(), selectedState);
+            if (spotDto.getDistrictName() != null ) {
+                District selectedDistrict = districtRepository.findByNameAndState(spotDto.getDistrictName(), selectedState);
                 List<City> cities = cityRepository.findByDistrict(selectedDistrict);
                 model.addAttribute("cities", cities);
                 cities.forEach(System.out::println);
-                if (spotDto.getCity() != null) {
-                    City selectedCity = cityRepository.findByNameAndDistrict(spotDto.getCity(), selectedDistrict);
+                if (spotDto.getCityName() != null) {
+                    City selectedCity = cityRepository.findByNameAndDistrict(spotDto.getCityName(), selectedDistrict);
                     List<Spot> spots = spotRepository.findByCity(selectedCity);
                     System.out.println(spots);
                     model.addAttribute("spots", spots.size()!=0 ? spots : null);

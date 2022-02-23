@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Centre List</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <!--TODO: add sorting and filtering-->
+        <h3>Centres</h3>
+        <p sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{/centre/add}">Add</a>
+        </p>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Spot</th>
+                <th>City</th>
+                <th>District</th>
+                <th>State</th>
+            </tr>
+            <tr th:each="centre: ${centres}">
+                <td th:text="${centre.name}"></td>
+                <td th:text="${centre.situatedAt.ward}"></td>
+                <td th:text="${centre.situatedAt.city.name}"></td>
+                <td th:text="${centre.situatedAt.city.district.name}"></td>
+                <td th:text="${centre.situatedAt.city.district.state.name}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

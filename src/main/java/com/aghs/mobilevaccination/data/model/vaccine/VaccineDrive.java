@@ -21,6 +21,8 @@ public class VaccineDrive {
     private VaccineCategory vaccineCategory;
     @ManyToOne
     private Vehicle vehicle;
+    @Column
+    private long slotCount;
     @ManyToOne
     private Staff vaccinator;
     @Column
@@ -63,6 +65,14 @@ public class VaccineDrive {
 
     public void setVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
+    }
+
+    public long getSlotCount() {
+        return slotCount;
+    }
+
+    public void setSlotCount(long slotCount) {
+        this.slotCount = slotCount;
     }
 
     public Staff getVaccinator() {

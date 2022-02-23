@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Centre</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3>Add Centre</h3>
+        <form id="add-centre-form" method="post"
+              th:action="@{/staff/centre/add}" th:object="${centreDto}">
+            <input type="text" name="name" placeholder="Centre Name"
+                   th:value="${centreDto.name}"/>
+            <label for="state-select">Select State/UT:</label>
+            <select id="state-select" name="stateName" onchange="submitCentreForm()" required>
+                <option value="" selected disabled>Select State</option>
+                <span th:each="state: ${states}">
+                    <option th:if="${centreDto.stateName != state.name}" th:value="${state.name}"
+                            th:text="${state.name}"></option>
+                    <!--If condition is false-->
+                    <option th:if="${centreDto.stateName == state.name}" th:value="${state.name}"
+                            th:text="${state.name}" selected></option>
+                </span>
+            </select>
+
+            <label for="district-select">Select District:</label>
+            <select id="district-select" name="districtId" onchange="submitCentreForm()">
+                <option selected disabled>Select District</option>
+                <span th:each="district: ${districts}">
+                    <option th:if="${centreDto.districtId!=district.id}" th:value="${district.id}"
+                            th:text="${district.name}"></option>
+                    <option th:unless="${centreDto.districtId!=district.id}" th:value="${district.id}"
+                            th:text="${district.name}" selected></option>
+                </span>
+            </select>
+
+            <label for="city-select">Select City/Village:</label>
+            <select id="city-select" name="cityId" onchange="submitCentreForm()">
+                <option selected disabled>Select City/Village</option>
+                <span th:each="city: ${cities}">
+                    <option th:if="${centreDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"></option>
+                    <option th:unless="${centreDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}" selected></option>
+                </span>
+            </select>
+
+            <label for="spot-select">Select City/Village:</label>
+            <select id="spot-select" name="spotId" onchange="submitCentreForm()">
+                <option selected disabled>Select Spot</option>
+                <span th:each="spot: ${spots}">
+                    <option th:if="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}"></option>
+                    <option th:unless="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}" selected></option>
+                </span>
+            </select>
+
+            <input type="submit" value="Add Centre">
+
+        </form>
+    </div>
+
+    <script layout:fragment="script">
+        function submitCentreForm() {
+            document.getElementById("add-centre-form").submit();
+        }
+    </script>
+</body>
+</html>

@@ -3,12 +3,11 @@ package com.aghs.mobilevaccination.data.model.vaccine;
 import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
+@Entity
+@Table
 public class MemberVaccination {
     @Id
     @Column
@@ -16,10 +15,10 @@ public class MemberVaccination {
     private String id;
     @Column(length = 6)
     private String pin;
-    @Column
+    @ManyToOne
     private VaccineDrive vaccineDrive;
-    @Column
-    private Spot vaccinateAt;
+    @ManyToOne
+    private Spot vaccinationSpot;
     @ManyToOne
     private Member recipient;
     @Column
@@ -51,12 +50,12 @@ public class MemberVaccination {
         this.vaccineDrive = vaccineDrive;
     }
 
-    public Spot getVaccinateAt() {
-        return vaccinateAt;
+    public Spot getVaccinationSpot() {
+        return vaccinationSpot;
     }
 
-    public void setVaccinateAt(Spot vaccinateAt) {
-        this.vaccinateAt = vaccinateAt;
+    public void setVaccinationSpot(Spot vaccinationSpot) {
+        this.vaccinationSpot = vaccinationSpot;
     }
 
     public Member getRecipient() {

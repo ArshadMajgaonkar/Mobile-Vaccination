@@ -49,7 +49,7 @@ public class VaccineController {
     public String postAddVaccine(Model model, @ModelAttribute("vaccine")Vaccine vaccine) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
-        Staff staff = staffService.getStaff();
+        Staff staff = staffService.getCurrentStaff();
         if(staff != null) {
             vaccine.setAddedBy(staff);
             vaccine.setAddedAt(new Date());
@@ -83,7 +83,7 @@ public class VaccineController {
         model.addAttribute("messages", messages);
         model.addAttribute("vaccines", vaccineRepository.findAll());
         model.addAttribute("vaccineCategories", vaccineCategoryRepository.findAll());
-        Staff staff = staffService.getStaff();
+        Staff staff = staffService.getCurrentStaff();
         if(staff != null) {
             vaccineCategory.setAddedBy(staff);
             vaccineCategory.setAddedAt(new Date());
