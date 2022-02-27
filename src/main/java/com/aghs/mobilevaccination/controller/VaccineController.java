@@ -89,6 +89,7 @@ public class VaccineController {
             vaccineCategory.setAddedAt(new Date());
             vaccineCategoryRepository.save(vaccineCategory);
             messages.add("New Vaccine Category added: " + vaccineCategory.getName());
+            vaccineCategory = new VaccineCategory();
         }
         else messages.add("Access Denied: No staff user found.");
         return "add-vaccine-category";

@@ -24,6 +24,8 @@ public class MemberVaccination {
     @Column
     private Date registeredAt;
     @Column
+    private Date selectedDate;
+    @Column
     private Date vaccinatedAt;
 
     public String getId() {
@@ -72,6 +74,14 @@ public class MemberVaccination {
 
     public void setRegisteredAt(Date registeredAt) {
         this.registeredAt = registeredAt;
+    }
+
+    public Date getSelectedDate() {
+        return selectedDate;
+    }
+
+    public void setSelectedDate(Date selectedDate) {
+        this.selectedDate = selectedDate;
     }
 
     public Date getVaccinatedAt() {

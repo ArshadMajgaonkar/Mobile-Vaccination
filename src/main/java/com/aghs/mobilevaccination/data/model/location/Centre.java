@@ -1,6 +1,5 @@
 package com.aghs.mobilevaccination.data.model.location;
 
-import com.aghs.mobilevaccination.data.dto.CentreDto;
 import com.aghs.mobilevaccination.data.model.Staff;
 
 import javax.persistence.*;
@@ -16,7 +15,7 @@ public class Centre {
     @Column(length = 100)
     private String name;
     @ManyToOne
-    private Spot situatedAt;
+    private Spot spot;
     @Column
     private Date addedAt;
     @ManyToOne
@@ -38,12 +37,12 @@ public class Centre {
         this.name = name;
     }
 
-    public Spot getSituatedAt() {
-        return situatedAt;
+    public Spot getSpot() {
+        return spot;
     }
 
-    public void setSituatedAt(Spot situatedAt) {
-        this.situatedAt = situatedAt;
+    public void setSpot(Spot spot) {
+        this.spot = spot;
     }
 
     public Date getAddedAt() {
@@ -67,7 +66,7 @@ public class Centre {
     public static Centre fromDto(String name, Spot spot, Staff staff) {
         Centre centre = new Centre();
         centre.setName(name);
-        centre.setSituatedAt(spot);
+        centre.setSpot(spot);
         centre.setAddedAt(new Date());
         centre.setAddedBy(staff);
         return centre;

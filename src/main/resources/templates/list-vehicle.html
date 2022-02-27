@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vehicle Listing</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3>Vehicle Listing</h3>
+        <p>
+            <a th:href="@{/staff/vehicle/add}">Add</a>
+        </p>
+        <table>
+            <tr>
+                <th>Registration Number</th>
+                <th>Centre</th>
+                <th>City</th>
+                <th>District</th>
+                <th>State</th>
+            </tr>
+            <tr th:each="vehicle: ${vehicles}">
+                <td th:text="${vehicle.registrationNumber}"></td>
+                <td th:text="${vehicle.centre.name}"></td>
+                <td th:text="${vehicle.centre.spot.city.name}"></td>
+                <td th:text="${vehicle.centre.spot.city.district.name}"></td>
+                <td th:text="${vehicle.centre.spot.city.district.state.name}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

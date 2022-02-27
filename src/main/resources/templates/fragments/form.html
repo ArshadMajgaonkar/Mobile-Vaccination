@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+    <div th:fragment="centre-select-elements">
+        <label for="c-state-select">Select State/UT:</label>
+        <select id="c-state-select" name="stateName" onchange="submitForm()" required>
+            <option value="" selected disabled>Select State</option>
+            <span th:each="state: ${states}">
+                    <option th:if="${centreSelectDto.stateName != state.name}" th:value="${state.name}"
+                            th:text="${state.name}"></option>
+                <!--If condition is false-->
+                    <option th:if="${centreSelectDto.stateName == state.name}" th:value="${state.name}"
+                            th:text="${state.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="c-district-select">Select District:</label>
+        <select id="c-district-select" name="districtId" onchange="submitForm()">
+            <option selected disabled>Select District</option>
+            <span th:each="district: ${districts}">
+                    <option th:if="${centreSelectDto.districtId!=district.id}" th:value="${district.id}"
+                            th:text="${district.name}"></option>
+                    <option th:unless="${centreSelectDto.districtId!=district.id}" th:value="${district.id}"
+                            th:text="${district.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="c-city-select">Select City/Village:</label>
+        <select id="c-city-select" name="cityId" onchange="submitForm()">
+            <option selected disabled>Select City/Village</option>
+            <span th:each="city: ${cities}">
+                    <option th:if="${centreSelectDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"></option>
+                    <option th:unless="${centreSelectDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="c-centre-select">Select Centre:</label>
+        <select id="c-centre-select" name="centreId" onchange="submitForm()">
+            <option selected disabled>Select Centre</option>
+            <span th:each="centre: ${centres}">
+                    <option th:if="${centreSelectDto.centreId!=centre.id}" th:value="${centre.id}"
+                            th:text="${centre.name}"></option>
+                    <option th:unless="${centreSelectDto.centreId!=centre.id}" th:value="${centre.id}"
+                            th:text="${centre.name}" selected></option>
+                </span>
+        </select>
+    </div>
+
+
+
+    <div th:fragment="spot-form-element">
+        <label for="s-state-select">Select State/UT:</label>
+        <select id="s-state-select" name="stateName" onchange="submitForm()" required>
+            <option value="" selected disabled>Select State</option>
+            <!--<option th:if="${spotDto.state!=null}" th:value="${spotDto.state}"
+                    th:text="${spotDto.state}" selected>
+            </option>-->
+            <span th:each="state: ${states}">
+                    <option th:if="${spotDto.stateName != state.name}" th:value="${state.name}"
+                            th:text="${state.name}"></option>
+                <!--If condition is false-->
+                    <option th:unless="${spotDto.stateName != state.name}" th:value="${state.name}"
+                            th:text="${state.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="s-district-select">Select District:</label>
+        <select id="s-district-select" name="districtName" onchange="submitForm()">
+            <option selected disabled>Select District</option>
+            <span th:each="district: ${districts}">
+                    <option th:if="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                            th:text="${district.name}"></option>
+                    <option th:unless="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                            th:text="${district.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="s-city-select">Select City/Village:</label>
+        <select id="s-city-select" name="cityName" onchange="submitForm()">
+            <option selected disabled>Select City/Village</option>
+            <span th:each="city: ${cities}">
+                    <option th:if="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}">
+                    </option>
+                    <option th:unless="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}"
+                            selected></option>
+                </span>
+        </select>
+    </div>
+
+
+
+</body>
+</html>

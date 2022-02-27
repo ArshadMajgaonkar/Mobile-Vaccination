@@ -9,7 +9,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <form method="post" id="spot-form" th:action="@{/spot/get-by-city}" th:object="${spotDto}">
+        <form method="post" id="spot-form" th:action="@{/spot/get-by-city}" >
 
             <label for="state-select">Select State/UT:</label>
             <select id="state-select" name="stateName" onchange="submitspotForm()" required>

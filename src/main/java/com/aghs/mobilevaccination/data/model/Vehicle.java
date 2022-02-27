@@ -50,4 +50,14 @@ public class Vehicle {
     public void setAddedBy(Staff addedBy) {
         this.addedBy = addedBy;
     }
+
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "registrationNumber='" + registrationNumber + '\'' +
+                ", centre=" + centre +
+                ", addedAt=" + addedAt +
+                ", addedBy=" + addedBy +
+                '}';
+    }
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vehicle</title>
+    <p>
+        <a th:text="@{/staff/vehicle}">Back</a>
+    </p>
+</head>
+<body>
+    <div layout:fragment="content">
+        <form id="add-vehicle-form" method="post" th:action="@{/staff/vehicle/add}">
+            <input type="text" name="registrationNumber" placeholder="Vehicle Registration Number"
+                   th:value="${vehicle.registrationNumber}"/>
+
+            <div th:replace="fragments/form::centre-select-elements"></div>
+
+            <input type="submit" value="Add Vehicle" />
+        </form>
+    </div>
+
+    <script layout:fragment="script">
+        function submitForm() {
+            document.getElementById("add-vehicle-form").submit();
+        }
+    </script>
+</body>
+</html>

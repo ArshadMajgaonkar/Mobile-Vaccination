@@ -15,24 +15,24 @@ public class VaccineDrive {
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @Column
+    @Column(nullable = false)
     private Date driveDate;
-    @ManyToOne
+    @ManyToOne(optional = false)
     private VaccineCategory vaccineCategory;
     @ManyToOne
     private Vehicle vehicle;
-    @Column
+    @Column(nullable = false)
     private long slotCount;
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Staff vaccinator;
-    @Column
+    @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private VaccineDriveStatus status;
     @ManyToMany
     private Set<Spot> vaccinationSpots;
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Staff addedBy;
-    @Column
+    @Column(nullable = false)
     private Date addedAt;
 
     public long getId() {

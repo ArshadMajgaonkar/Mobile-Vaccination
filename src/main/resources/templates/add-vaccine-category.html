@@ -38,9 +38,9 @@
                 <option selected>None</option>
                 <span th:each="vaccineCategory: ${vaccineCategories}">
                     <option selected th:value="${vaccineCategory.name}" th:text="${vaccineCategory.name}"
-                            th:if="${vaccineCategory.name == vaccineCategoryInstance.name}"></option>
+                            th:if="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
                     <option th:value="${vaccineCategory.name}" th:text="${vaccineCategory.name}"
-                            th:unless="${vaccineCategory.name == vaccineCategoryInstance.name}"></option>
+                            th:unless="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
                 </span>
             </select>
 
