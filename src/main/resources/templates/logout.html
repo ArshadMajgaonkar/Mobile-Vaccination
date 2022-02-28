@@ -9,14 +9,19 @@
     <style>
         .jumbotron{
             height: 32rem;
+            background-color: white;
         }
         .container1{
             position: relative;
         }
         .logout-image-overlay{
             position: absolute;
-            left: 10rem;
+            left: 5rem;
             top: 2rem;
+        }
+
+        .logout-image-overlay>img{
+        height: 25rem;
         }
 
         @media screen and (min-width: 768px)
@@ -41,15 +46,15 @@
         <div class="jumbotron row col-12">
             <div class="container1 d-none d-md-block col-md-4">
                 <div class="logout-image-overlay">
-                    <img src="../static/img/p107.png">
+                    <img src="/img/p108.jpg">
                 </div>
             </div>
             <div class="container2 col-12 col-md-6">
                 <div class="inner d-flex flex-column align-items-center justify-content-center">
-                    <h2>Logged out successfully</h2>
+                    <h2 class="pl-4">Logged out successfully</h2>
                     <div><a th:href="@{/}" class="btn btn-lg btn-primary mt-5">Back to Home</a></div>
                     <div class="mt-5">
-                        <blockquote class="blockquote">
+                        <blockquote class="blockquote pl-4">
                             <p class="mb-0">Get vaccinated at your nearest landmark</p>
                             <footer class="blockquote-footer"> <cite title="Source Title">Mobile Vaccination</cite></footer>
                         </blockquote>
