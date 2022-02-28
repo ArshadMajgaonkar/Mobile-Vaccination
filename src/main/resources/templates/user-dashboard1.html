@@ -7,6 +7,17 @@ lang="en">
 
     <title>Hello, world!</title>
 
+      <style>
+        .box{
+            height: 5rem;
+            background-color:hsl(0, 37%, 97%);
+            border-radius: 1rem;
+            box-shadow: 20px 20px 50px 15px rgb(216, 227, 235);
+            padding: 10px;
+            font-size: 1.5rem;
+        }
+    </style>
+
   </head>
   <body class="d-flex flex-column ">
     <div layout:fragment="content">
@@ -52,18 +63,48 @@ lang="en">
 </div>
       
     <div class="d-flex flex-column align-items-center">
-        <!--Member listing-->
-        <div th:if="${members != null}">
-            <ul th:each="member: ${members}">
-                <li>
+<!--        mycode-->
+        <div class="container">
+            <div class="d-flex flex-column" th:if="${members != null}">
+                <!-- divOne -->
+                <div class="box col-md-8 col-10 my-4" th:each="member: ${members}">
                     <form method="post" th:action="@{/user/member}">
-                        <input type="hidden" name="userId"
-                               th:value="${member.userId}">
-                        <input type="submit" th:value="${member.fullName}" />
+                        <input type="hidden" name="userId" th:value="${member.userId}">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div class="d-flex flex-column align-items-center">
+                            <div>
+                                <span class="material-icons-outlined"> <img src="/img/p109.svg"> </span>
+                                <input type="submit" th:value="${member.fullName}" />
+                            </div>
+                            <div>
+                                <span class="badge badge-pill badge-warning">Partially vaccinated</span>
+                                <!-- <span class="badge badge-pill badge-success">Fully vaccinated</span>
+                                <span class="badge badge-pill badge-danger">Not vaccinated</span> -->
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div>Year of Birth : 1998 (24 yrs)</div>
+                            <div>
+                                <a href="#"><button class="btn btn-primary col-10">Book Slot</button></a>
+                            </div>
+                        </div>
+                    </div>
                     </form>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
+        <!--Member listing-->
+<!--        <div th:if="${members != null}">-->
+<!--            <ul th:each="member: ${members}">-->
+<!--                <li>-->
+<!--                    <form method="post" th:action="@{/user/member}">-->
+<!--                        <input type="hidden" name="userId"-->
+<!--                               th:value="${member.userId}">-->
+<!--                        <input type="submit" th:value="${member.fullName}" />-->
+<!--                    </form>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
         <!--for no member-->
         <div class="p-2 bd-highlight" th:unless="${members != null}">
             <span style="font-size: 80px; color: gray;">
