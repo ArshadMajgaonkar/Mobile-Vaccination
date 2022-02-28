@@ -10,6 +10,9 @@ import java.util.Date;
 public class VaccineCategory {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @Column
     private String name;
     @ManyToOne(optional = false)
     private Vaccine vaccine;
@@ -24,6 +27,14 @@ public class VaccineCategory {
     private Date addedAt;
     @ManyToOne(optional = false)
     private Staff addedBy;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

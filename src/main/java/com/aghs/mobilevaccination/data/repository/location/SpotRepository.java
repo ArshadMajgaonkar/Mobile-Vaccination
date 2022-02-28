@@ -9,4 +9,5 @@ import java.util.List;
 public interface SpotRepository extends JpaRepository<Spot, Long> {
     List<Spot> findByCity(City city);
     List<Spot> findByPinCode(String pinCode);
+    Spot findByIdAndCity(Long id, City city);
 }

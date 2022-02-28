@@ -1,10 +1,9 @@
 package com.aghs.mobilevaccination.data.dto;
 
-public class SpotDto {
+public class CityDto {
     private String stateName;
     private Long districtId;
     private Long cityId;
-    private Long spotId;
 
     public String getStateName() {
         return stateName;
@@ -30,11 +29,12 @@ public class SpotDto {
         this.cityId = cityId;
     }
 
-    public Long getSpotId() {
-        return spotId;
-    }
-
-    public void setSpotId(Long spotId) {
-        this.spotId = spotId;
+    @Override
+    public String toString() {
+        return "CityDto{" +
+                "stateName='" + stateName + '\'' +
+                ", districtId=" + districtId +
+                ", cityId=" + cityId +
+                '}';
     }
 }

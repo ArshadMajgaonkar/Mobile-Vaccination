@@ -12,7 +12,7 @@
         <h3>Add Vaccine Category</h3>
         <a th:href="@{/staff/vaccine/category}">Back to Vaccine Category List</a>
         <form method="post"
-              th:action="@{/staff/vaccine/add-vaccine-category}" th:object="${vaccineCategoryInstance}">
+              th:action="@{/staff/vaccine/add-vaccine-category}" >
 
             <input type="text" name="name" placeholder="Category Name" required
                    th:value="${vaccineCategoryInstance.name}" />
@@ -35,11 +35,11 @@
 
             <label for="prerequisite-select">Pre-requisite</label>
             <select name="prerequisite" id="prerequisite-select">
-                <option selected>None</option>
+                <option selected disabled>None</option>
                 <span th:each="vaccineCategory: ${vaccineCategories}">
-                    <option selected th:value="${vaccineCategory.name}" th:text="${vaccineCategory.name}"
+                    <option selected th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
                             th:if="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
-                    <option th:value="${vaccineCategory.name}" th:text="${vaccineCategory.name}"
+                    <option th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
                             th:unless="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
                 </span>
             </select>

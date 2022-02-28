@@ -1,6 +1,6 @@
 package com.aghs.mobilevaccination.controller;
 
-import com.aghs.mobilevaccination.data.dto.SpotDto;
+import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.dto.PinCodeDto;
 import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.District;
@@ -47,25 +47,23 @@ public class SpotController {
     }
 
     @PostMapping("/get-by-city")
-    public String postByCity(Model model, @ModelAttribute("spotDto") SpotDto spotDto) {
+    public String postByCity(Model model, @ModelAttribute("cityDto") CityDto cityDto) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("states", stateRepository.findAll());
-        model.addAttribute("spotDto", spotDto);
+        model.addAttribute("cityDto", cityDto);
         model.addAttribute("messages", messages);
-        if(spotDto.getStateName() != null) {
-            State selectedState = stateRepository.findByName(spotDto.getStateName());
+        System.out.println(cityDto);
+        if(cityDto.getStateName() != null) {
+            State selectedState = stateRepository.findByName(cityDto.getStateName());
             List<District> districts = districtRepository.findByState(selectedState);
             model.addAttribute("districts", districts);
-            districts.forEach(System.out::println);
-            if (spotDto.getDistrictName() != null ) {
-                District selectedDistrict = districtRepository.findByNameAndState(spotDto.getDistrictName(), selectedState);
+            if (cityDto.getDistrictId() != null ) {
+                District selectedDistrict = districtRepository.findByIdAndState(cityDto.getDistrictId(), selectedState);
                 List<City> cities = cityRepository.findByDistrict(selectedDistrict);
                 model.addAttribute("cities", cities);
-                cities.forEach(System.out::println);
-                if (spotDto.getCityName() != null) {
-                    City selectedCity = cityRepository.findByNameAndDistrict(spotDto.getCityName(), selectedDistrict);
+                if (cityDto.getCityId() != null) {
+                    City selectedCity = cityRepository.findByIdAndDistrict(cityDto.getCityId(), selectedDistrict);
                     List<Spot> spots = spotRepository.findByCity(selectedCity);
-                    System.out.println(spots);
                     model.addAttribute("spots", spots.size()!=0 ? spots : null);
                 }
             }
@@ -88,9 +86,9 @@ public class SpotController {
         return "slot-by-pin-code";
     }
 
-    @ModelAttribute("spotDto")
-    public SpotDto getSpotDTO() {
-        return new SpotDto();
+    @ModelAttribute("cityDto")
+    public CityDto getSpotDTO() {
+        return new CityDto();
     }
 
     @ModelAttribute("pinCodeDto")

@@ -12,10 +12,12 @@
         <h3>Add Vaccine</h3>
         <a th:href="@{/staff/vaccine/}">Back</a>
         <form method="post" th:action="@{/staff/vaccine/add-vaccine}" th:object="${vaccineInstance}">
-            <input type="text" name="name" placeholder="Vaccine Name"
+            <input type="text" name="name" placeholder="Vaccine Name" required
                    th:value="${vaccineInstance.name}" />
-            <input type="text" name="code" placeholder="Code"
+            <input type="text" name="code" placeholder="Code" required
                    th:value="${vaccineInstance.code}" />
+            <input type="number" name="intervalInDays" placeholder="Interval In Days" required
+                   th:value="${vaccineInstance.intervalInDays}" />
             <input type="submit" value="Add Vaccine"/>
         </form>
     </div>

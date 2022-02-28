@@ -15,7 +15,7 @@
         </p>
         <p>
             <label>Aadhar Number: </label>
-            <span th:text="${member.aadharLast4Digit}"></span>
+            <span th:text="${'XXXX XXXX '+member.aadharLast4Digit}"></span>
         </p>
         <p>
             <label>Year of Birth: </label>
@@ -23,17 +23,10 @@
         </p>
 
         <div>
-            <h4>Vaccinated:</h4>
-        </div>
+            <h6>Vaccinated:</h6>
+            <span th:if="${vaccinatedList}">
 
-        <div>
-            <h4>Available Vaccination:</h4>
-            <div th:each="availableVaccine: ${availableVaccines}">
-                <form th:href="@{/user/member/book-slot}">
-                    <input type="hidden" name="userId" th:value="${member.userId}"/>
-                    <input type="submit" value="Book Slot"/>
-                </form>
-            </div>
+            </span>
         </div>
 
     </div>

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface VaccineCategoryRepository extends JpaRepository<VaccineCategory, String> {
+public interface VaccineCategoryRepository extends JpaRepository<VaccineCategory, Long> {
 }

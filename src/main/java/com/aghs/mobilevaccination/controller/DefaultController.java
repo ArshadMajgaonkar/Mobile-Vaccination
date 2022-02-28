@@ -1,6 +1,7 @@
 package com.aghs.mobilevaccination.controller;
 
 import com.aghs.mobilevaccination.data.dto.CentreSelectDto;
+import com.aghs.mobilevaccination.data.dto.SpotDto;
 import com.aghs.mobilevaccination.data.model.location.*;
 import com.aghs.mobilevaccination.data.repository.location.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,29 @@ public class DefaultController {
                     model.addAttribute("centres", centres);
                     if(centreSelectDto.getCentreId() != -1) {
                         return centreRepository.findById(centreSelectDto.getCentreId()).orElse(null);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Spot getSpotDto(SpotDto spotDto, Model model) {
+        model.addAttribute("state", stateRepository.findAll());
+        if(spotDto.getStateName() != null) {
+            State selectedState = stateRepository.findByName(spotDto.getStateName());
+            model.addAttribute("districts", districtRepository.findByState(selectedState));
+            if(spotDto.getDistrictId() != null &&
+                    districtRepository.findByIdAndState(spotDto.getDistrictId(), selectedState) != null) {
+                District selectedDistrict = districtRepository.findById(spotDto.getDistrictId()).orElse(null);
+                model.addAttribute("cities", cityRepository.findByDistrict(selectedDistrict));
+                if(spotDto.getCityId() != null &&
+                        cityRepository.findByIdAndDistrict(spotDto.getCityId(), selectedDistrict)!=null) {
+                    City selectedCity = cityRepository.findById(spotDto.getCityId()).orElse(null);
+                    model.addAttribute("spots", spotRepository.findByCity(selectedCity));
+                    if(spotDto.getSpotId() != null &&
+                            spotRepository.findByIdAndCity(spotDto.getSpotId(), selectedCity)!=null) {
+                        return spotRepository.findById(spotDto.getSpotId()).orElse(null);
                     }
                 }
             }

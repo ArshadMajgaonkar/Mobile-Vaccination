@@ -5,6 +5,7 @@ import com.aghs.mobilevaccination.data.model.location.Spot;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Random;
 
 @Entity
 @Table
@@ -90,5 +91,13 @@ public class MemberVaccination {
 
     public void setVaccinatedAt(Date vaccinatedAt) {
         this.vaccinatedAt = vaccinatedAt;
+    }
+
+    public void generatePIN(int length) {
+        Random random = new Random();
+        pin = "";
+        for(int i=0; i < length; i++) {
+            pin += String.valueOf(random.nextInt(10));
+        }
     }
 }
