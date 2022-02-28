@@ -45,7 +45,7 @@ lang="en">
                       th:action="@{/generate-otp}" th:object="${accountInstance}">
                     <h3 style="color:white; font-family:verdana;"
                     class="mb-3 font-weight-light text-muted">Mobile Vaccination</h3>
-                    <h1 style="color:white; font-family:verdana;"
+                    <h1 style="color:#777; font-family:verdana;"
                     class="mb-4 font-weight-light text-uppercase">Login</h1>
                     <div class="form-group">
                       <div class="input-group mb-2">
@@ -64,10 +64,12 @@ lang="en">
                     </div> -->
 
                     <div class="form-group">
-                      <button type="submit" name="submitbtn" value="submit" 
+                      <button type="submit" name="submitbtn" value="submit"
                       class="btn mt-5 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Get OTP</button>
                   </div>
                 </form>
+
+
             </div>
         </div>
 
@@ -110,11 +112,24 @@ lang="en">
 
                     <div class="form-group">
                         <button type="submit" name="submitbtn" value="submit"
-                                class="btn mt-5 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Log in</button>
+                                class="btn mt-3 mb-2 rounded-pill btn-lg btn-custom btn-block text-uppercase form-control rounded-pill">Log in</button>
                     </div>
 
+<!--                    <div class="form-group">-->
+<!--                        <button type="" name="submitbtn" value="Resend OTP" disabled-->
+<!--                                class="btn mt-3 mb-2 rounded-pill btn-lg btn-success btn-block text-uppercase form-control rounded-pill">Resend OTP</button>-->
+<!--                    </div>-->
+
+                    <div class="form-group mt-2">
+                        <ul class="mt-2" th:each="message: ${messages}">
+                            <li th:text="${message}">MESSAGE</li>
+                            <li>OTP valid for 10 min</li>
+                        </ul>
+                    </div>
 
                 </form>
+
+
             </div>
         </div>
 
