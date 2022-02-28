@@ -96,6 +96,19 @@ public class Member {
         this.linkedAccount = linkedAccount;
     }
 
+    @Override
+    public String toString() {
+        return "Member{" +
+                "userId=" + userId +
+                ", aadharId='" + aadharId + '\'' +
+                ", aadharLast4Digit='" + aadharLast4Digit + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", birthYear='" + birthYear + '\'' +
+                ", addedAt=" + addedAt +
+                ", linkedAccount=" + linkedAccount +
+                '}';
+    }
+
     public void processData() {
         aadharLast4Digit = aadharId.substring(8, 12);
         aadharId = Hashing.sha512().hashString(aadharId, StandardCharsets.UTF_8).toString();

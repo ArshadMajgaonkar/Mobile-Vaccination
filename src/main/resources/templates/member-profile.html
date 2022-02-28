@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Profile</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <p>
+            <label>Name: </label>
+            <span th:text="${member.fullName}"></span>
+        </p>
+        <p>
+            <label>Aadhar Number: </label>
+            <span th:text="${member.aadharLast4Digit}"></span>
+        </p>
+        <p>
+            <label>Year of Birth: </label>
+            <span th:text="${member.birthYear}"></span>
+        </p>
+
+        <div>
+            <h4>Vaccinated:</h4>
+        </div>
+
+        <div>
+            <h4>Available Vaccination:</h4>
+            <div th:each="availableVaccine: ${availableVaccines}">
+                <form th:href="@{/user/member/book-slot}">
+                    <input type="hidden" name="userId" th:value="${member.userId}"/>
+                    <input type="submit" value="Book Slot"/>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

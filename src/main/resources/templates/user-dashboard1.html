@@ -56,7 +56,11 @@ lang="en">
         <div th:if="${members != null}">
             <ul th:each="member: ${members}">
                 <li>
-                    <a href="#" th:text="${member.fullName}"></a>
+                    <form method="post" th:action="@{/user/member}">
+                        <input type="hidden" name="userId"
+                               th:value="${member.userId}">
+                        <input type="submit" th:value="${member.fullName}" />
+                    </form>
                 </li>
             </ul>
         </div>

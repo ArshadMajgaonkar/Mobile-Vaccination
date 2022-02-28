@@ -4,11 +4,13 @@ import com.aghs.mobilevaccination.auth.GeneralUserDetails;
 import com.aghs.mobilevaccination.data.model.Account;
 import com.aghs.mobilevaccination.data.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.Date;
 
 @Service
@@ -23,6 +25,11 @@ public class GeneralUserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found.");
         }
         return new GeneralUserDetails(account);
+    }
+
+    public Account getCurrentAccount() {
+        String mobileNumber = SecurityContextHolder.getContext().getAuthentication().getName();
+        return accountRepository.findByMobileNumber(mobileNumber);
     }
 
     public void updateLastLogin(Account account) {
