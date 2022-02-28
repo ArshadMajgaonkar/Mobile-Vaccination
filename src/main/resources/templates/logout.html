@@ -5,12 +5,59 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login | Mobile Vaccination</title>
+    <title>Logout | Mobile Vaccination</title>
+    <style>
+        .jumbotron{
+            height: 32rem;
+        }
+        .container1{
+            position: relative;
+        }
+        .logout-image-overlay{
+            position: absolute;
+            left: 10rem;
+            top: 2rem;
+        }
+
+        @media screen and (min-width: 768px)
+        {
+            .container2{
+            position: relative;
+            /* padding: 2rem; */
+            }
+            .inner{
+                position: absolute;
+                left: 10rem;
+                top: 5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>You have been logged out successfully.</h3>
-        <a th:href="@{/}">Back to Home</a>
+<!--        <h3>You have been logged out successfully.</h3>-->
+<!--        <a th:href="@{/}">Back to Home</a>-->
+
+        <div class="jumbotron row col-12">
+            <div class="container1 d-none d-md-block col-md-4">
+                <div class="logout-image-overlay">
+                    <img src="../static/img/p107.png">
+                </div>
+            </div>
+            <div class="container2 col-12 col-md-6">
+                <div class="inner d-flex flex-column align-items-center justify-content-center">
+                    <h2>Logged out successfully</h2>
+                    <div><a th:href="@{/}" class="btn btn-lg btn-primary mt-5">Back to Home</a></div>
+                    <div class="mt-5">
+                        <blockquote class="blockquote">
+                            <p class="mb-0">Get vaccinated at your nearest landmark</p>
+                            <footer class="blockquote-footer"> <cite title="Source Title">Mobile Vaccination</cite></footer>
+                        </blockquote>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -35,3 +35,4 @@ build/
 
 ###arshad system
 src/main/resources/templates/carousel.html
+src/main/resources/templates/tempLogout.html
