@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+###arshad system
+src/main/resources/templates/carousel.html
