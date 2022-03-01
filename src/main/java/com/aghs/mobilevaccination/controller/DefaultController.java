@@ -7,6 +7,7 @@ import com.aghs.mobilevaccination.data.model.location.*;
 import com.aghs.mobilevaccination.data.repository.location.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class DefaultController {
     }
 
     public Spot getSpotWithSelectedCityAndItsSpots(SpotDto spotDto, Model model, City city, List<Spot> spots) {
-        model.addAttribute("state", stateRepository.findAll());
+        model.addAttribute("states", stateRepository.findAll());
         if(spotDto.getStateName() != null) {
             State selectedState = stateRepository.findByName(spotDto.getStateName());
             model.addAttribute("districts", districtRepository.findByState(selectedState));
@@ -60,8 +61,8 @@ public class DefaultController {
                 if(spotDto.getCityId() != null &&
                         cityRepository.findByIdAndDistrict(spotDto.getCityId(), selectedDistrict)!=null) {
                     City selectedCity = cityRepository.findById(spotDto.getCityId()).orElse(null);
-                    city = selectedCity;
-                    spots = spotRepository.findByCity(selectedCity);
+                    city.setAllotedSlotsPerDay(selectedCity.getAllotedSlotsPerDay());
+                    spots.addAll(spotRepository.findByCity(selectedCity));
                     model.addAttribute("spots", spots);
                     if(spotDto.getSpotId() != null &&
                             spotRepository.findByIdAndCity(spotDto.getSpotId(), selectedCity)!=null) {

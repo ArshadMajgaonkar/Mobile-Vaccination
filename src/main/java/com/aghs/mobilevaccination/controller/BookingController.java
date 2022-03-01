@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,9 +32,10 @@ public class BookingController extends DefaultController{
     MemberVaccinationRepository memberVaccinationRepository;
     @Autowired
     GeneralUserDetailService userService;
+    DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @PostMapping("/user/member/show-slot")
-    public String getSlotBookingPage(@RequestBody Long userId, Model model) {
+    public String getSlotBookingPage(@ModelAttribute("userId") Long userId, Model model) {
         model.addAttribute("states", stateRepository.findAll());
         LocalDate today = LocalDate.now();
         model.addAttribute("selectedDate", today);
@@ -40,40 +43,43 @@ public class BookingController extends DefaultController{
         return "book-slot-by-city";
     }
 
-    @PostMapping("/user/member/get-slot-by-city")
-    public String postSlotBookingPage(@RequestBody LocalDate selectedDate,
-                                      @RequestBody CityDto cityDto,
-                                      Model model) {
-        City city = getCity(cityDto, model);
-        if(city != null) {
-            model.addAttribute("spots", new Spot());
+    @PostMapping("/user/member/book-slot")
+    public String bookSlot(@ModelAttribute("userId") Long userId,
+                           @ModelAttribute("selectedDate") String selectedDateString,
+                           @ModelAttribute("spotDto") SpotDto spotDto,
+                           Model model) {
+        City city = new City();
+        List<Spot> spots = new ArrayList<>();
+        Member currentMember = memberRepository.findById(userId).orElse(null);
+        LocalDate selectedDate = LocalDate.parse(selectedDateString, dateFormatter);
+        List<String> messages = new ArrayList<>();
+        model.addAttribute("messages", messages);
+        model.addAttribute("remainingSlots", "Please select a city");
+        Spot selectedSpot = getSpotWithSelectedCityAndItsSpots(spotDto, model, city, spots);
+        // data checking
+        if(spotDto.getCityId() != null) {
+            Long bookedSlot = City.getRemainingSlots(memberVaccinationRepository, selectedDate, spots);
+            Long remainingSlots = city.getAllotedSlotsPerDay() - bookedSlot;
+            model.addAttribute("remainingSlots", remainingSlots);
+            if(remainingSlots <= 0)
+                messages.add("All slots for selected city.");
+            else if(currentMember == null)
+                messages.add("No such Member exist: " + String.valueOf(userId));
+            else if (selectedSpot != null) {
+                MemberVaccination memberVaccination = new MemberVaccination();
+                memberVaccination.setSelectedDate(selectedDate);
+                memberVaccination.setVaccinationSpot(selectedSpot);
+                memberVaccination.setRegisteredAt(new Date());
+                memberVaccination.setRecipient(currentMember);
+                memberVaccinationRepository.save(memberVaccination);
+                messages.add("Vaccination Slot Booked");
+            }
         }
         return "book-slot-by-city";
     }
 
-    @PostMapping("/user/member/book-slot")
-    public String bookSlot(@RequestBody Long userId,
-                           @RequestBody LocalDate selectedDate,
-                           @RequestBody SpotDto spotDto,
-                           Model model) {
-        City city = new City();
-        List<Spot> spots = new ArrayList<>();
-        model.addAttribute("reamainingSlots", "N/A");
-        Spot selectedSpot = getSpotWithSelectedCityAndItsSpots(spotDto, model, city, spots);
-        if(city.getName() != null) {
-            Long bookedSlot = City.getRemainingSlots(memberVaccinationRepository, selectedDate, spots);
-            Long remainingSlots = city.getAllotedSlotsPerDay() - bookedSlot;
-            model.addAttribute("remainingSlots", remainingSlots);
-        }
-        if (selectedSpot != null) {
-            Member currentMember = memberRepository.findById(userId).orElse(null);
-            MemberVaccination memberVaccination = new MemberVaccination();
-            memberVaccination.setVaccinationSpot(selectedSpot);
-            memberVaccination.setRegisteredAt(new Date());
-            memberVaccination.setRecipient(currentMember);
-            memberVaccinationRepository.save(memberVaccination);
-        }
-        return "book-slot";
+    @ModelAttribute("spotDto")
+    public SpotDto getDefaultSpotDto() {
+        return new SpotDto();
     }
-
 }

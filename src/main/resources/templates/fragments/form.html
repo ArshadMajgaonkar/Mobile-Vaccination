@@ -107,23 +107,34 @@
         </select>
 
         <label for="s-district-select">Select District:</label>
-        <select id="s-district-select" name="districtName" onchange="submitForm()">
+        <select id="s-district-select" name="districtId" onchange="submitForm()">
             <option selected disabled>Select District</option>
             <span th:each="district: ${districts}">
-                    <option th:if="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                    <option th:if="${spotDto.districtId!=district.id}" th:value="${district.id}"
                             th:text="${district.name}"></option>
-                    <option th:unless="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                    <option th:unless="${spotDto.districtId!=district.id}" th:value="${district.id}"
                             th:text="${district.name}" selected></option>
                 </span>
         </select>
 
         <label for="s-city-select">Select City/Village:</label>
-        <select id="s-city-select" name="cityName" onchange="submitForm()">
+        <select id="s-city-select" name="cityId" onchange="submitForm()">
             <option selected disabled>Select City/Village</option>
             <span th:each="city: ${cities}">
-                    <option th:if="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}">
+                    <option th:if="${spotDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}">
                     </option>
-                    <option th:unless="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}"
+                    <option th:unless="${spotDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"
+                            selected></option>
+                </span>
+        </select>
+
+        <label for="s-spot-select">Select Ward:</label>
+        <select id="s-spot-select" name="spotId" onchange="submitForm()">
+            <option selected disabled>Select Ward</option>
+            <span th:each="spot: ${spots}">
+                    <option th:if="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward}">
+                    </option>
+                    <option th:unless="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward}"
                             selected></option>
                 </span>
         </select>

@@ -1,5 +1,7 @@
 package com.aghs.mobilevaccination.data.model;
 
+import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 import com.google.common.hash.Hashing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**

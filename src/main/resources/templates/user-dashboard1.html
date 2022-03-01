@@ -68,7 +68,7 @@ lang="en">
             <div class="d-flex flex-column align-items-center" th:if="${members != null}">
                 <!-- divOne -->
                 <div class="box col-md-8 col-10 my-4" th:each="member: ${members}">
-                    <form method="post" th:action="@{/user/member/book-slot}">
+                    <form method="post" th:action="@{/user/member/show-slot}">
                         <input type="hidden" name="userId" th:value="${member.userId}">
                     <div class="d-flex flex-row justify-content-between">
                         <div class="d-flex flex-column align-items-center">

@@ -13,8 +13,8 @@ import java.util.Random;
 public class MemberVaccination {
     @Id
     @Column
-    @GeneratedValue
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     @Column(length = 6)
     private String pin;
     @ManyToOne
@@ -30,11 +30,11 @@ public class MemberVaccination {
     @Column
     private Date vaccinatedAt;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

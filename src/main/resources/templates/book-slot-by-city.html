@@ -9,7 +9,7 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <form id="spot-form" th:action="@{/user/book-slot}">
+        <form method="post" id="spot-form" th:action="@{/user/member/book-slot}" th:object="${spotDto}">
 
             <input type="hidden" name="userId"
                    th:value="${userId}" />
@@ -19,7 +19,7 @@
 
             <div th:replace="fragments/form::spot-select-elements"></div>
 
-            <p th:text="'Remaining slot for city: ' + ${remainingSlots}"></p>
+            <p th:text="'Remaining slot: ' + ${remainingSlots}"></p>
 
             <submit th:if="${spots}">Search</submit>
             <submit th:unless="${spots}">Book Slot</submit>
