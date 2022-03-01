@@ -55,13 +55,48 @@
 
 
 
-    <div th:fragment="spot-form-element">
+    <div th:fragment="city-select-elements">
+        <label for="city-state-select">Select State/UT:</label>
+        <select id="city-state-select" name="stateName" onchange="submitForm()" required>
+            <option value="" selected disabled>Select State</option>
+            <span th:each="state: ${states}">
+                    <option th:if="${spotDto.stateName != state.name}" th:value="${state.name}"
+                            th:text="${state.name}"></option>
+                <!--If condition is false-->
+                    <option th:unless="${spotDto.stateName != state.name}" th:value="${state.name}"
+                            th:text="${state.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="city-district-select">Select District:</label>
+        <select id="city-district-select" name="districtName" onchange="submitForm()">
+            <option selected disabled>Select District</option>
+            <span th:each="district: ${districts}">
+                    <option th:if="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                            th:text="${district.name}"></option>
+                    <option th:unless="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                            th:text="${district.name}" selected></option>
+                </span>
+        </select>
+
+        <label for="city-city-select">Select City/Village:</label>
+        <select id="city-city-select" name="cityName" onchange="submitForm()">
+            <option selected disabled>Select City/Village</option>
+            <span th:each="city: ${cities}">
+                    <option th:if="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}">
+                    </option>
+                    <option th:unless="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}"
+                            selected></option>
+                </span>
+        </select>
+    </div>
+
+
+
+    <div th:fragment="spot-select-elements">
         <label for="s-state-select">Select State/UT:</label>
         <select id="s-state-select" name="stateName" onchange="submitForm()" required>
             <option value="" selected disabled>Select State</option>
-            <!--<option th:if="${spotDto.state!=null}" th:value="${spotDto.state}"
-                    th:text="${spotDto.state}" selected>
-            </option>-->
             <span th:each="state: ${states}">
                     <option th:if="${spotDto.stateName != state.name}" th:value="${state.name}"
                             th:text="${state.name}"></option>

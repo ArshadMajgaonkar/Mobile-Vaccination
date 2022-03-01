@@ -1,6 +1,7 @@
 package com.aghs.mobilevaccination.controller;
 
 import com.aghs.mobilevaccination.data.dto.CentreSelectDto;
+import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.dto.SpotDto;
 import com.aghs.mobilevaccination.data.model.location.*;
 import com.aghs.mobilevaccination.data.repository.location.*;
@@ -47,7 +48,7 @@ public class DefaultController {
         return null;
     }
 
-    public Spot getSpotDto(SpotDto spotDto, Model model) {
+    public Spot getSpotWithSelectedCityAndItsSpots(SpotDto spotDto, Model model, City city, List<Spot> spots) {
         model.addAttribute("state", stateRepository.findAll());
         if(spotDto.getStateName() != null) {
             State selectedState = stateRepository.findByName(spotDto.getStateName());
@@ -59,11 +60,37 @@ public class DefaultController {
                 if(spotDto.getCityId() != null &&
                         cityRepository.findByIdAndDistrict(spotDto.getCityId(), selectedDistrict)!=null) {
                     City selectedCity = cityRepository.findById(spotDto.getCityId()).orElse(null);
-                    model.addAttribute("spots", spotRepository.findByCity(selectedCity));
+                    city = selectedCity;
+                    spots = spotRepository.findByCity(selectedCity);
+                    model.addAttribute("spots", spots);
                     if(spotDto.getSpotId() != null &&
                             spotRepository.findByIdAndCity(spotDto.getSpotId(), selectedCity)!=null) {
                         return spotRepository.findById(spotDto.getSpotId()).orElse(null);
                     }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Spot getSpot(SpotDto spotDto, Model model) {
+        City city = new City();
+        List<Spot> spots = new ArrayList<>();
+        return getSpotWithSelectedCityAndItsSpots(spotDto, model, city, spots);
+    }
+
+    public City getCity(CityDto cityDto, Model model) {
+        model.addAttribute("state", stateRepository.findAll());
+        if(cityDto.getStateName() != null) {
+            State selectedState = stateRepository.findByName(cityDto.getStateName());
+            model.addAttribute("districts", districtRepository.findByState(selectedState));
+            if(cityDto.getDistrictId() != null &&
+                    districtRepository.findByIdAndState(cityDto.getDistrictId(), selectedState) != null) {
+                District selectedDistrict = districtRepository.findById(cityDto.getDistrictId()).orElse(null);
+                model.addAttribute("cities", cityRepository.findByDistrict(selectedDistrict));
+                if(cityDto.getCityId() != null &&
+                        cityRepository.findByIdAndDistrict(cityDto.getCityId(), selectedDistrict)!=null) {
+                    return cityRepository.findById(cityDto.getCityId()).orElse(null);
                 }
             }
         }

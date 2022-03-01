@@ -4,6 +4,7 @@ import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Random;
 
@@ -25,7 +26,7 @@ public class MemberVaccination {
     @Column
     private Date registeredAt;
     @Column
-    private Date selectedDate;
+    private LocalDate selectedDate;
     @Column
     private Date vaccinatedAt;
 
@@ -77,11 +78,11 @@ public class MemberVaccination {
         this.registeredAt = registeredAt;
     }
 
-    public Date getSelectedDate() {
+    public LocalDate getSelectedDate() {
         return selectedDate;
     }
 
-    public void setSelectedDate(Date selectedDate) {
+    public void setSelectedDate(LocalDate selectedDate) {
         this.selectedDate = selectedDate;
     }
 
