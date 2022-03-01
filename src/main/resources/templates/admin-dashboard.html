@@ -17,6 +17,177 @@
         <a th:href="@{/staff/vehicle}">Vehicle</a> |
         <a th:href="@{/staff/logout}">Log Out</a>
     </p>
+
+    <div class="container">
+        <div class="d-flex flex-column">
+            <div class="h3 text-center">List of Registration</div> <hr>
+            <div><p class="text-uppercase badge bg-warning p-2">Filters</p></div>
+
+            <!-- NOTE : MIN MAX DATE FILTER TO BE ADDED SOON -->
+            <!-- <div>
+                <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody><tr>
+                        <td>Minimum date:</td>
+                        <td><input type="text" id="min" name="min"></td>
+                    </tr>
+                    <tr>
+                        <td>Maximum date:</td>
+                        <td><input type="text" id="max" name="max"></td>
+                    </tr>
+                </tbody></table>
+            </div> -->
+            <div class="container">
+                <table class="table table-hover table-striped text-center" id="myTable">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Appoi. Date</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Dose</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Edit-Status</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>2022-03-01</td>
+                        <td>Otto</td>
+                        <td>Mark</td>
+                        <td>1</td>
+                        <td>Airoli</td>
+                        <td>Registered</td>
+                        <td><button class="btn btn-danger">Change</button></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>2022-03-02</td>
+                        <td>Otto</td>
+                        <td>Delloite</td>
+                        <td>1</td>
+                        <td>Airoli</td>
+                        <td>Registered</td>
+                        <td><button class="btn btn-danger">Change</button></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>2022-03-01</td>
+                        <td>Flank</td>
+                        <td>Mark</td>
+                        <td>2</td>
+                        <td>Thane</td>
+                        <td>Registered</td>
+                        <td><button class="btn btn-danger">Change</button></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">4</th>
+                        <td>2022-02-28</td>
+                        <td>Otto</td>
+                        <td>Delloite</td>
+                        <td>2</td>
+                        <td>Airoli</td>
+                        <td>Registered</td>
+                        <td><button class="btn btn-danger">Change</button></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">5</th>
+                        <td>2022-03-01</td>
+                        <td>Flank</td>
+                        <td>Mark</td>
+                        <td>1</td>
+                        <td>Ambernath</td>
+                        <td>Registered</td>
+                        <td><button class="btn btn-danger">Change</button></td>
+                      </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Appoi. Date</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Dose</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Edit-Status</th>
+                        </tr>
+                    </tfoot>
+                  </table>
+            </div>
+        </div>
+    </div>
 </div>
+<script layout:fragment="script">
+    var minDate, maxDate;
+ 
+ // Custom filtering function which will search data in column four between two values
+ $.fn.dataTable.ext.search.push(
+     function( settings, data, dataIndex ) {
+         var min = minDate.val();
+         var max = maxDate.val();
+         var date = new Date( data[1] );
+         console.log(date);
+  
+         if (
+             ( min === null && max === null ) ||
+             ( min === null && date <= max ) ||
+             ( min <= date   && max === null ) ||
+             ( min <= date   && date <= max )
+         ) {
+             return true;
+         }
+         return false;
+     }
+ );
+  
+ $(document).ready(function() {
+     // Create date inputs
+     minDate = new DateTime($('#min'), {
+         format: 'YYYY MM DD'
+     });
+     maxDate = new DateTime($('#max'), {
+         format: 'YYYY MM DD'
+     });
+  
+     // DataTables initialisation
+     var table = $('#myTable').DataTable();
+  
+     // Refilter the table
+     $('#min, #max').on('change', function () {
+         table.draw();
+     });
+ });
+
+
+//  $.fn.dataTable.ext.search.push(
+//     function( settings, data, dataIndex ) {
+//         var min = parseInt( $('#min').val(), 10 );
+//         var max = parseInt( $('#max').val(), 10 );
+//         var age = parseFloat( data[0] ) || 0; // use data for the age column
+ 
+//         if ( ( isNaN( min ) && isNaN( max ) ) ||
+//              ( isNaN( min ) && age <= max ) ||
+//              ( min <= age   && isNaN( max ) ) ||
+//              ( min <= age   && age <= max ) )
+//         {
+//             return true;
+//         }
+//         return false;
+//     }
+// );
+ 
+// $(document).ready(function() {
+//     var table = $('#myTable').DataTable();
+     
+//     // Event listener to the two range filtering inputs to redraw on input
+//     $('#min, #max').keyup( function() {
+//         table.draw();
+//     } );
+// } );
+
+</script>
 </body>
 </html>

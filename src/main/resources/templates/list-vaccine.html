@@ -9,7 +9,48 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Vaccine</h3>
+
+
+        
+    <div class="container py-4">
+        <div class="d-flex flex-column">
+            <div class="h3 text-center">List of Vaccine</div> <hr>
+            <div>
+                <div class="d-flex flex-row justify-content-between">
+                    <p class="text-uppercase badge bg-warning p-2">Filters</p>
+                    <p>
+                        <a th:href="@{/staff/vaccine/add-vaccine}" class="btn btn-info">Add</a>
+                    </p>
+                </div>
+                
+            </div>
+
+            <div class="container">
+                <table id="myTable" class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Code</th>
+                            <th scope="col">Added by</th>
+                            <th scope="col">Added at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="vaccine: ${vaccines}">
+                            <td th:text="${vaccine.name}"></td>
+                            <td th:text="${vaccine.code}"></td>
+                            <td th:text="${vaccine.addedBy.fullName}"></td>
+                            <td th:text="${vaccine.addedAt}"></td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            </div>
+
+        </div>
+    </div>    
+
+        <!-- <h3>Vaccine</h3>
         <p>
             <a th:href="@{/staff/vaccine/add-vaccine}">Add</a>
         </p>
@@ -26,7 +67,17 @@
                 <td th:text="${vaccine.addedBy.fullName}"></td>
                 <td th:text="${vaccine.addedAt}"></td>
             </tr>
-        </table>
+        </table> -->
     </div>
+
+    <script layout:fragment="script">
+      
+     $(document).ready(function() {
+         
+         // DataTables initialisation
+         var table = $('#myTable').DataTable();
+      
+     });
+</script>    
 </body>
 </html>

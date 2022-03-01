@@ -6,46 +6,129 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Vaccine Category</title>
+    <style>
+        #map-img{
+            height: 25rem;
+        }
+        label{
+            font-size: 1.3rem;
+        }
+        .btn{
+            font-size: 1.1rem;
+        }
+        .card-deck{
+            margin-top: 10px;
+            margin-left: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: .5rem;
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Add Vaccine Category</h3>
+
+        <div class="container">
+            <div class="d-flex flex-row p-4">
+                <div class="d-none d-md-block col-5">
+                    <img src="/img/p112.jpg" id="map-img">
+                </div>
+                <div class="col-10 col-md-5 ml-auto pt-4">
+                    <div class="d-flex flex-column">
+                        <div class="h3 mb-4">Add Vaccine Category</div>
+                        <div class="form-container">    
+                            <form method="post" th:action="@{/staff/vaccine/add-vaccine-category}">
+                                <input type="text" name="name" placeholder="Category Name" required
+                   th:value="${vaccineCategoryInstance.name}" class="form-control form-control-lg mb-4"  />
+
+            <div class="form-group">
+                <label for="vaccine-select" class="form-control form-control-lg mb-1">Vaccine:</label>
+                <select name="vaccine" id="vaccine-select" class="form-control form-control-lg mb-4">
+                    <span th:each="vaccine: ${vaccines}">
+                        <option selected th:value="${vaccine.name}" th:text="${vaccine.name}"
+                                th:if="${vaccine == vaccineCategoryInstance.vaccine}"></option>
+                        <option th:value="${vaccine.name}" th:text="${vaccine.name}"
+                                th:unless="${vaccine== vaccineCategoryInstance.vaccine}"></option>
+                    </span>
+                </select>
+            </div>
+            
+
+            <input type="number" name="minAgeLimit" placeholder="Minimum Age Limit"
+                   th:value="${vaccineCategoryInstance.minAgeLimit}" class="form-control form-control-lg mb-4"/>
+
+            <input type="number" name="maxAgeLimit" placeholder="Maximum Age Limit"
+                   th:value="${vaccineCategoryInstance.maxAgeLimit}" class="form-control form-control-lg mb-4"/>
+
+            <div class="form-group">
+                <label for="prerequisite-select" class="form-control form-control-lg mb-1">Pre-requisite</label>
+                <select name="prerequisite" id="prerequisite-select" class="form-control form-control-lg mb-4">
+                    <option selected disabled>None</option>
+                    <span th:each="vaccineCategory: ${vaccineCategories}">
+                        <option selected th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
+                                th:if="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
+                        <option th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
+                                th:unless="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
+                    </span>
+                </select>
+            </div>
+            
+
+            <a class="btn btn-light col-10 col-md-5 mb-4 offset-md-1" th:href="@{/staff/vaccine/category}">Back</a>
+            <input type="submit" value="Add Category" class=" mb-4 btn btn-primary btn-lg"/>
+        
+                               
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- <h3>Add Vaccine Category</h3>
         <a th:href="@{/staff/vaccine/category}">Back to Vaccine Category List</a>
         <form method="post"
               th:action="@{/staff/vaccine/add-vaccine-category}" >
 
             <input type="text" name="name" placeholder="Category Name" required
-                   th:value="${vaccineCategoryInstance.name}" />
+                   th:value="${vaccineCategoryInstance.name}" class="form-control form-control-lg mb-4"  />
 
-            <label for="vaccine-select">Vaccine:</label>
-            <select name="vaccine" id="vaccine-select">
-                <span th:each="vaccine: ${vaccines}">
-                    <option selected th:value="${vaccine.name}" th:text="${vaccine.name}"
-                            th:if="${vaccine == vaccineCategoryInstance.vaccine}"></option>
-                    <option th:value="${vaccine.name}" th:text="${vaccine.name}"
-                            th:unless="${vaccine== vaccineCategoryInstance.vaccine}"></option>
-                </span>
-            </select>
+            <div class="form-group">
+                <label for="vaccine-select" class="form-control form-control-lg mb-1">Vaccine:</label>
+                <select name="vaccine" id="vaccine-select" class="form-control form-control-lg mb-4">
+                    <span th:each="vaccine: ${vaccines}">
+                        <option selected th:value="${vaccine.name}" th:text="${vaccine.name}"
+                                th:if="${vaccine == vaccineCategoryInstance.vaccine}"></option>
+                        <option th:value="${vaccine.name}" th:text="${vaccine.name}"
+                                th:unless="${vaccine== vaccineCategoryInstance.vaccine}"></option>
+                    </span>
+                </select>
+            </div>
+            
 
             <input type="number" name="minAgeLimit" placeholder="Minimum Age Limit"
-                   th:value="${vaccineCategoryInstance.minAgeLimit}" />
+                   th:value="${vaccineCategoryInstance.minAgeLimit}" class="form-control form-control-lg mb-4"/>
 
             <input type="number" name="maxAgeLimit" placeholder="Maximum Age Limit"
-                   th:value="${vaccineCategoryInstance.maxAgeLimit}" />
+                   th:value="${vaccineCategoryInstance.maxAgeLimit}" class="form-control form-control-lg mb-4"/>
 
-            <label for="prerequisite-select">Pre-requisite</label>
-            <select name="prerequisite" id="prerequisite-select">
-                <option selected disabled>None</option>
-                <span th:each="vaccineCategory: ${vaccineCategories}">
-                    <option selected th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
-                            th:if="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
-                    <option th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
-                            th:unless="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
-                </span>
-            </select>
+            <div class="form-group">
+                <label for="prerequisite-select" class="form-control form-control-lg mb-1">Pre-requisite</label>
+                <select name="prerequisite" id="prerequisite-select" class="form-control form-control-lg mb-4">
+                    <option selected disabled>None</option>
+                    <span th:each="vaccineCategory: ${vaccineCategories}">
+                        <option selected th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
+                                th:if="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
+                        <option th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
+                                th:unless="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
+                    </span>
+                </select>
+            </div>
+            
 
-            <input type="submit" value="Add Category" />
-        </form>
+            <input type="submit" value="Add Category" class="form-control form-control-lg mb-4 btn btn-primary btn-lg"/>
+        </form> -->
     </div>
 </body>
 </html>

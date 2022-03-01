@@ -9,7 +9,50 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Vehicle Listing</h3>
+
+        <div class="container py-4">
+            <div class="d-flex flex-column">
+                <div class="h3 text-center">Vehicle Listing</div> <hr>
+                <div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p class="text-uppercase badge bg-warning p-2">Filters</p>
+                        <p>
+                            <a th:href="@{/staff/vehicle/add}" class="btn btn-info">Add</a>
+                        </p>
+                    </div>
+                    
+                </div>
+    
+                <div class="container">
+                    <table id="myTable" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Registration Number</th>
+                                <th scope="col">Centre</th>
+                                <th scope="col">City</th>
+                                <th scope="col">District</th>
+                                <th scope="col">State</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="vehicle: ${vehicles}">
+                                <td th:text="${vehicle.registrationNumber}"></td>
+                                <td th:text="${vehicle.centre.name}"></td>
+                                <td th:text="${vehicle.centre.spot.city.name}"></td>
+                                <td th:text="${vehicle.centre.spot.city.district.name}"></td>
+                                <td th:text="${vehicle.centre.spot.city.district.state.name}"></td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+    
+            </div>
+        </div>    
+
+    </div>
+
+        <!-- <h3>Vehicle Listing</h3>
         <p>
             <a th:href="@{/staff/vehicle/add}">Add</a>
         </p>
@@ -28,7 +71,18 @@
                 <td th:text="${vehicle.centre.spot.city.district.name}"></td>
                 <td th:text="${vehicle.centre.spot.city.district.state.name}"></td>
             </tr>
-        </table>
-    </div>
+        </table> -->
+    
+
+
+    <script layout:fragment="script">
+      
+        $(document).ready(function() {
+            
+            // DataTables initialisation
+            var table = $('#myTable').DataTable();
+         
+        });
+   </script>    
 </body>
 </html>

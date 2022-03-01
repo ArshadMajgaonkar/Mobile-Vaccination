@@ -9,7 +9,67 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Vaccine Category List</h3>
+
+        <div class="container py-4">
+            <div class="d-flex flex-column">
+                <div class="h3 text-center">Vaccine Category List</div> <hr>
+                <div>
+                    <div class="d-flex flex-row justify-content-between">
+                        <p class="text-uppercase badge bg-warning p-2">Filters</p>
+                        <p>
+                            <a th:href="@{/staff/vaccine/add-vaccine-category}" class="btn btn-info">Add</a>
+                        </p>
+                    </div>
+                    
+                </div>
+    
+                <div class="container">
+                    <table id="myTable" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Vaccine</th>
+                                    <th scope="col">Minimum Age Limit</th>
+                                    <th scope="col">Maximum Age Limit</th>
+                                    <th scope="col">Pre-requisite</th>
+                                    <th scope="col">Added At</th>
+                                    <th scope="col">Added By</th>
+                                </tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="vaccineCategory: ${vaccineCategories}">
+                                <td th:text="${vaccineCategory.name}"></td>
+                
+                                <td th:text="${vaccineCategory.vaccine.name}"></td>
+                
+                                <td th:if="${vaccineCategory.minAgeLimit}" th:text="${vaccineCategory.minAgeLimit}"></td>
+                                <td th:unless="${vaccineCategory.minAgeLimit}">-</td>
+                
+                                <td th:if="${vaccineCategory.maxAgeLimit}" th:text="${vaccineCategory.maxAgeLimit}"></td>
+                                <td th:unless="${vaccineCategory.maxAgeLimit}">-</td>
+                
+                                <td th:if="${vaccineCategory.prerequisite}" th:text="${vaccineCategory.prerequisite.name}"></td>
+                                <td th:unless="${vaccineCategory.prerequisite}">-</td>
+                
+                                <td th:if="${vaccineCategory.addedAt}" th:text="${vaccineCategory.addedAt}"></td>
+                
+                                <td th:if="${vaccineCategory.addedBy}" th:text="${vaccineCategory.addedBy.fullName}"></td>
+                            </tr>        
+                        </tbody>
+                        
+                    </table>
+                </div>
+    
+            </div>
+        </div>    
+    
+           
+    </div>
+
+        <!-- mycode ends -->
+        <!-- <h3>Vaccine Category List</h3>
         <p>
             <a th:href="@{/staff/vaccine/add-vaccine-category}">Add</a>
         </p>
@@ -43,6 +103,16 @@
             </tr>
 
         </table>
-    </div>
+    </div> -->
+
+    <script layout:fragment="script">
+      
+        $(document).ready(function() {
+            
+            // DataTables initialisation
+            var table = $('#myTable').DataTable();
+         
+        });
+   </script>    
 </body>
 </html>
