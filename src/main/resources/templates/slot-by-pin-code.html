@@ -6,20 +6,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Slot By Pin Code</title>
+
+    <style>
+        #map-img{
+            height: 25rem;
+        }
+        label{
+            font-size: 1.3rem;
+        }
+        .btn{
+            font-size: 1.1rem;
+        }
+        .card-deck{
+            margin-top: 10px;
+            margin-left: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: .5rem;
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
-      <form method="post" th:action="@{/spot/get-by-pin-code}" th:object="${pinCodeDto}">
-        <input type="number" name="pinCode" th:value="${pinCodeDto.pinCode}" required/>
-        <button type="submit">Search</button>
-      </form>
 
-        <div class="result">
-          <ul th:if="${spots}">
-            <li th:each="spot: ${spots}" th:text="${spot.ward}"></li>
-          </ul>
-            <p th:if="${spots==null and pinCodeDto.pinCode!=null}">No spots found for above Pin Code.</p>
+<!--        mycode-->
+
+        <div class="container">
+            <div class="d-flex flex-row p-4">
+                <div class="d-none d-md-block col-5">
+                    <img src="/img/p109.jpg" id="map-img">
+                </div>
+                <div class="col-10 col-md-5 ml-auto pt-4">
+                    <div class="form-container">
+                        <form method="post" th:action="@{/spot/get-by-pin-code}" th:object="${pinCodeDto}">
+
+                            <div class="form-group pb-4">
+                                <label for="pincode">Enter pincode : </label>
+                                <input type="number" class="form-control p-2" name="pinCode" th:value="${pinCodeDto.pinCode}"  placeholder="E.g. 400612" required/>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary col-12 ml-auto p-2">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
+        <!--        mcend-->
+<!--      <form method="post" th:action="@{/spot/get-by-pin-code}" th:object="${pinCodeDto}">-->
+<!--        <input type="number" name="pinCode" th:value="${pinCodeDto.pinCode}" required/>-->
+<!--        <button type="submit">Search</button>-->
+<!--      </form>-->
+
+<!--        <div class="result">-->
+<!--          <ul th:if="${spots}">-->
+<!--            <li th:each="spot: ${spots}" th:text="${spot.ward}"></li>-->
+<!--          </ul>-->
+<!--            <p th:if="${spots==null and pinCodeDto.pinCode!=null}">No spots found for above Pin Code.</p>-->
+<!--        </div>-->
+
+        <div class="result col-10 pb-4 offset-1">
+            <h3 class="col-4 pb-3">
+                <span class="badge badge-pill badge-success">Spots </span></h3>
+            <div class="card-deck" th:if="${spots}">
+                <div class="card" th:each="spot: ${spots}">
+                    <div class="card-body ">
+                        <h5 class="card-title" th:text="${spot.ward}"></h5>
+                    </div>
+                </div>
+                <p th:if="${spots==null and pinCodeDto.pinCode!=null}">No spots found for above Pin Code.</p>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>
