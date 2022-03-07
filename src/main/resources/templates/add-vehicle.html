@@ -6,20 +6,59 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Vehicle</title>
-    <p>
+    <!-- <p>
         <a th:text="@{/staff/vehicle}">Back</a>
-    </p>
+    </p> -->
+    <style>
+        #map-img{
+            height: 25rem;
+        }
+        label{
+            font-size: 1.3rem;
+        }
+        .btn{
+            font-size: 1.1rem;
+        }
+        .card-deck{
+            margin-top: 10px;
+            margin-left: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: .5rem;
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
-        <form id="add-vehicle-form" method="post" th:action="@{/staff/vehicle/add}">
-            <input type="text" name="registrationNumber" placeholder="Vehicle Registration Number"
-                   th:value="${vehicle.registrationNumber}"/>
 
-            <div th:replace="fragments/form::centre-select-elements"></div>
+        <div class="container">
+            <div class="d-flex flex-row p-4">
+                <div class="d-none d-md-block col-5">
+                    <img src="/img/p112.jpg" id="map-img">
+                </div>
+                <div class="col-10 col-md-5 ml-auto pt-4">
+                    <div class="d-flex flex-column">
+                        <div class="h3 mb-4">Add Vehicle</div>
+                        <div class="form-container">
+    
+                            <form id="add-vehicle-form" method="post" th:action="@{/staff/vehicle/add}">
+                                <input type="text" name="registrationNumber" placeholder="Vehicle Registration Number"
+                                       th:value="${vehicle.registrationNumber}" class="form-control form-control-lg mb-4" />
+                    
+                                <div th:replace="fragments/form::centre-select-elements"></div>
+                    
+                                <a class="btn btn-light col-10 col-md-5 form-control form-control-lg mb-4 offset-md-1" th:href="@{/staff/vaccine/}">Back</a>
+                                <input type="submit" class="btn btn-primary col-10 col-md-5 ml-auto p-2 mb-4 offset-md-1" value="Add Vehicle"/>
+                                                    
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
 
-            <input type="submit" value="Add Vehicle" />
-        </form>
+        
     </div>
 
     <script layout:fragment="script">
