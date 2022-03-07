@@ -1,5 +1,6 @@
 package com.aghs.mobilevaccination.data.model.location;
 
+import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 
 import javax.persistence.*;
@@ -73,6 +74,14 @@ public class City {
             );
         });
         return bookedSlot.get();
+    }
+
+    public CityDto toDto() {
+        CityDto dto = new CityDto();
+        dto.setCityId(this.id);
+        dto.setDistrictId(this.district.getId());
+        dto.setStateName(this.district.getState().getName());
+        return dto;
     }
 
 }

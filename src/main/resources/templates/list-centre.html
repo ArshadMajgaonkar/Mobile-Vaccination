@@ -24,10 +24,10 @@
             </tr>
             <tr th:each="centre: ${centres}">
                 <td th:text="${centre.name}"></td>
-                <td th:text="${centre.situatedAt.ward}"></td>
-                <td th:text="${centre.situatedAt.city.name}"></td>
-                <td th:text="${centre.situatedAt.city.district.name}"></td>
-                <td th:text="${centre.situatedAt.city.district.state.name}"></td>
+                <td th:text="${centre.spot.ward}"></td>
+                <td th:text="${centre.spot.city.name}"></td>
+                <td th:text="${centre.spot.city.district.name}"></td>
+                <td th:text="${centre.spot.city.district.state.name}"></td>
             </tr>
         </table>
     </div>

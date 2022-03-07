@@ -81,7 +81,7 @@ public class DefaultController {
     }
 
     public City getCity(CityDto cityDto, Model model) {
-        model.addAttribute("state", stateRepository.findAll());
+        model.addAttribute("states", stateRepository.findAll());
         if(cityDto.getStateName() != null) {
             State selectedState = stateRepository.findByName(cityDto.getStateName());
             model.addAttribute("districts", districtRepository.findByState(selectedState));

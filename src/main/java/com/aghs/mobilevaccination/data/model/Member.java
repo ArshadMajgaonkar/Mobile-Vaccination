@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -130,5 +132,17 @@ public class Member {
         return Pattern.matches("^[0-9]{4}$", this.birthYear)
                 && LocalDate.now().minusYears(LOWER_AGE_LIMIT).getYear() > Integer.parseInt(birthYear)
                 && LocalDate.now().minusYears(UPPER_AGE_LIMIT).getYear() < Integer.parseInt(birthYear);
+    }
+
+    public boolean hasCompletedVaccinationInterval(MemberVaccinationRepository memberVaccinationRepository) {
+        List<MemberVaccination> memberVaccinations = memberVaccinationRepository.findByRecipient(this);
+        if(memberVaccinations.size() > 0) {
+            for(MemberVaccination vaccination: memberVaccinations) {
+                if(!vaccination.hasCompletedVaccinationInterval())
+                    return false;
+            }
+            return true;
+        }
+        return true;
     }
 }

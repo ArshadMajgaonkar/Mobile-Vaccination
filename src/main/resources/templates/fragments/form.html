@@ -60,34 +60,34 @@
         <select id="city-state-select" name="stateName" onchange="submitForm()" required>
             <option value="" selected disabled>Select State</option>
             <span th:each="state: ${states}">
-                    <option th:if="${spotDto.stateName != state.name}" th:value="${state.name}"
+                    <option th:if="${cityDto.stateName != state.name}" th:value="${state.name}"
                             th:text="${state.name}"></option>
                 <!--If condition is false-->
-                    <option th:unless="${spotDto.stateName != state.name}" th:value="${state.name}"
+                    <option th:unless="${cityDto.stateName != state.name}" th:value="${state.name}"
                             th:text="${state.name}" selected></option>
                 </span>
         </select>
 
         <label for="city-district-select">Select District:</label>
-        <select id="city-district-select" name="districtName" onchange="submitForm()">
+        <select id="city-district-select" name="districtId" onchange="submitForm()">
             <option selected disabled>Select District</option>
             <span th:each="district: ${districts}">
-                    <option th:if="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                    <option th:if="${cityDto.districtId!=district.id}" th:value="${district.id}"
                             th:text="${district.name}"></option>
-                    <option th:unless="${spotDto.districtName!=district.name}" th:value="${district.name}"
+                    <option th:unless="${cityDto.districtId!=district.id}" th:value="${district.id}"
                             th:text="${district.name}" selected></option>
                 </span>
         </select>
 
         <label for="city-city-select">Select City/Village:</label>
-        <select id="city-city-select" name="cityName" onchange="submitForm()">
+        <select id="city-city-select" name="cityId">
             <option selected disabled>Select City/Village</option>
             <span th:each="city: ${cities}">
-                    <option th:if="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}">
-                    </option>
-                    <option th:unless="${spotDto.cityName != city.name}" th:value="${city.name}" th:text="${city.name}"
-                            selected></option>
-                </span>
+                <option th:if="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}">
+                </option>
+                <option th:unless="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"
+                        selected></option>
+            </span>
         </select>
     </div>
 
@@ -129,7 +129,7 @@
         </select>
 
         <label for="s-spot-select">Select Ward:</label>
-        <select id="s-spot-select" name="spotId" onchange="submitForm()">
+        <select id="s-spot-select" name="spotId">
             <option selected disabled>Select Ward</option>
             <span th:each="spot: ${spots}">
                     <option th:if="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward}">
@@ -141,6 +141,49 @@
     </div>
 
 
+    <div th:fragment="vaccine-category-select">
+        <label for="vaccine-category-select">Select Vaccine Category:</label>
+        <select id="vaccine-category-select" name="vaccineCategoryId">
+            <option selected disabled>Select Vaccine Category</option>
+            <span th:each="vaccineCategory: ${vaccineCategories}">
+                <option th:if="${vaccineCategoryId != vaccineCategory.id}"
+                        th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}">
+                </option>
+                <option th:unless="${vaccineCategoryId != vaccineCategory.id}"
+                        th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}" selected>
+                </option>
+            </span>
+        </select>
+    </div>
+
+    <div th:fragment="vaccine-drive-status-select">
+        <label for="vaccine-drive-status-select">Select Vaccine Drive Status:</label>
+        <select id="vaccine-drive-status-select" name="selectedDriveStatus" onchange="submitForm()">
+            <option selected disabled>Select Status</option>
+            <span th:each="driveStatus: ${driveStatuses}">
+                <option th:if="${driveStatus != selectedDriveStatus}"
+                        th:value="${driveStatus}" th:text="${driveStatus}">
+                </option>
+                <option th:unless="${driveStatus != selectedDriveStatus}"
+                        th:value="${driveStatus}" th:text="${driveStatus}" selected>
+                </option>
+            </span>
+        </select>
+    </div>
+
+    <div th:fragment="vaccine-select">
+        <label for="vaccine-select">Select Vaccine Category:</label>
+        <select id="vaccine-select" name="vaccineName">
+            <option selected disabled>Select Vaccine</option>
+            <span th:each="vaccine: ${vaccines}">
+                <option th:if="${vaccineName != vaccine.name}" th:value="${vaccine.name}" th:text="${vaccine.name}">
+                </option>
+                <option th:unless="${vaccineName != vaccine.name}" th:value="${vaccine.name}" th:text="${vaccine.name}"
+                        selected>
+                </option>
+            </span>
+        </select>
+    </div>
 
 </body>
 </html>

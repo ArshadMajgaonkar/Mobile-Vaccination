@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Vaccine Drive</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Ward</th>
+                <th>Vehicle</th>
+                <th>Vaccine</th>
+                <th>Vaccinator</th>
+            </tr>
+            <tr th:each="vaccineDrive : ${vaccineDrives}">
+                <form method="post" id="update-drive-${vaccineDrive.id}"
+                      th:action="@{/}">
+                    <td>
+                        <span th:each="spot: ${vaccineDrive.vaccinationSpots}"
+                              th:text="${spot.ward + ': ' + spot.localityNames}"></span>
+                    </td>
+                    <td></td>
+                </form>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

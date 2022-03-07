@@ -14,17 +14,24 @@
             <input type="hidden" name="userId"
                    th:value="${userId}" />
 
-            <input type="date" name="selectedDate"
-                   th:value="${selectedDate}"/>
+            <input type="date" name="selectedDate" required
+                   th:attr="min=${minRegistrationDate}" th:value="${selectedDate}"/>
+            <div>Note: Registration closes 2 days before of Vaccination Drive.</div>
 
             <div th:replace="fragments/form::spot-select-elements"></div>
 
-            <p th:text="'Remaining slot: ' + ${remainingSlots}"></p>
+            <div>
+                Remaining slot&nbsp;:&nbsp;
+                <span th:if="${remainingSlots}" th:text="${remainingSlots}"></span>
+                <span th:unless="${remainingSlots}" th:text="${'Please select a city.'}"></span>
+            </div>
 
-            <submit th:if="${spots}">Search</submit>
-            <submit th:unless="${spots}">Book Slot</submit>
+            <input type="submit" value="Search"
+                   th:if="${spots==null}" />
+            <input type="submit" value="Book Slot"
+                   th:unless="${spots==null}" />
         </form>
-
+        <a th:href="@{/user/dashboard}"><button>Back</button></a>
 
     </div>
 

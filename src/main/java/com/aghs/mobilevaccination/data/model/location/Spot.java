@@ -14,6 +14,9 @@ public class Spot {
     private long id;
     @Column(nullable = false)
     private String ward;
+    // separated with comma
+    @Column(nullable = false)
+    private String localityNames;
     @Column(nullable = false)
     private String pinCode;
     @ManyToOne(optional = false)
@@ -37,6 +40,14 @@ public class Spot {
 
     public void setWard(String ward) {
         this.ward = ward;
+    }
+
+    public String getLocalityNames() {
+        return localityNames;
+    }
+
+    public void setLocalityNames(String localityNames) {
+        this.localityNames = localityNames;
     }
 
     public String getPinCode() {

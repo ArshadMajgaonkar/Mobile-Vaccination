@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Deploy Algorithm</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h1>Deploy Algorithm</h1>
+
+        <h4>Registration Data</h4>
+
+        <form method="post" id="drive-form" th:action="@{/get-registrations}">
+
+            <input type="date" name="driveDate"
+                   th:value="${driveDate}" th:attr="min=${minDriveDate}" />
+
+            <div th:insert="fragments/form::city-select-elements"></div>
+
+            <input type="submit" value="Get Registrations" />
+
+        </form>
+
+        <div th:if="${hasReport}">
+            <table>
+                <tr>
+                    <th>Ward</th>
+                    <th>Registration</th>
+                </tr>
+                <tr th:each="regEntry: ${spotWiseRegistrations}">
+                    <td th:text="${regEntry.key}"></td>
+                    <td th:text="${regEntry.value}"></td>
+                </tr>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td><b th:text="${totalRegistration}"></b></td>
+                    </tr>
+                </b>
+            </table>
+
+            <label for="cityCapacity">Registration Limit</label>
+            <input type="number" id="cityCapacity" th:value="${cityCapacity}" readonly />
+
+            <form method="post" th:action="@{/deploy-algorithm}">
+
+                <input type="hidden" name="driveDate" th:value="${driveDate}" />
+                <input type="hidden" name="cityId" th:value="${cityDto.cityId}" />
+
+                <select name="selectedVehicleCount" onchange="calculateDosePerVan(this)" required>
+                    <option selected disabled>Select Vehicle Count</option>
+                    <span th:each="number: ${#numbers.sequence(1, vehicleCount)}">
+                        <option th:if="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
+                                selected></option>
+                        <option th:unless="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
+                                ></option>
+                    </span>
+                </select>
+
+                <label for="dosesPerVehicle">Dose per Vehicle</label>
+                <input type="number" name="dosesPerVehicle" id="dosesPerVehicle" readonly
+                       th:value="${dosesPerVehicle}" />
+
+                <!--<label for="totalCount">Total Dose</label>
+                <input type="number" name="totalCount" id="totalCount" readonly
+                       th:value="${dosesPerVehicle}" />-->
+
+                <input type="submit" value="Distribute" />
+            </form>
+
+        </div>
+
+        <div th:if="${driveAddedForCityDate}">
+            <h4>Vaccine Drive is already for this combination city and date.</h4>
+        </div>
+
+        <div th:if="${hasAddedDrives}">
+            Please update newly added Vaccine Drives.
+            <form method="post" th:action="@{/list-inadequate-vaccine-drive}">
+                <input type="hidden" name="driveDate" th:value="${driveDate}" />
+                <input type="hidden" name="cityId" th:value="${cityId}" />
+                <input type="submit" value="Update Vaccine Drives" />
+            </form>
+        </div>
+
+    </div>
+</body>
+<script layout:fragment="script">
+    function submitForm() {
+        document.getElementById("drive-form").submit();
+    }
+
+    function calculateDosePerVan(vehicleCountSelect) {
+        var cityCapacity = document.getElementById("cityCapacity").value;
+        var vehicleCount = parseInt(vehicleCountSelect.value);
+        if(cityCapacity!=NaN && cityCapacity != null) {
+            document.getElementById("dosesPerVehicle").value = Math.ceil(cityCapacity / vehicleCount);
+        }
+        else
+            alert("Please reload the page.");
+    }
+</script>
+</html>

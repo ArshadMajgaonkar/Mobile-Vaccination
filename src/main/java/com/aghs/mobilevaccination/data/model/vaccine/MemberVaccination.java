@@ -5,6 +5,8 @@ import com.aghs.mobilevaccination.data.model.location.Spot;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Random;
 
@@ -100,5 +102,15 @@ public class MemberVaccination {
         for(int i=0; i < length; i++) {
             pin += String.valueOf(random.nextInt(10));
         }
+    }
+
+    public boolean hasCompletedVaccinationInterval() {
+        if( this.getVaccinatedAt() != null) {
+            LocalDate vaccinatedDate = this.getVaccinatedAt().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            Long interval = this.getVaccineDrive().getVaccine().getIntervalInDays();
+            return LocalDate.now().plusDays(interval).compareTo(vaccinatedDate) > 0;
+        }
+        return true;
     }
 }

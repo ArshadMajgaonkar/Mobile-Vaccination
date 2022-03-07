@@ -2,10 +2,15 @@ package com.aghs.mobilevaccination.data.model.vaccine;
 
 import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.model.Vehicle;
+import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,49 +19,51 @@ public class VaccineDrive {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     @Column(nullable = false)
-    private Date driveDate;
-    @ManyToOne(optional = false)
-    private VaccineCategory vaccineCategory;
+    private LocalDate driveDate;
+    @ManyToOne
+    private Vaccine vaccine;
     @ManyToOne
     private Vehicle vehicle;
     @Column(nullable = false)
-    private long slotCount;
-    @ManyToOne(optional = false)
+    private Long slotCount;
+    @ManyToOne
     private Staff vaccinator;
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private VaccineDriveStatus status;
+    @ManyToOne
+    private City city;
     @ManyToMany
     private Set<Spot> vaccinationSpots;
-    @ManyToOne(optional = false)
+    @ManyToOne/*(optional = false)*/
     private Staff addedBy;
     @Column(nullable = false)
     private Date addedAt;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Date getDriveDate() {
+    public LocalDate getDriveDate() {
         return driveDate;
     }
 
-    public void setDriveDate(Date driveDate) {
+    public void setDriveDate(LocalDate driveDate) {
         this.driveDate = driveDate;
     }
 
-    public VaccineCategory getVaccineCategory() {
-        return vaccineCategory;
+    public Vaccine getVaccine() {
+        return vaccine;
     }
 
-    public void setVaccineCategory(VaccineCategory vaccineCategory) {
-        this.vaccineCategory = vaccineCategory;
+    public void setVaccineCategory(Vaccine vaccine) {
+        this.vaccine = vaccine;
     }
 
     public Vehicle getVehicle() {
@@ -67,11 +74,11 @@ public class VaccineDrive {
         this.vehicle = vehicle;
     }
 
-    public long getSlotCount() {
+    public Long getSlotCount() {
         return slotCount;
     }
 
-    public void setSlotCount(long slotCount) {
+    public void setSlotCount(Long slotCount) {
         this.slotCount = slotCount;
     }
 
@@ -89,6 +96,14 @@ public class VaccineDrive {
 
     public void setStatus(VaccineDriveStatus status) {
         this.status = status;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public Set<Spot> getVaccinationSpots() {
@@ -113,5 +128,32 @@ public class VaccineDrive {
 
     public void setAddedAt(Date addedAt) {
         this.addedAt = addedAt;
+    }
+
+    public boolean isUpdateValid() {
+        if(this.id != null &&
+                this.addedAt != null &&
+                this.addedBy != null &&
+                this.city != null  &&
+                this.driveDate != null &&
+                this.slotCount != null &&
+                this.status!=null &&
+                this.vaccinationSpots != null &&
+                this.vaccinator != null &&
+                this.vaccine != null &&
+                this.vehicle != null)
+            return true;
+        return false;
+    }
+
+    public void updateMemberVaccinations(MemberVaccinationRepository memberVaccinationRepository) {
+        for(Spot spot: this.getVaccinationSpots()) {
+            List<MemberVaccination> vaccinations = memberVaccinationRepository.findByVaccinationSpotAndSelectedDate(
+                    spot, this.getDriveDate());
+            for (MemberVaccination vaccination : vaccinations) {
+                vaccination.setVaccineDrive(this);
+                memberVaccinationRepository.save(vaccination);
+            }
+        }
     }
 }
