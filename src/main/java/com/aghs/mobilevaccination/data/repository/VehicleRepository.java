@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, String> {
     List<Vehicle> findByCentre(Centre centre);
+    Vehicle findByRegistrationNumber(String registrationNumber);
 }

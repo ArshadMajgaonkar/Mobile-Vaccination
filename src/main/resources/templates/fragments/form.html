@@ -171,6 +171,22 @@
         </select>
     </div>
 
+    <div th:fragment="vaccinator-select">
+        <label for="vaccinator-select">Select Vaccinator:</label>
+        <select id="vaccinator-select" name="vaccinatorUsername">
+            <option selected disabled>Select Vaccine</option>
+            <span th:each="vaccinator: ${vaccinators}">
+                <option th:if="${vaccinator.username != vaccinatorUsername}"
+                        th:value="${vaccinator.username}" th:text="${vaccinator.fullName}">
+                </option>
+                <option th:unless="${vaccinator.username != vaccinatorUsername}"
+                        th:value="${vaccinator.username}" th:text="${vaccinator.fullName}"
+                        selected>
+                </option>
+            </span>
+        </select>
+    </div>
+
     <div th:fragment="vaccine-select">
         <label for="vaccine-select">Select Vaccine Category:</label>
         <select id="vaccine-select" name="vaccineName">
@@ -179,6 +195,24 @@
                 <option th:if="${vaccineName != vaccine.name}" th:value="${vaccine.name}" th:text="${vaccine.name}">
                 </option>
                 <option th:unless="${vaccineName != vaccine.name}" th:value="${vaccine.name}" th:text="${vaccine.name}"
+                        selected>
+                </option>
+            </span>
+        </select>
+    </div>
+
+    <div th:fragment="vehicle-select">
+        <label for="vehicle-select">Select Vehicle:</label>
+        <select id="vehicle-select" name="vehicleRegNo">
+            <option selected disabled>Select Vehicle</option>
+            <span th:each="vehicle: ${vehicles}">
+                <option th:if="${vehicle.registrationNumber != vehicleRegNo}"
+                        th:value="${vehicle.registrationNumber}"
+                        th:text="${vehicle.registrationNumber}">
+                </option>
+                <option th:unless="${vehicle.registrationNumber != vehicleRegNo}"
+                        th:value="${vehicle.registrationNumber}"
+                        th:text="${vehicle.registrationNumber}"
                         selected>
                 </option>
             </span>

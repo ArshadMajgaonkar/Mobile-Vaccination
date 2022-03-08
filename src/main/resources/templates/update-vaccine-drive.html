@@ -5,29 +5,75 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Add Vaccine Drive</title>
+    <title>Update Vaccine Drive</title>
 </head>
 <body>
     <div layout:fragment="content">
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Ward</th>
-                <th>Vehicle</th>
-                <th>Vaccine</th>
-                <th>Vaccinator</th>
-            </tr>
-            <tr th:each="vaccineDrive : ${vaccineDrives}">
-                <form method="post" id="update-drive-${vaccineDrive.id}"
-                      th:action="@{/}">
+        <form method="post"
+              th:action="@{/staff/vaccine-drive/update}" th:object="${driveDto}">
+            <table width="80%">
+                <tr>
+                    <td><label for="vaccine-drive-id">ID</label></td>
                     <td>
-                        <span th:each="spot: ${vaccineDrive.vaccinationSpots}"
-                              th:text="${spot.ward + ': ' + spot.localityNames}"></span>
+                        <input type="text" name="driveId" id="vaccine-drive-id" readonly
+                               th:value="${vaccineDrive.id}"/>
                     </td>
-                    <td></td>
-                </form>
-            </tr>
-        </table>
+                </tr>
+                <tr>
+                    <td><label for="drive-date">Drive Date:</label></td>
+                    <td>
+                        <input type="date" id="drive-date" readonly
+                               th:value="${vaccineDrive.driveDate}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="drive-status">Drive Status:</label></td>
+                    <td>
+                        <input type="text" id="drive-status" readonly
+                               th:value="${vaccineDrive.status}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td rowspan="2">
+                        <h6>Location</h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="drive-city"></label></td>
+                    <td>
+                        <input type="text" id="drive-city" readonly
+                               th:value="${vaccineDrive.city.name}"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><label for="vaccinationSpots">Spots</label></td>
+                    <td>
+                        <div id="vaccinationSpots">
+                            <div th:each="spot: ${vaccineDrive.vaccinationSpots}"
+                                 th:text="${spot.ward+':'+spot.localityNames +'; '}"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="drive-slot-count">Slot Count: </label></td>
+                    <td>
+                        <input type="text" id="drive-slot-count" readonly
+                               th:value="${vaccineDrive.slotCount}" />
+                    </td>
+                </tr>
+            </table>
+
+            <div th:insert="fragments/form::vehicle-select"></div>
+
+            <h6>Vaccine</h6>
+            <div th:insert="fragments/form::vaccine-select"></div>
+
+            <div th:insert="fragments/form::vaccinator-select"></div>
+
+            <input type="submit" value="submit" />
+        </form>
     </div>
 </body>
 </html>

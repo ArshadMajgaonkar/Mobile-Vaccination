@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface CentreRepository extends JpaRepository<Centre, Long> {
     List<Centre> findBySpot(Spot spot);
+    List<Centre> findBySpotIn(List<Spot> spots);
 }

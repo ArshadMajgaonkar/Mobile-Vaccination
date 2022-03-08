@@ -13,7 +13,7 @@
 
         <h4>Registration Data</h4>
 
-        <form method="post" id="drive-form" th:action="@{/get-registrations}">
+        <form method="post" id="drive-form" th:action="@{/staff/vaccine-drive/get-registrations}">
 
             <input type="date" name="driveDate"
                    th:value="${driveDate}" th:attr="min=${minDriveDate}" />
@@ -44,7 +44,7 @@
             <label for="cityCapacity">Registration Limit</label>
             <input type="number" id="cityCapacity" th:value="${cityCapacity}" readonly />
 
-            <form method="post" th:action="@{/deploy-algorithm}">
+            <form method="post" th:action="@{/staff/vaccine-drive/deploy-algorithm}">
 
                 <input type="hidden" name="driveDate" th:value="${driveDate}" />
                 <input type="hidden" name="cityId" th:value="${cityDto.cityId}" />
@@ -78,7 +78,7 @@
 
         <div th:if="${hasAddedDrives}">
             Please update newly added Vaccine Drives.
-            <form method="post" th:action="@{/list-inadequate-vaccine-drive}">
+            <form method="post" th:action="@{/staff/vaccine-drive/list-inadequate}">
                 <input type="hidden" name="driveDate" th:value="${driveDate}" />
                 <input type="hidden" name="cityId" th:value="${cityId}" />
                 <input type="submit" value="Update Vaccine Drives" />

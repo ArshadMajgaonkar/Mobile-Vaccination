@@ -1,9 +1,14 @@
 package com.aghs.mobilevaccination.data.model;
 
 import com.aghs.mobilevaccination.data.model.location.Centre;
+import com.aghs.mobilevaccination.data.model.location.City;
+import com.aghs.mobilevaccination.data.model.location.Spot;
+import com.aghs.mobilevaccination.data.repository.VehicleRepository;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table

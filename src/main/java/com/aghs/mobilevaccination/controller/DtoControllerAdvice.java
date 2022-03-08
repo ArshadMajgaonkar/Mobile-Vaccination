@@ -5,6 +5,7 @@ import com.aghs.mobilevaccination.data.dto.CentreSelectDto;
 import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.dto.SpotDto;
 import com.aghs.mobilevaccination.data.model.location.City;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccineDrive;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -24,6 +25,11 @@ public class DtoControllerAdvice {
     @ModelAttribute("cityDto")
     public CityDto getCityDto() {
         return new CityDto();
+    }
+
+    @ModelAttribute("vaccineDrive")
+    public VaccineDrive getVaccineDrive() {
+        return new VaccineDrive();
     }
 
     @ModelAttribute("spotDto")

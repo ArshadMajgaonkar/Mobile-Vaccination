@@ -1,15 +1,18 @@
 package com.aghs.mobilevaccination.data.model.vaccine;
 
+import com.aghs.mobilevaccination.data.dto.DriveDto;
 import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.model.Vehicle;
 import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
+import com.aghs.mobilevaccination.data.repository.StaffRepository;
+import com.aghs.mobilevaccination.data.repository.VehicleRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,7 +65,7 @@ public class VaccineDrive {
         return vaccine;
     }
 
-    public void setVaccineCategory(Vaccine vaccine) {
+    public void setVaccine(Vaccine vaccine) {
         this.vaccine = vaccine;
     }
 
@@ -144,6 +147,15 @@ public class VaccineDrive {
                 this.vehicle != null)
             return true;
         return false;
+    }
+
+    public void updateFromDto(DriveDto driveDto,
+                              StaffRepository staffRepository,
+                              VehicleRepository vehicleRepository,
+                              VaccineRepository vaccineRepository) {
+        this.setVehicle(vehicleRepository.findByRegistrationNumber(driveDto.getVehicleRegNo()));
+        this.setVaccine(vaccineRepository.findById(driveDto.getVaccineName()).orElse(null));
+        this.setVaccinator(staffRepository.findByUsername(driveDto.getVaccinatorUsername()));
     }
 
     public void updateMemberVaccinations(MemberVaccinationRepository memberVaccinationRepository) {

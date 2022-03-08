@@ -1,5 +1,7 @@
 package com.aghs.mobilevaccination.data.model;
 
+import com.aghs.mobilevaccination.data.model.location.Centre;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -24,6 +26,9 @@ public class Staff {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthGroup role;
+    // works at Centre
+    @ManyToOne
+    private Centre centre;
     @Column(unique = true, length = 11/*, nullable = false*/)
     private String mobileNumber;
     @Column(unique = true, length = 255/*, nullable = false*/)
@@ -103,6 +108,14 @@ public class Staff {
 
     public void setRole(AuthGroup role) {
         this.role = role;
+    }
+
+    public Centre getCentre() {
+        return centre;
+    }
+
+    public void setCentre(Centre centre) {
+        this.centre = centre;
     }
 
     public String getMobileNumber() {

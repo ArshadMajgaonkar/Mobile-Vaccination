@@ -1,9 +1,12 @@
 package com.aghs.mobilevaccination.data.model.location;
 
 import com.aghs.mobilevaccination.data.model.Staff;
+import com.aghs.mobilevaccination.data.repository.location.CentreRepository;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -62,6 +65,18 @@ public class Centre {
     }
 
     // Static Methods
+
+
+    public static List<Centre> getCentresBySpots(List<Spot> spots, CentreRepository centreRepository) {
+        List<Centre> centres = new ArrayList<>();
+        for(Spot spot: spots) {
+            centres.addAll(centreRepository.findBySpot(spot));
+        }
+        return centres;
+    }
+
+
+    // Conversions
 
     public static Centre fromDto(String name, Spot spot, Staff staff) {
         Centre centre = new Centre();

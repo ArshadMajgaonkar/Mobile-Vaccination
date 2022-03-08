@@ -64,6 +64,9 @@ public class City {
                 '}';
     }
 
+
+    // Static Methods
+
     public static long getRemainingSlots(MemberVaccinationRepository memberVaccinationRepository,
                                          LocalDate selectedDate,
                                          List<Spot> spots) {
@@ -75,6 +78,9 @@ public class City {
         });
         return bookedSlot.get();
     }
+
+
+    // Conversions
 
     public CityDto toDto() {
         CityDto dto = new CityDto();
