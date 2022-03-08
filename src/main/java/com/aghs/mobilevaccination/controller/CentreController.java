@@ -38,6 +38,12 @@ public class CentreController {
         return "list-centre";
     }
 
+    @GetMapping("/staff/centre")
+    public String getCentresForStaff(Model model) {
+        model.addAttribute("centres", centreRepository.findAll());
+        return "list-centre";
+    }
+
     @GetMapping("/staff/centre/add")
     public String getAddCentre(Model model) {
         model.addAttribute("states", stateRepository.findAll());

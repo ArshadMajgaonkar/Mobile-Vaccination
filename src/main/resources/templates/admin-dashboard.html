@@ -11,7 +11,7 @@
 <div layout:fragment="content">
     <h1>Welcome, admin</h1>
     <p>
-        <a th:href="@{/centre}">Centre</a> |
+        <a th:href="@{/staff/centre}">Centre</a> |
         <a th:href="@{/staff/vaccine/}">Vaccine</a> |
         <a th:href="@{/staff/vaccine/category}">Vaccine Category</a> |
         <a th:href="@{/staff/vehicle}">Vehicle</a> |
@@ -22,6 +22,15 @@
     <div class="container">
         <div class="d-flex flex-column">
             <div class="h3 text-center">List of Registration</div> <hr>
+
+            <form method="post" id="registration-filter-form"
+                  th:action="@{/staff/admin-dashboard}" >
+                <input type="date" name="selectedDate"
+                       th:value="${selectedDate}" />
+                <div th:insert="fragments/form::city-select-elements"></div>
+                <input type="submit" value="Search" />
+            </form>
+
             <div><p class="text-uppercase badge bg-warning p-2">Filters</p></div>
 
             <!-- NOTE : MIN MAX DATE FILTER TO BE ADDED SOON -->
@@ -41,68 +50,28 @@
                 <table class="table table-hover table-striped text-center" id="myTable">
                     <thead>
                       <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Appoi. Date</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Dose</th>
-                        <th scope="col">Location</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Edit-Status</th>
-                        
+                          <th scope="col">ID</th>
+                          <th scope="col">Appoint. Date</th>
+                          <th scope="col">Full Name</th>
+                          <th scope="col">Aadhar No.</th>
+                          <th scope="col">Location</th>
+                          <th scope="col">Dose</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Edit-Status</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>2022-03-01</td>
-                        <td>Otto</td>
-                        <td>Mark</td>
-                        <td>1</td>
-                        <td>Airoli</td>
-                        <td>Registered</td>
-                        <td><button class="btn btn-danger">Change</button></td>
+                      <tr th:each="vaccination: ${vaccinations}">
+                          <th scope="row" th:text="${vaccination.id}"></th>
+                          <td th:text="${vaccination.selectedDate}"></td>
+                          <td th:text="${vaccination.recipient.fullName}"></td>
+                          <td th:text="${'****...'+vaccination.recipient.aadharLast4Digit}"></td>
+                          <td th:text="${vaccination.vaccinationSpot.ward}"></td>
+                          <td>Airoli</td>
+                          <td th:text="${vaccination.status}"></td>
+                          <td><button class="btn btn-danger">Change</button></td>
                       </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>2022-03-02</td>
-                        <td>Otto</td>
-                        <td>Delloite</td>
-                        <td>1</td>
-                        <td>Airoli</td>
-                        <td>Registered</td>
-                        <td><button class="btn btn-danger">Change</button></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">3</th>
-                        <td>2022-03-01</td>
-                        <td>Flank</td>
-                        <td>Mark</td>
-                        <td>2</td>
-                        <td>Thane</td>
-                        <td>Registered</td>
-                        <td><button class="btn btn-danger">Change</button></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">4</th>
-                        <td>2022-02-28</td>
-                        <td>Otto</td>
-                        <td>Delloite</td>
-                        <td>2</td>
-                        <td>Airoli</td>
-                        <td>Registered</td>
-                        <td><button class="btn btn-danger">Change</button></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">5</th>
-                        <td>2022-03-01</td>
-                        <td>Flank</td>
-                        <td>Mark</td>
-                        <td>1</td>
-                        <td>Ambernath</td>
-                        <td>Registered</td>
-                        <td><button class="btn btn-danger">Change</button></td>
-                      </tr>
+
                     </tbody>
                     <tfoot>
                         <tr>
@@ -122,6 +91,12 @@
     </div>
 </div>
 <script layout:fragment="script">
+
+    // Form submitting function
+    function submitForm() {
+        document.getElementById('registration-filter-form').submit();
+    }
+
     var minDate, maxDate;
  
  // Custom filtering function which will search data in column four between two values

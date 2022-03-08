@@ -39,6 +39,9 @@
                     <div class="form-container">
                         <form method="post" id="spot-form" th:action="@{/spot/get-by-city}" >
 
+                            <div class="form-group pb-2">
+                                <h4 th:text="${'Slot Count for '+minRegistrationDate}"></h4>
+                            </div>
                             <div class="form-group pb-4">
                                 <label for="state-select">Select State/UT:</label>
                                 <select class="form-control" id="state-select" name="stateName" onchange="submitspotForm()" required>
@@ -136,7 +139,10 @@
 
             <div class="result col-10 pb-4 offset-1">
                 <h3 class="col-4 pb-3">
-                    <span class="badge badge-pill badge-success">Spots </span></h3>
+                    <span class="badge badge-pill badge-success">Spots </span>
+                    &nbsp;
+                    <span th:if="${remainingSlots}" th:text="${'Remaining Slots: ' + remainingSlots}"></span>
+                </h3>
                 <div class="card-deck" th:if="${spots}">
                     <div class="card" th:each="spot: ${spots}">
                         <div class="card-body ">

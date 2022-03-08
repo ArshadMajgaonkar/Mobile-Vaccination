@@ -1,12 +1,12 @@
 package com.aghs.mobilevaccination.data.model.vaccine;
 
 public enum VaccinationStatus {
-    BOOKED, VACCINATED, DISCARDED;
+    REGISTERED, VACCINATED, DISCARDED;
 
     @Override
     public String toString() {
         switch (this) {
-            case BOOKED -> { return "Booked"; }
+            case REGISTERED -> { return "Registered"; }
             case VACCINATED -> { return "Vaccinated"; }
             case DISCARDED -> { return  "Discarded"; }
         }

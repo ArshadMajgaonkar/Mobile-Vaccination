@@ -61,15 +61,15 @@ public class VaccineDriveController extends  DefaultController{
 
     private long getUnlinkedRegistration(LocalDate driveDate, City city, Map<Long, Long> spotWiseRegistrations) {
         List<Spot> spots = spotRepository.findByCity(city);
-        long totalRegistration = 0;
+        long unlinkedRegistration = 0;
         for(Spot spot: spots) {
             List<MemberVaccination> memberVaccinations =
                     memberVaccinationRepository.findByVaccinationSpotAndSelectedDateAndVaccineDrive(
                             spot, driveDate, null);
             spotWiseRegistrations.put(spot.getId(), (long) memberVaccinations.size());
-            totalRegistration += memberVaccinations.size();
+            unlinkedRegistration += memberVaccinations.size();
         }
-        return totalRegistration;
+        return unlinkedRegistration;
     }
 
     private List<Spot> getSpots(List<?> spotIds) {
