@@ -15,7 +15,7 @@
                 <div class="h3 text-center">Centres</div> <hr>
                 <div class="d-flex flex-row justify-content-between">
                     <p class="text-uppercase badge bg-warning p-2">Filters</p>
-                    <p>
+                    <p sec:authorize="hasRole('ROLE_ADMIN')">
                         <a th:href="@{/staff/centre/add}" class="btn btn-info">Add Centre</a>
                     </p>
                 </div>

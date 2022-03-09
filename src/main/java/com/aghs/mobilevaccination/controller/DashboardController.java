@@ -1,6 +1,15 @@
 package com.aghs.mobilevaccination.controller;
 
+import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.model.AuthGroup;
+import com.aghs.mobilevaccination.data.model.Staff;
+import com.aghs.mobilevaccination.data.model.location.City;
+import com.aghs.mobilevaccination.data.model.location.Spot;
+import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.repository.location.SpotRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.service.StaffUserDetailService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,21 +22,52 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-public class DashboardController {
+public class DashboardController extends DefaultController{
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
+    @Autowired
+    private MemberVaccinationRepository memberVaccinationRepository;
+    @Autowired
+    private SpotRepository spotRepository;
+    @Autowired
+    private StaffUserDetailService staffService;
 
     @GetMapping("/staff/admin-dashboard")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public String adminDashboard() {
+    public String adminDashboard(Model model) {
+        LocalDate today = LocalDate.now();
+        Staff admin = staffService.getCurrentStaff();
+        City workCity = admin.getCentre().getSpot().getCity();
+        List<MemberVaccination> vaccinations = getVaccinationByCityAndDate(workCity, today);
+        model.addAttribute("selectedDate", today);
+        CityDto workCityDto = workCity.toDto();
+        model.addAttribute("cityDto", workCityDto);
+        getCity(workCityDto, model);
+        model.addAttribute("vaccinations", vaccinations);
+        return "admin-dashboard";
+    }
+
+    @PostMapping("/staff/admin-dashboard")
+    public String postAdminDashboard(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate,
+                                     @ModelAttribute("cityDto") CityDto cityDto,
+                                     Model model) {
+        City workCity = getCity(cityDto, model);
+        if(selectedDate!=null && workCity!=null) {
+            List<MemberVaccination> vaccinations = getVaccinationByCityAndDate(workCity, selectedDate);
+            model.addAttribute("vaccinations", vaccinations);
+            model.addAttribute("selectedDate", selectedDate);
+        }
         return "admin-dashboard";
     }
 

@@ -1,14 +1,14 @@
 package com.aghs.mobilevaccination.data.model.vaccine;
 
 import com.aghs.mobilevaccination.data.model.Member;
+import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 @Entity
 @Table
@@ -19,6 +19,9 @@ public class MemberVaccination {
     private Long id;
     @Column(length = 6)
     private String pin;
+    @Column()
+    @Enumerated(EnumType.STRING)
+    private VaccinationStatus status = VaccinationStatus.REGISTERED;
     @ManyToOne
     private VaccineDrive vaccineDrive;
     @ManyToOne
@@ -46,6 +49,14 @@ public class MemberVaccination {
 
     public void setPin(String pin) {
         this.pin = pin;
+    }
+
+    public VaccinationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(VaccinationStatus status) {
+        this.status = status;
     }
 
     public VaccineDrive getVaccineDrive() {
@@ -112,5 +123,14 @@ public class MemberVaccination {
             return LocalDate.now().plusDays(interval).compareTo(vaccinatedDate) > 0;
         }
         return true;
+    }
+
+    public static List<MemberVaccination> getBySpotsAndDate(MemberVaccinationRepository vaccinationRepository,
+                                                            List<Spot> spots,
+                                                            LocalDate date) {
+        List<MemberVaccination> memberVaccinations = new ArrayList<>();
+        for(Spot spot: spots)
+            memberVaccinations.addAll(vaccinationRepository.findByVaccinationSpotAndSelectedDate(spot, date));
+        return memberVaccinations;
     }
 }

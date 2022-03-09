@@ -4,25 +4,30 @@ import com.aghs.mobilevaccination.data.dto.CentreSelectDto;
 import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.dto.SpotDto;
 import com.aghs.mobilevaccination.data.model.location.*;
+import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
 import com.aghs.mobilevaccination.data.repository.location.*;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultController {
     @Autowired
-    CentreRepository centreRepository;
+    protected CentreRepository centreRepository;
     @Autowired
-    CityRepository cityRepository;
+    protected CityRepository cityRepository;
     @Autowired
-    DistrictRepository districtRepository;
+    protected DistrictRepository districtRepository;
     @Autowired
-    SpotRepository spotRepository;
+    protected MemberVaccinationRepository vaccinationRepository;
     @Autowired
-    StateRepository stateRepository;
+    protected SpotRepository spotRepository;
+    @Autowired
+    protected StateRepository stateRepository;
 
     protected Centre getCentre(CentreSelectDto centreSelectDto, Model model) {
         model.addAttribute("states", stateRepository.findAll());
@@ -96,5 +101,21 @@ public class DefaultController {
             }
         }
         return null;
+    }
+
+
+    // MemberVaccination
+
+    public long getRemainingSlot(City city, LocalDate date) {
+        long registrationCount = getVaccinationByCityAndDate(city, date).size();
+        return city.getAllotedSlotsPerDay() - registrationCount;
+    }
+
+    public List<MemberVaccination> getVaccinationByCityAndDate(City city, LocalDate date) {
+        List<Spot> citySpots = spotRepository.findByCity(city);
+        List<MemberVaccination> vaccinations = new ArrayList<>();
+        for(Spot spot: citySpots)
+            vaccinations.addAll(vaccinationRepository.findByVaccinationSpotAndSelectedDate(spot, date));
+        return vaccinations;
     }
 }
