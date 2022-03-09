@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface MemberVaccinationRepository extends JpaRepository<MemberVaccination, String> {
+public interface MemberVaccinationRepository extends JpaRepository<MemberVaccination, Long> {
     List<MemberVaccination> findByVaccinationSpotAndSelectedDate(Spot VaccinationSpot, LocalDate selectedDate);
     List<MemberVaccination> findByVaccinationSpotAndSelectedDateAndVaccineDrive(Spot VaccinationSpot,
                                                                                 LocalDate selectedDate,

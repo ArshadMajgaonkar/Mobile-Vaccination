@@ -30,11 +30,9 @@
     <body>
         <div th:insert="fragments/header::header"></div>
 
-        <div>
-            <ul th:each="message: ${messages}">
-                <li th:text="${message}">MESSAGE</li>
-            </ul>
-        </div>
+        <ul id="messages" style="margin: 0">
+            <li th:each="message: ${messages}" th:text="${message}">MESSAGE</li>
+        </ul>
 
         <div layout:fragment="content"></div>
 
