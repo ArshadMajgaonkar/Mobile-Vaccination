@@ -6,58 +6,105 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Centre</title>
+    <style>
+        #map-img{
+            height: 25rem;
+        }
+        label{
+            font-size: 1.3rem;
+        }
+        .btn{
+            font-size: 1.1rem;
+        }
+        .card-deck{
+            margin-top: 10px;
+            margin-left: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: .5rem;
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Add Centre</h3>
-        <form id="add-centre-form" method="post"
-              th:action="@{/staff/centre/add}" th:object="${centreDto}">
-            <input type="text" name="name" placeholder="Centre Name"
-                   th:value="${centreDto.name}"/>
-            <label for="state-select">Select State/UT:</label>
-            <select id="state-select" name="stateName" onchange="submitCentreForm()" required>
-                <option value="" selected disabled>Select State</option>
-                <span th:each="state: ${states}">
-                    <option th:if="${centreDto.stateName != state.name}" th:value="${state.name}"
-                            th:text="${state.name}"></option>
-                    <!--If condition is false-->
-                    <option th:if="${centreDto.stateName == state.name}" th:value="${state.name}"
-                            th:text="${state.name}" selected></option>
-                </span>
-            </select>
+        <div class="container">
+            <div class="d-flex flex-row p-4">
+                <div class="d-none d-md-block col-5">
+                    <img src="/img/p112.jpg" id="map-img">
+                </div>
+                <div class="col-10 col-md-5 ml-auto pt-4">
+                    <div class="d-flex flex-column">
+                        <div class="h3 mb-4 text-uppercase">Add Centre</div>
+                        <div class="form-container">
+    
+                            <form id="add-centre-form" method="post" th:action="@{/staff/centre/add}" th:object="${centreDto}">
+                                
+                                <input type="text" name="name" placeholder="Centre Name" th:value="${centreDto.name}" class="form-control form-control-lg mb-4"/>
+                                
+                                <div class="form-group">
+                                    <label for="state-select" class="mb-2">Select State/UT:</label>
+                                    <select id="state-select" class="form-control form-control-lg mb-4" name="stateName" onchange="submitCentreForm()" required>
+                                        <option value="" selected disabled>Select State</option>
+                                        <span th:each="state: ${states}">
+                                            <option th:if="${centreDto.stateName != state.name}" th:value="${state.name}"
+                                                    th:text="${state.name}"></option>
+                                            <!--If condition is false-->
+                                            <option th:if="${centreDto.stateName == state.name}" th:value="${state.name}"
+                                                    th:text="${state.name}" selected></option>
+                                        </span>
+                                    </select>
+                                </div>
 
-            <label for="district-select">Select District:</label>
-            <select id="district-select" name="districtId" onchange="submitCentreForm()">
-                <option selected disabled>Select District</option>
-                <span th:each="district: ${districts}">
-                    <option th:if="${centreDto.districtId!=district.id}" th:value="${district.id}"
-                            th:text="${district.name}"></option>
-                    <option th:unless="${centreDto.districtId!=district.id}" th:value="${district.id}"
-                            th:text="${district.name}" selected></option>
-                </span>
-            </select>
+                                <div class="form-group">
+                                    <label for="district-select" class="mb-2">Select District:</label>
+                                    <select id="district-select" name="districtId" onchange="submitCentreForm()" class="form-control form-control-lg mb-4">
+                                        <option selected disabled>Select District</option>
+                                        <span th:each="district: ${districts}">
+                                            <option th:if="${centreDto.districtId!=district.id}" th:value="${district.id}"
+                                                    th:text="${district.name}"></option>
+                                            <option th:unless="${centreDto.districtId!=district.id}" th:value="${district.id}"
+                                                    th:text="${district.name}" selected></option>
+                                        </span>
+                                    </select>
+                                </div>
 
-            <label for="city-select">Select City/Village:</label>
-            <select id="city-select" name="cityId" onchange="submitCentreForm()">
-                <option selected disabled>Select City/Village</option>
-                <span th:each="city: ${cities}">
-                    <option th:if="${centreDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"></option>
-                    <option th:unless="${centreDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}" selected></option>
-                </span>
-            </select>
+                                
+                                <div class="form-group">
+                                    <label for="city-select" class="mb-2">Select City/Village:</label>
+                                    <select id="city-select" name="cityId" onchange="submitCentreForm()" class="form-control form-control-lg mb-4">
+                                        <option selected disabled>Select City/Village</option>
+                                        <span th:each="city: ${cities}">
+                                            <option th:if="${centreDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"></option>
+                                            <option th:unless="${centreDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}" selected></option>
+                                        </span>
+                                    </select>
+                                </div>
 
-            <label for="spot-select">Select Spot:</label>
-            <select id="spot-select" name="spotId" onchange="submitCentreForm()">
-                <option selected disabled>Select Spot</option>
-                <span th:each="spot: ${spots}">
-                    <option th:if="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}"></option>
-                    <option th:unless="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}" selected></option>
-                </span>
-            </select>
+                                
+                                <div class="form-group">
+                                    <label for="spot-select" class="mb-2">Select Spot:</label>
+                                    <select id="spot-select" name="spotId" onchange="submitCentreForm()" class="form-control form-control-lg mb-4">
+                                        <option selected disabled>Select Spot</option>
+                                        <span th:each="spot: ${spots}">
+                                            <option th:if="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}"></option>
+                                            <option th:unless="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}" selected></option>
+                                        </span>
+                                    </select>
+                                </div>
 
-            <input type="submit" value="Add Centre">
+                                <a class="btn btn-light col-10 col-md-5 form-control form-control-lg mb-4 offset-md-1" th:href="@{/centre}">Back</a>
+                                <input type="submit" class="btn btn-primary col-10 col-md-5 ml-auto p-2 mb-4 offset-md-1" value="Add Centre"/>
+                                
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
 
-        </form>
+        
+
     </div>
 
     <script layout:fragment="script">
