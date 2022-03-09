@@ -22,7 +22,7 @@ public class TwilioMessagingService {
     public String sendOtpMessage(String mobileNumber, String otp) {
         try {
             Message message = Message.creator(
-                    new com.twilio.type.PhoneNumber(mobileNumber),
+                    new com.twilio.type.PhoneNumber("+91"+mobileNumber),
                     MESSAGING_SID,
                     String.format(this.message, mobileNumber.substring(0, 7), otp)
             ).create();
