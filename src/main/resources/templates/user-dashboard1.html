@@ -65,7 +65,7 @@ lang="en">
     <div class="d-flex flex-column align-items-center">
 <!--        mycode-->
         <div class="container">
-            <div class="d-flex flex-column align-items-center" th:if="${members != null}">
+            <div class="d-flex flex-column align-items-center py-4" th:if="${members != null}">
                 <!-- divOne -->
                 <div class="box col-md-8 col-10 my-4" th:each="member: ${members}">
                     <form method="post" th:action="@{/user/member/show-slot}">
@@ -120,7 +120,7 @@ lang="en">
             </p>
         </div>
 
-        <div class="p-2 bd-highlight">
+        <div class="p-2 bd-highlight pb-4">
             <a href="#">
                 <button type="button" class="btn btn-outline-primary btn-lg text-uppercase" data-toggle="modal" data-target="#exampleModalCenter">
                   <p class="mb-0 p-2"><span><i class="fas fa-plus mr-3"></i></span>Add Member</p>
