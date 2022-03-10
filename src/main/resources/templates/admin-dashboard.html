@@ -9,18 +9,24 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <h1>Welcome, admin</h1>
+    <!-- <h1>Welcome, admin</h1> -->
 
     <div class="container">
         <div class="d-flex flex-column">
-            <div class="h3 text-center">List of Registration</div> <hr>
+            <div class="h3 text-center mt-4">List of Registration</div> <hr>
 
             <form method="post" id="registration-filter-form"
                   th:action="@{/staff/admin-dashboard}" >
-                <input type="date" name="selectedDate"
-                       th:value="${selectedDate}" />
-                <div th:insert="fragments/form::city-select-elements"></div>
-                <input type="submit" value="Search" />
+                  <div class="d-flex flex-row justify-content-center">
+                    <input type="date" name="selectedDate"
+                    th:value="${selectedDate}" class="form-control form-control-lg col-10 col-md-4"/>
+                  </div>
+                <div th:insert="fragments/form::city-select-elements" class="my-4"></div>
+
+                
+                <div class="d-flex flex-row justify-content-center">
+                    <input type="submit" value="Search" class="form-control form-control-lg btn btn-primary col-md-4 col-10"/>
+                </div>
             </form>
 
             <div><p class="text-uppercase badge bg-warning p-2">Filters</p></div>
@@ -65,7 +71,7 @@
                       </tr>
 
                     </tbody>
-                    <tfoot>
+                    <!-- <tfoot>
                         <tr>
                         <th scope="col">#</th>
                         <th scope="col">Appoi. Date</th>
@@ -76,7 +82,7 @@
                         <th scope="col">Status</th>
                         <th scope="col">Edit-Status</th>
                         </tr>
-                    </tfoot>
+                    </tfoot> -->
                   </table>
             </div>
         </div>

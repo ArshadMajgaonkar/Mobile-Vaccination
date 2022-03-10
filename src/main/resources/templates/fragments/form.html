@@ -55,40 +55,49 @@
 
 
 
-    <div th:fragment="city-select-elements">
-        <label for="city-state-select">Select State/UT:</label>
-        <select id="city-state-select" name="stateName" onchange="submitForm()" required>
-            <option value="" selected disabled>Select State</option>
-            <span th:each="state: ${states}">
-                    <option th:if="${cityDto.stateName != state.name}" th:value="${state.name}"
-                            th:text="${state.name}"></option>
-                <!--If condition is false-->
-                    <option th:unless="${cityDto.stateName != state.name}" th:value="${state.name}"
-                            th:text="${state.name}" selected></option>
-                </span>
-        </select>
+    <div th:fragment="city-select-elements" class="d-flex flex-row justify-content-between">
+        
+        
+        <div class="form-group mb-4">
+                <label for="city-state-select" class="col-auto">Select State/UT:</label>
+                <select id="city-state-select" name="stateName" onchange="submitForm()" class="form-control form-control-lg" required>
+                <option value="" selected disabled>Select State</option>
+                <span th:each="state: ${states}">
+                        <option th:if="${cityDto.stateName != state.name}" th:value="${state.name}"
+                                th:text="${state.name}"></option>
+                        <!--If condition is false-->
+                        <option th:unless="${cityDto.stateName != state.name}" th:value="${state.name}"
+                                th:text="${state.name}" selected></option>
+                        </span>
+                </select>
+        </div>
 
-        <label for="city-district-select">Select District:</label>
-        <select id="city-district-select" name="districtId" onchange="submitForm()">
-            <option selected disabled>Select District</option>
-            <span th:each="district: ${districts}">
-                    <option th:if="${cityDto.districtId!=district.id}" th:value="${district.id}"
-                            th:text="${district.name}"></option>
-                    <option th:unless="${cityDto.districtId!=district.id}" th:value="${district.id}"
-                            th:text="${district.name}" selected></option>
-                </span>
-        </select>
+        <div class="form-group mb-4">
+                <label for="city-district-select" class="col-auto">Select District:</label>
+                <select id="city-district-select" name="districtId" onchange="submitForm()" class=" form-control form-control-lg">
+                <option selected disabled>Select District</option>
+                <span th:each="district: ${districts}">
+                        <option th:if="${cityDto.districtId!=district.id}" th:value="${district.id}"
+                                th:text="${district.name}"></option>
+                        <option th:unless="${cityDto.districtId!=district.id}" th:value="${district.id}"
+                                th:text="${district.name}" selected></option>
+                        </span>
+                </select>
+        </div>
 
-        <label for="city-city-select">Select City/Village:</label>
-        <select id="city-city-select" name="cityId">
-            <option selected disabled>Select City/Village</option>
-            <span th:each="city: ${cities}">
-                <option th:if="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}">
-                </option>
-                <option th:unless="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"
-                        selected></option>
-            </span>
-        </select>
+        <div class="form-group mb-4">
+                <label for="city-city-select" class="col-auto">Select City/Village:</label>
+                <select id="city-city-select" name="cityId" class="form-control form-control-lg">
+                <option selected disabled>Select City/Village</option>
+                <span th:each="city: ${cities}">
+                        <option th:if="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}">
+                        </option>
+                        <option th:unless="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}"
+                                selected></option>
+                </span>
+                </select>
+        </div>
+
     </div>
 
 
