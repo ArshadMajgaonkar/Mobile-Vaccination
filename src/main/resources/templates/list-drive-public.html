@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Vaccine Drive</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3>Today's Vaccine Drives</h3>
+        <form method="post" id="drive-form" action="/vaccine-drive"
+              th:object="${cityDto}">
+            <div th:insert="fragments/form::city-select-elements"></div>
+            <input type="submit" value="Search" />
+        </form>
+
+        <div th:unless="${vaccineDrives}">
+            <h6>Please select a city.</h6>
+        </div>
+        <div th:if="${vaccineDrives}">
+            <div th:if="${#lists.size(vaccineDrives)!=0}">
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Spots</th>
+                    </tr>
+                    <tr th:each="drive: ${vaccineDrives}">
+                        <td th:text="${drive.id}"></td>
+                        <td>
+                            <div th:each="spot: ${drive.vaccinationSpots}"
+                                 th:text="${spot.ward+':'+spot.localityNames +'; '}">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div th:unless="${#lists.size(vaccineDrives)!=0}">
+                <h6>No Vaccine Drives today.</h6>
+            </div>
+        </div>
+    </div>
+</body>
+<script layout:fragment="script">
+    function submitForm() {
+        document.getElementById("drive-form").submit();
+    }
+</script>
+</html>

@@ -33,7 +33,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Controller
-@RequestMapping("/staff/vaccine-drive")
 public class VaccineDriveController extends  DefaultController{
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     @Autowired
@@ -52,9 +51,9 @@ public class VaccineDriveController extends  DefaultController{
     @Autowired
     AlgorithmDeployService algorithmDeployService;
 
-    private static final String GET_REGISTRATIONS_URL = "/get-registrations";
-    private static final String DEPLOY_ALGORITHM = "/deploy-algorithm";
-    private static final String SAVE_VACCINE_DRIVE = "/save";
+    private static final String GET_REGISTRATIONS_URL = "/staff/vaccine-drive/get-registrations";
+    private static final String DEPLOY_ALGORITHM = "/staff/vaccine-drive/deploy-algorithm";
+    private static final String SAVE_VACCINE_DRIVE = "/staff/vaccine-drive/save";
 
 
     // Private Methods
@@ -137,6 +136,25 @@ public class VaccineDriveController extends  DefaultController{
 
     // Controllers
 
+    // Public
+    @GetMapping("/vaccine-drive")
+    public String getPublicDrive(Model model) {
+        model.addAttribute("states", stateRepository.findAll());
+        return "list-drive-public";
+    }
+
+    @PostMapping("/vaccine-drive")
+    public String postPublicDrive(@ModelAttribute("cityDto") CityDto cityDto, Model model) {
+        City city = getCity(cityDto, model);
+        if(city!=null) {
+            List<VaccineDrive> drives = vaccineDriveRepository.findByDriveDateAndCity(LocalDate.now().minusDays(2), city);
+            model.addAttribute("vaccineDrives", drives);
+        }
+        return "list-drive-public";
+    }
+
+    // Staff
+
     @GetMapping(GET_REGISTRATIONS_URL)
     public String getRegistrations(Model model) {
         model.addAttribute("minDriveDate", LocalDate.now().plusDays(1));
@@ -212,7 +230,7 @@ public class VaccineDriveController extends  DefaultController{
         return "deploy-algorithm";
     }
 
-    @GetMapping({"/", "" })
+    @GetMapping({"/staff/vaccine-drive/", "/staff/vaccine-drive" })
     public String getListVaccineDrive(Model model) {
         LocalDate today = LocalDate.now();
         model.addAttribute("maxDriveDate", LocalDate.now().plusDays(2));
@@ -222,7 +240,7 @@ public class VaccineDriveController extends  DefaultController{
     }
 
 
-    @PostMapping({"", "/"})
+    @PostMapping({"/staff/vaccine-drive", "/staff/vaccine-drive/"})
     public String postListVaccineDrive(
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate driveDate,
             @ModelAttribute("cityDto") CityDto cityDto,
@@ -256,7 +274,7 @@ public class VaccineDriveController extends  DefaultController{
     }
 
 
-    @PostMapping("/list-inadequate")
+    @PostMapping("/staff/vaccine-drive/list-inadequate")
     public String listInadequateVaccineDrive(@ModelAttribute("driveDate") String driveDateString,
                                              @ModelAttribute("cityId") long cityId,
                                              Model model) {
@@ -280,7 +298,7 @@ public class VaccineDriveController extends  DefaultController{
         return "list-vaccine-drive";
     }
 
-    @PostMapping("/update")
+    @PostMapping("/staff/vaccine-drive/update")
     public String updateVaccineDrive(@ModelAttribute("driveDto")DriveDto driveDto, Model model) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
