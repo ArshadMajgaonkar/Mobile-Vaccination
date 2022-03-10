@@ -6,10 +6,77 @@
 <head>
     <meta charset="UTF-8">
     <title>Book Slot by City</title>
+    <style>
+        #map-img{
+            height: 25rem;
+        }
+        label{
+            font-size: 1.3rem;
+        }
+        .btn{
+            font-size: 1.1rem;
+        }
+        .card-deck{
+            margin-top: 10px;
+            margin-left: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-gap: .5rem;
+        }
+    </style>
 </head>
 <body>
     <div layout:fragment="content">
-        <form method="post" id="spot-form" th:action="@{/user/member/book-slot}" th:object="${spotDto}">
+
+        <div class="container">
+            <div class="d-flex flex-row p-4">
+                <div class="d-none d-md-block col-5">
+                    <img src="/img/p112.jpg" id="map-img">
+                    <div class="font-italic m-3">Note: Registration closes 2 days before of Vaccination Drive.</div>
+                </div>
+                <div class="col-10 col-md-5 ml-auto pt-4">
+                    <div class="d-flex flex-column">
+                        <div class="h3 mb-4">Registration</div>
+                        <div class="form-container">
+    
+                            <form method="post" id="spot-form" th:action="@{/user/member/book-slot}" th:object="${spotDto}">
+                                
+                                <input type="hidden" name="userId" th:value="${userId}" class="form-control form-control-lg mb-4"/>
+                                <input type="date" name="selectedDate" required th:attr="min=${minRegistrationDate}" th:value="${selectedDate}" class="form-control form-control-lg mb-4"/>
+                                
+
+                                <div th:replace="fragments/form::spot-select-elements"></div>
+
+                                <div class="font-italic col-10 mb-4">
+                                    Remaining slot&nbsp;:&nbsp;
+                                    <span th:if="${remainingSlots}" th:text="${remainingSlots}"></span>
+                                    <span th:unless="${remainingSlots}" th:text="${'Please select a city.'}"></span>
+                                </div>
+
+                                <input type="submit" value="Search" th:if="${spots==null}" class="btn btn-primary col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1"/>
+                                <input type="submit" value="Book Slot" th:unless="${spots==null}" class="btn btn-primary col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1"/>
+                                <a th:href="@{/user/dashboard}"  class="btn btn-light col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1">Back</a>
+
+                                <!-- <input type="text" name="name" placeholder="Vaccine Name" required
+                                       th:value="${vaccineInstance.name}" class="form-control form-control-lg mb-4" />
+                                <input type="text" name="code" placeholder="Code" required
+                                       th:value="${vaccineInstance.code}" class="form-control form-control-lg mb-4" />
+                                <input type="number" name="intervalInDays" placeholder="Interval In Days" required
+                                       th:value="${vaccineInstance.intervalInDays}" class="form-control form-control-lg mb-4" />
+                                
+                                <a class="btn btn-light col-10 col-md-5 form-control form-control-lg mb-4 offset-md-1" th:href="@{/staff/vaccine/}">Back</a>
+                                <input type="submit" class="btn btn-primary col-10 col-md-5 ml-auto p-2 mb-4 offset-md-1" value="Add Vaccine"/> -->
+                                
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- mcends -->
+        <!-- <form method="post" id="spot-form" th:action="@{/user/member/book-slot}" th:object="${spotDto}">
 
             <input type="hidden" name="userId"
                    th:value="${userId}" />
@@ -30,8 +97,7 @@
                    th:if="${spots==null}" />
             <input type="submit" value="Book Slot"
                    th:unless="${spots==null}" />
-        </form>
-        <a th:href="@{/user/dashboard}"><button>Back</button></a>
+        </form> -->
 
     </div>
 
