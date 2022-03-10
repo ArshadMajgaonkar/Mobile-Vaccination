@@ -1,23 +1,24 @@
 package com.aghs.mobilevaccination.controller;
 
-import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.dto.SpotDto;
 import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
 import com.aghs.mobilevaccination.data.repository.MemberRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 import com.aghs.mobilevaccination.service.GeneralUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

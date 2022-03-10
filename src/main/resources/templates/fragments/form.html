@@ -132,9 +132,9 @@
         <select id="s-spot-select" name="spotId">
             <option selected disabled>Select Ward</option>
             <span th:each="spot: ${spots}">
-                    <option th:if="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward}">
+                    <option th:if="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward+' : '+spot.localityNames}">
                     </option>
-                    <option th:unless="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward}"
+                    <option th:unless="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward+' : '+spot.localityNames}"
                             selected></option>
                 </span>
         </select>

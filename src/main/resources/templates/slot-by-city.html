@@ -146,7 +146,7 @@
                 <div class="card-deck" th:if="${spots}">
                     <div class="card" th:each="spot: ${spots}">
                         <div class="card-body ">
-                            <h5 class="card-title" th:text="${spot.ward}"></h5>
+                            <h5 class="card-title" th:text="${spot.ward+' : '+spot.localityNames}"></h5>
                         </div>
                     </div>
                     <p th:if="${spots==null and cityDto.cityId!=null}">No spots available for above city.</p>

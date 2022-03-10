@@ -10,14 +10,6 @@
 <body>
 <div layout:fragment="content">
     <h1>Welcome, admin</h1>
-    <p>
-        <a th:href="@{/staff/centre}">Centre</a> |
-        <a th:href="@{/staff/vaccine/}">Vaccine</a> |
-        <a th:href="@{/staff/vaccine/category}">Vaccine Category</a> |
-        <a th:href="@{/staff/vehicle}">Vehicle</a> |
-        <a th:href="@{/staff/vaccine-drive}">Vaccine Drive</a> |
-        <a th:href="@{/staff/logout}">Log Out</a>
-    </p>
 
     <div class="container">
         <div class="d-flex flex-column">
@@ -69,7 +61,7 @@
                           <td th:text="${vaccination.vaccinationSpot.ward}"></td>
                           <td>Airoli</td>
                           <td th:text="${vaccination.status}"></td>
-                          <td><button class="btn btn-danger">Change</button></td>
+                          <td><button th:attr="onclick='updateStatus('+${vaccination.id}+')'" class="btn btn-danger">Change</button></td>
                       </tr>
 
                     </tbody>
@@ -97,6 +89,38 @@
         document.getElementById('registration-filter-form').submit();
     }
 
+    function updateStatus(vaccinationId) {
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.onreadystatechange = function() {
+            if(xmlHttpRequest.readyState == XMLHttpRequest.DONE){
+                if(xmlHttpRequest.status == 200) {
+                    addMessage(xmlHttpRequest.responseText);
+                    // sleep 2sec
+                    await new Promise(r => setTimeout(r, 3000));
+                    submitForm();
+                }
+                else if(xmlHttpRequest.readyState == 404)
+                    addMessage(xmlHttpRequest.responseText);
+            }
+            else
+                addMessage('Error occurred while updating.');
+        }
+
+        var data = {"vaccinationId": vaccinationId};
+        console.log(data);
+
+        xmlHttpRequest.open('POST', '/staff/update-vaccination-status', true);
+        xmlHttpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xmlHttpRequest.send(JSON.stringify(data));
+    }
+
+    function addMessage(message) {
+        var messagesList = document.getElementById('messages');
+        var li = document.createElement('li');
+        li.appendChild(document.createTextNode(message));
+        messagesList.appendChild(li)
+    }
+
     var minDate, maxDate;
  
  // Custom filtering function which will search data in column four between two values
@@ -120,6 +144,9 @@
  );
   
  $(document).ready(function() {
+    // create a actionListener
+
+
      // Create date inputs
      minDate = new DateTime($('#min'), {
          format: 'YYYY MM DD'
