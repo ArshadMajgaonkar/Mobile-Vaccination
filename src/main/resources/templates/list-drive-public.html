@@ -9,35 +9,47 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Today's Vaccine Drives</h3>
-        <form method="post" id="drive-form" action="/vaccine-drive"
-              th:object="${cityDto}">
-            <div th:insert="fragments/form::city-select-elements"></div>
-            <input type="submit" value="Search" />
-        </form>
-
-        <div th:unless="${vaccineDrives}">
-            <h6>Please select a city.</h6>
-        </div>
-        <div th:if="${vaccineDrives}">
-            <div th:if="${#lists.size(vaccineDrives)!=0}">
-                <table>
-                    <tr>
-                        <th>Id</th>
-                        <th>Spots</th>
-                    </tr>
-                    <tr th:each="drive: ${vaccineDrives}">
-                        <td th:text="${drive.id}"></td>
-                        <td>
-                            <div th:each="spot: ${drive.vaccinationSpots}"
-                                 th:text="${spot.ward+':'+spot.localityNames +'; '}">
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+        <div class="container p-4">
+            <div class="h4 mb-4">
+                Today's Vaccine Drives
             </div>
-            <div th:unless="${#lists.size(vaccineDrives)!=0}">
-                <h6>No Vaccine Drives today.</h6>
+            <form method="post" id="drive-form" action="/vaccine-drive"
+                th:object="${cityDto}">
+                <div th:insert="fragments/form::city-select-elements"></div>
+                <input type="submit" value="Search" class="btn btn-primary p-2 btn-lg"/>
+            </form>
+
+            <div th:unless="${vaccineDrives}">
+                <div class="d-flex flex-row justify-content-center">
+                    <label class="font-italic form-control m-4 bg-warning col-10 col-md-5">
+                        Please select City.
+                    </label> 
+                </div>
+            </div>
+            <div th:if="${vaccineDrives}">
+                <div th:if="${#lists.size(vaccineDrives)!=0}">
+                    <table>
+                        <tr>
+                            <th>Id</th>
+                            <th>Spots</th>
+                        </tr>
+                        <tr th:each="drive: ${vaccineDrives}">
+                            <td th:text="${drive.id}"></td>
+                            <td>
+                                <div th:each="spot: ${drive.vaccinationSpots}"
+                                    th:text="${spot.ward+':'+spot.localityNames +'; '}">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div th:unless="${#lists.size(vaccineDrives)!=0}">
+                    <div class="d-flex flex-row justify-content-center">
+                        <label class="font-italic form-control m-4 bg-warning col-10 col-md-5">
+                            No Vaccine Drives today.
+                        </label> 
+                    </div>
+                </div>
             </div>
         </div>
     </div>

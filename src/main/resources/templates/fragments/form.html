@@ -61,7 +61,7 @@
         <div class="form-group mb-4">
                 <label for="city-state-select" class="col-auto">Select State/UT:</label>
                 <select id="city-state-select" name="stateName" onchange="submitForm()" class="form-control form-control-lg" required>
-                <option value="" selected disabled>Select State</option>
+                <option value="" selected disabled>--Select--</option>
                 <span th:each="state: ${states}">
                         <option th:if="${cityDto.stateName != state.name}" th:value="${state.name}"
                                 th:text="${state.name}"></option>
@@ -75,7 +75,7 @@
         <div class="form-group mb-4">
                 <label for="city-district-select" class="col-auto">Select District:</label>
                 <select id="city-district-select" name="districtId" onchange="submitForm()" class=" form-control form-control-lg">
-                <option selected disabled>Select District</option>
+                <option selected disabled>--Select--</option>
                 <span th:each="district: ${districts}">
                         <option th:if="${cityDto.districtId!=district.id}" th:value="${district.id}"
                                 th:text="${district.name}"></option>
@@ -88,7 +88,7 @@
         <div class="form-group mb-4">
                 <label for="city-city-select" class="col-auto">Select City/Village:</label>
                 <select id="city-city-select" name="cityId" class="form-control form-control-lg">
-                <option selected disabled>Select City/Village</option>
+                <option selected disabled>--Select--</option>
                 <span th:each="city: ${cities}">
                         <option th:if="${cityDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}">
                         </option>
@@ -107,7 +107,7 @@
         <div class="form-group mb-4">
                 <label for="s-state-select" class="col-auto">State / UT:</label>
                 <select id="s-state-select" name="stateName" onchange="submitForm()" class="form-control-lg form-control" required>
-                <option value="" selected disabled>Select</option>
+                <option value="" selected disabled>--Select--</option>
                 <span th:each="state: ${states}">
                         <option th:if="${spotDto.stateName != state.name}" th:value="${state.name}"
                                 th:text="${state.name}"></option>
@@ -123,7 +123,7 @@
         <div class="form-group mb-4">    
                 <label for="s-district-select" class="col-auto">District:</label>
                 <select id="s-district-select" name="districtId" onchange="submitForm()" class="form-control-lg form-control col-auto">
-                        <option selected disabled>Select</option>
+                        <option selected disabled>--Select--</option>
                         <span th:each="district: ${districts}">
                                 <option th:if="${spotDto.districtId!=district.id}" th:value="${district.id}"
                                         th:text="${district.name}"></option>
@@ -138,7 +138,7 @@
         <div class="form-group mb-4">  
                 <label for="s-city-select" class="col-auto">City/Village:</label>
                 <select id="s-city-select" name="cityId" onchange="submitForm()" class="form-control-lg form-control col-auto">
-                <option selected disabled>Select</option>
+                <option selected disabled>--Select--</option>
                 <span th:each="city: ${cities}">
                         <option th:if="${spotDto.cityId != city.id}" th:value="${city.id}" th:text="${city.name}">
                         </option>
@@ -153,7 +153,7 @@
         <div class="form-group mb-4"> 
                 <label for="s-spot-select" class="col-auto">Ward:</label>
                 <select id="s-spot-select" name="spotId" class="form-control-lg form-control col-auto">
-                <option selected disabled>Select</option>
+                <option selected disabled>--Select--</option>
                 <span th:each="spot: ${spots}">
                         <option th:if="${spotDto.spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward+' : '+spot.localityNames}">
                         </option>
@@ -169,7 +169,7 @@
     <div th:fragment="vaccine-category-select">
         <label for="vaccine-category-select">Select Vaccine Category:</label>
         <select id="vaccine-category-select" name="vaccineCategoryId">
-            <option selected disabled>Select Vaccine Category</option>
+            <option selected disabled>--Select--</option>
             <span th:each="vaccineCategory: ${vaccineCategories}">
                 <option th:if="${vaccineCategoryId != vaccineCategory.id}"
                         th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}">
@@ -182,9 +182,9 @@
     </div>
 
     <div th:fragment="vaccine-drive-status-select">
-        <label for="vaccine-drive-status-select">Select Vaccine Drive Status:</label>
-        <select id="vaccine-drive-status-select" name="selectedDriveStatus" onchange="submitForm()">
-            <option selected disabled>Select Status</option>
+        <label for="vaccine-drive-status-select">Select Vaccine Drive Status: <i>(Optional)</i></label>
+        <select id="vaccine-drive-status-select" name="selectedDriveStatus" onchange="submitForm()" class="form-control form-control-lg">
+            <option selected disabled>--Select--</option>
             <span th:each="driveStatus: ${driveStatuses}">
                 <option th:if="${driveStatus != selectedDriveStatus}"
                         th:value="${driveStatus}" th:text="${driveStatus}">
