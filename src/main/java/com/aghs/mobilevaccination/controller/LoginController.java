@@ -78,15 +78,15 @@ public class LoginController {
                 System.out.println("Creating Account: " + account.getMobileNumber());
             }
             fetchedAccount.generateOtp();
-            String errorMessage = messagingService.sendOtpMessage(fetchedAccount.getMobileNumber(), fetchedAccount.getOtp());
+            /*String errorMessage = messagingService.sendOtpMessage(fetchedAccount.getMobileNumber(), fetchedAccount.getOtp());
             if(errorMessage != null)
                 messages.add(errorMessage);
-            else {                                                               // Saves OTP in the database
+            else {*/                                                               // Saves OTP in the database
                 generalUserService.updateOtp(fetchedAccount);
                 model.addAttribute("showOtpForm", true);
                 messages.add("OTP sent successfully");
                 System.out.println("OTP: " + fetchedAccount.getOtp());
-            }
+            //}
         }
         else {
             messages.add("Mobile Number cannot be empty.");
