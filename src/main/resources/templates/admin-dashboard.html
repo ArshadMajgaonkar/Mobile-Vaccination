@@ -102,7 +102,7 @@
                 if(xmlHttpRequest.status == 200) {
                     addMessage(xmlHttpRequest.responseText);
                     // sleep 2sec
-                    await new Promise(r => setTimeout(r, 3000));
+                    new Promise(r => setTimeout(r, 3000));
                     submitForm();
                 }
                 else if(xmlHttpRequest.readyState == 404)

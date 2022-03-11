@@ -40,3 +40,6 @@ src/main/resources/templates/todo.txt
 src/main/resources/templates/tempLogout.html
 src/main/resources/templates/frontendTesting
 algo.txt
+
+## harshad
+src/main/resources/application.properties
