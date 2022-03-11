@@ -89,7 +89,10 @@ public class LoginController {
             //}
         }
         else {
-            messages.add("Mobile Number cannot be empty.");
+            if(account.getMobileNumber() == null || account.getMobileNumber().equals(""))
+                messages.add("Mobile Number cannot be empty.");
+            else
+                messages.add("Invalid Mobile Number");
             model.addAttribute("showOtpForm", false);
         }
         return "index";

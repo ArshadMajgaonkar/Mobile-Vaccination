@@ -58,7 +58,7 @@ public class VaccineDriveController extends  DefaultController{
 
     // Private Methods
 
-    private long getUnlinkedRegistration(LocalDate driveDate, City city, Map<Long, Long> spotWiseRegistrations) {
+    private long getUnlinkedRegistrationWithId(LocalDate driveDate, City city, Map<Long, Long> spotWiseRegistrations) {
         List<Spot> spots = spotRepository.findByCity(city);
         long unlinkedRegistration = 0;
         for(Spot spot: spots) {
@@ -66,6 +66,20 @@ public class VaccineDriveController extends  DefaultController{
                     memberVaccinationRepository.findByVaccinationSpotAndSelectedDateAndVaccineDrive(
                             spot, driveDate, null);
             spotWiseRegistrations.put(spot.getId(), (long) memberVaccinations.size());
+            unlinkedRegistration += memberVaccinations.size();
+        }
+        return unlinkedRegistration;
+    }
+
+    private long getUnlinkedRegistration(LocalDate driveDate, City city, Map<String, Long> spotWiseRegistrations) {
+        List<Spot> spots = spotRepository.findByCity(city);
+        long unlinkedRegistration = 0;
+        for(Spot spot: spots) {
+            List<MemberVaccination> memberVaccinations =
+                    memberVaccinationRepository.findByVaccinationSpotAndSelectedDateAndVaccineDrive(
+                            spot, driveDate, null);
+            String location = spot.getWard() + " : " + spot.getLocalityNames();
+            spotWiseRegistrations.put(location, (long) memberVaccinations.size());
             unlinkedRegistration += memberVaccinations.size();
         }
         return unlinkedRegistration;
@@ -174,7 +188,7 @@ public class VaccineDriveController extends  DefaultController{
         if(city != null) {
             if(driveDate != null) {
                 if(vaccineDriveRepository.findByDriveDateAndCity(driveDate, city).size() == 0) {
-                    Map<Long, Long> spotWiseRegistrations = new HashMap<>();
+                    Map<String, Long> spotWiseRegistrations = new HashMap<>();
                     long totalRegistration = getUnlinkedRegistration(driveDate, city, spotWiseRegistrations);
                     model.addAttribute("hasReport", true);
                     model.addAttribute("spotWiseRegistrations", spotWiseRegistrations);
@@ -210,7 +224,7 @@ public class VaccineDriveController extends  DefaultController{
             if( city != null) {
                 HashMap<Long, Long> spotWiseRegistrations = new HashMap<>();
                 // TODO: vaccination count which are yet to be added to drive
-                getUnlinkedRegistration(driveDate, city, spotWiseRegistrations);
+                getUnlinkedRegistrationWithId(driveDate, city, spotWiseRegistrations);
                 try {
                     List<List<?>> spotDistribution =
                             algorithmDeployService.getSlotDistribution(dosesPerVehicle, spotWiseRegistrations);

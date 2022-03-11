@@ -64,8 +64,10 @@
                           <td th:text="${vaccination.selectedDate}"></td>
                           <td th:text="${vaccination.recipient.fullName}"></td>
                           <td th:text="${'****...'+vaccination.recipient.aadharLast4Digit}"></td>
-                          <td th:text="${vaccination.vaccinationSpot.ward}"></td>
-                          <td>Airoli</td>
+                          <td th:text="${vaccination.vaccinationSpot.ward+' : '+vaccination.vaccinationSpot.localityNames}">
+                          </td>
+                          <!--TODO: update dose number-->
+                          <td>2</td>
                           <td th:text="${vaccination.status}"></td>
                           <td><button th:attr="onclick='updateStatus('+${vaccination.id}+')'" class="btn btn-danger">Change</button></td>
                       </tr>
