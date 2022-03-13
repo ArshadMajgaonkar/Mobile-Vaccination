@@ -55,6 +55,8 @@
                                        th:value="${vaccineInstance.code}" class="form-control form-control-lg mb-4" />
                                 <input type="number" name="intervalInDays" placeholder="Interval In Days" required
                                        th:value="${vaccineInstance.intervalInDays}" class="form-control form-control-lg mb-4" />
+
+                                <div th:insert="fragments/form::disease-select"></div>
                                 
                                 <a class="btn btn-light col-10 col-md-5 form-control form-control-lg mb-4 offset-md-1" th:href="@{/staff/vaccine/}">Back</a>
                                 <input type="submit" class="btn btn-primary col-10 col-md-5 ml-auto p-2 mb-4 offset-md-1" value="Add Vaccine"/>

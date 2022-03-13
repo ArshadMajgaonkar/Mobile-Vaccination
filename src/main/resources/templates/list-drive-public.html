@@ -20,7 +20,7 @@
             <h6>Please select a city.</h6>
         </div>
         <div th:if="${vaccineDrives}">
-            <div th:if="${#lists.size(vaccineDrives)!=0}">
+            <div th:if="${#lists.size(vaccineDrives)>0}">
                 <table>
                     <tr>
                         <th>Id</th>

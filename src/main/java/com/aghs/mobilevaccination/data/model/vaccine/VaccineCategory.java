@@ -17,11 +17,12 @@ public class VaccineCategory {
     @ManyToOne(optional = false)
     private Vaccine vaccine;
     @Column
-    private int minAgeLimit;
+    private Integer minAgeLimit;
     @Column
-    private int maxAgeLimit;
+    private Integer maxAgeLimit;
+    @Column
+    private Boolean  isMandatory;
     @ManyToOne
-    @JoinColumn
     private VaccineCategory prerequisite;
     @Column(nullable = false)
     private Date addedAt;
@@ -52,20 +53,28 @@ public class VaccineCategory {
         this.vaccine = vaccine;
     }
 
-    public int getMinAgeLimit() {
+    public Integer getMinAgeLimit() {
         return minAgeLimit;
     }
 
-    public void setMinAgeLimit(int minAgeLimit) {
+    public void setMinAgeLimit(Integer minAgeLimit) {
         this.minAgeLimit = minAgeLimit;
     }
 
-    public int getMaxAgeLimit() {
+    public Integer getMaxAgeLimit() {
         return maxAgeLimit;
     }
 
-    public void setMaxAgeLimit(int maxAgeLimit) {
+    public void setMaxAgeLimit(Integer maxAgeLimit) {
         this.maxAgeLimit = maxAgeLimit;
+    }
+
+    public Boolean isMandatory() {
+        return isMandatory;
+    }
+
+    public void setIsMandatory(Boolean mandatory) {
+        isMandatory = mandatory;
     }
 
     public VaccineCategory getPrerequisite() {

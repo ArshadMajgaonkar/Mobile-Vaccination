@@ -32,6 +32,7 @@
                                     <th scope="col">Vaccine</th>
                                     <th scope="col">Minimum Age Limit</th>
                                     <th scope="col">Maximum Age Limit</th>
+                                    <th scope="col">Is Mandatory for all?</th>
                                     <th scope="col">Pre-requisite</th>
                                     <th scope="col">Added At</th>
                                     <th scope="col">Added By</th>
@@ -49,6 +50,9 @@
                 
                                 <td th:if="${vaccineCategory.maxAgeLimit}" th:text="${vaccineCategory.maxAgeLimit}"></td>
                                 <td th:unless="${vaccineCategory.maxAgeLimit}">-</td>
+
+                                <td th:if="${vaccineCategory.isMandatory}" th:text="Yes"></td>
+                                <td th:unless="${vaccineCategory.isMandatory}" th:text="No"></td>
                 
                                 <td th:if="${vaccineCategory.prerequisite}" th:text="${vaccineCategory.prerequisite.name}"></td>
                                 <td th:unless="${vaccineCategory.prerequisite}">-</td>

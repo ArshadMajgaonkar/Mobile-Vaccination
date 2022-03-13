@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -56,30 +58,20 @@ public class MemberController {
         return "user-dashboard1";
     }
 
-    @PostMapping("/user/member")
-    public String getMemberProfile(@ModelAttribute("member") Member postMember, Model model) {
-        boolean isMemberOfAccount = false;
+    @GetMapping("/user/member/{memberId}")
+    public String getMemberProfile(@PathVariable("memberId") Long memberId, Model model) {
+        List<String> messages = new ArrayList<>();
+        model.addAttribute("messages", messages);
         Account currentAccount = userService.getCurrentAccount();
-        List<Member> members = memberRepository.findByLinkedAccount(currentAccount);
+        Member member = memberRepository.findById(memberId).orElse(null);
         System.out.println("Account" + currentAccount.getMobileNumber());
-        System.out.println(members);
-        for (Member member : members) {
-            System.out.println("User Id:" + String.valueOf(member.getUserId()) +
-                    "posted: " + postMember.getUserId());
-            if (member.getUserId() == postMember.getUserId()) {
-                isMemberOfAccount = true;
-                break;
-            }
-        }
-        if (isMemberOfAccount) {
-            Member fetchedMember = memberRepository.findById(postMember.getUserId()).orElse(null);
-            model.addAttribute("member", fetchedMember);
-            return "member-profile";
-        }
+        if(member==null)
+            messages.add("No such member exists.");
+        else if(member.getLinkedAccount() != currentAccount)
+            messages.add("No such member exists");
         else {
-            List<String> messages = new ArrayList<>();
-            messages.add("No such member in this account.");
-            model.addAttribute("messages", messages);
+            model.addAttribute("member", member);
+            return "member-profile";
         }
         return "user-dashboard1";
     }

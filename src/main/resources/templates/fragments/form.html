@@ -102,6 +102,22 @@
 
 
 
+    <div th:fragment="disease-select">
+        <label for="disease-select" class="col-auto">Disease:</label>
+        <select id="disease-select" name="selectedDiseaseId" onchange="submitForm()" class="form-control-lg form-control" required>
+            <option value="" selected disabled>Select</option>
+            <span th:each="disease: ${diseases}">
+                        <option th:if="${selectedDiseaseId != disease.id}" th:value="${disease.id}"
+                                th:text="${disease.name}"></option>
+                <!--If condition is false-->
+                        <option th:unless="${selectedDiseaseId != disease.id}" th:value="${disease.id}"
+                                th:text="${disease.name}" selected></option>
+                        </span>
+        </select>
+    </div>
+
+
+
     <div th:fragment="spot-select-elements">
         
         <div class="form-group mb-4">
