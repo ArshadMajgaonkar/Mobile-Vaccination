@@ -10,9 +10,6 @@
 <body>
     <div layout:fragment="content">
         <div class="container p-4">
-            <!-- <div class="h2 mb-4">
-                Deploy Algorithm
-            </div> -->
             <div class="h4 mb-4 text-center">
                 Registration Data
             </div>
@@ -31,10 +28,10 @@
             </form>
     
             <div th:if="${hasReport}">
-                <table>
+                <table class="table table-hover table-striped text-center my-4" id="myTable">
                     <tr>
-                        <th>Ward</th>
-                        <th>Registration</th>
+                        <th scope="col">Ward</th>
+                        <th scope="col">Registration</th>
                     </tr>
                     <tr th:each="regEntry: ${spotWiseRegistrations}">
                         <td th:text="${regEntry.key}"></td>
@@ -47,33 +44,41 @@
                     </b>
                 </table>
     
-                <label for="cityCapacity">Registration Limit</label>
-                <input type="number" id="cityCapacity" th:value="${cityCapacity}" readonly />
     
-                <form method="post" th:action="@{/staff/vaccine-drive/deploy-algorithm}">
+                <form method="post" th:action="@{/staff/vaccine-drive/deploy-algorithm}" class="d-flex flex-row justify-content-between my-4">
     
                     <input type="hidden" name="driveDate" th:value="${driveDate}" />
                     <input type="hidden" name="cityId" th:value="${cityDto.cityId}" />
     
-                    <select name="selectedVehicleCount" onchange="calculateDosePerVan(this)" required>
-                        <option selected disabled>Select Vehicle Count</option>
-                        <span th:each="number: ${#numbers.sequence(1, vehicleCount)}">
-                            <option th:if="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
-                                    selected></option>
-                            <option th:unless="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
-                                    ></option>
-                        </span>
-                    </select>
+                    <div class="form-group">
+                        <label for="cityCapacity">Registration Limit</label>
+                        <input type="number" id="cityCapacity" th:value="${cityCapacity}" class="form-control form-control-lg" readonly />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Vehicle Count</label>
+                        <select name="selectedVehicleCount" onchange="calculateDosePerVan(this)" class="form-control form-control-lg" required>
+                            <option selected disabled>--Select--</option>
+                            <span th:each="number: ${#numbers.sequence(1, vehicleCount)}">
+                                <option th:if="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
+                                        selected></option>
+                                <option th:unless="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
+                                        ></option>
+                            </span>
+                        </select>
+                    </div>
     
-                    <label for="dosesPerVehicle">Dose per Vehicle</label>
-                    <input type="number" name="dosesPerVehicle" id="dosesPerVehicle" readonly
-                           th:value="${dosesPerVehicle}" />
-    
+                    <div class="form-group">
+                        <label for="dosesPerVehicle">Dose per Vehicle</label>
+                        <input type="number" name="dosesPerVehicle" id="dosesPerVehicle" class="form-control form-control-lg" readonly
+                            th:value="${dosesPerVehicle}" />
+                    </div>
+
                     <!--<label for="totalCount">Total Dose</label>
                     <input type="number" name="totalCount" id="totalCount" readonly
                            th:value="${dosesPerVehicle}" />-->
     
-                    <input type="submit" value="Distribute" />
+                    <input type="submit" value="Distribute" class="btn btn-primary col-10 col-md-2"/>
                 </form>
     
             </div>
@@ -109,5 +114,12 @@
         else
             alert("Please reload the page.");
     }
+
+    $(document).ready(function() {
+  
+    // DataTables initialisation
+    var table = $('#myTable').DataTable();
+
+    });
 </script>
 </html>

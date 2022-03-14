@@ -40,18 +40,18 @@
             </form>
     
             <div th:if="${vaccineDrives}">
-                <table width="100%">
+                <table class="table table-hover table-striped text-center my-4" id="myTable">
                     <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Doses</th>
-                        <th>Vaccine</th>
-                        <th>Vehicle</th>
-                        <th>Vaccinator</th>
-                        <th>City</th>
-                        <th>Spots</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Doses</th>
+                        <th scope="col">Vaccine</th>
+                        <th scope="col">Vehicle</th>
+                        <th scope="col">Vaccinator</th>
+                        <th scope="col">City</th>
+                        <th scope="col">Spots</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
                     </tr>
                     <tr th:each="vaccineDrive: ${vaccineDrives}">
                         <td th:text="${vaccineDrive.id}"></td>
@@ -100,5 +100,11 @@
     function submitForm() {
         document.getElementById('list-vaccine-drive-form').submit();
     }
+    $(document).ready(function() {
+  
+    // DataTables initialisation
+    var table = $('#myTable').DataTable();
+
+    });
 </script>
 </html>

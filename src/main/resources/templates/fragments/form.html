@@ -59,7 +59,7 @@
         
         
         <div class="form-group mb-4">
-                <label for="city-state-select" class="col-auto">Select State/UT:</label>
+                <label for="city-state-select" class="col-auto">State/UT:</label>
                 <select id="city-state-select" name="stateName" onchange="submitForm()" class="form-control form-control-lg" required>
                 <option value="" selected disabled>--Select--</option>
                 <span th:each="state: ${states}">
@@ -73,7 +73,7 @@
         </div>
 
         <div class="form-group mb-4">
-                <label for="city-district-select" class="col-auto">Select District:</label>
+                <label for="city-district-select" class="col-auto">District:</label>
                 <select id="city-district-select" name="districtId" onchange="submitForm()" class=" form-control form-control-lg">
                 <option selected disabled>--Select--</option>
                 <span th:each="district: ${districts}">
@@ -86,7 +86,7 @@
         </div>
 
         <div class="form-group mb-4">
-                <label for="city-city-select" class="col-auto">Select City/Village:</label>
+                <label for="city-city-select" class="col-auto">City/Village:</label>
                 <select id="city-city-select" name="cityId" class="form-control form-control-lg">
                 <option selected disabled>--Select--</option>
                 <span th:each="city: ${cities}">

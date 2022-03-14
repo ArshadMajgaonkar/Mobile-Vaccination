@@ -61,6 +61,8 @@
                             </td>
                         </tr>
                     </table> -->
+
+                    
                 </div>
                 <div th:unless="${#lists.size(vaccineDrives)!=0}">
                     <div class="d-flex flex-row justify-content-center">
@@ -71,11 +73,49 @@
                 </div>
             </div>
         </div>
+        <table class="table table-hover table-striped text-center" id="myTable">
+            <thead>
+              <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Spots</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>101</td>
+                    <td>Area 1, area 24, Sector2</td>
+                </tr>
+                <tr>
+                    <td>521</td>
+                    <td>Area 1, area 24, Sector2</td>
+                </tr>
+                <tr>
+                    <td>156</td>
+                    <td>Area 1, area 24, Sector2</td>
+                </tr>
+                <tr>
+                    <td>181</td>
+                    <td>Area 1, area 24, Sector2</td>
+                </tr>
+                <tr>
+                    <td>122</td>
+                    <td>Area 1, area 24, Sector2</td>
+                </tr>
+
+            </tbody>
+        </table>
     </div>
 </body>
 <script layout:fragment="script">
     function submitForm() {
         document.getElementById("drive-form").submit();
     }
+
+    $(document).ready(function() {
+  
+     // DataTables initialisation
+     var table = $('#myTable').DataTable();
+  
+    });
 </script>
 </html>
