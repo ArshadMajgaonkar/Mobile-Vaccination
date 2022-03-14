@@ -28,7 +28,7 @@
             </div>
             <div th:if="${vaccineDrives}">
                 <div th:if="${#lists.size(vaccineDrives)!=0}">
-                    <table>
+                    <!-- <table>
                         <tr>
                             <th>Id</th>
                             <th>Spots</th>
@@ -41,7 +41,7 @@
                                 </div>
                             </td>
                         </tr>
-                    </table>
+                    </table> -->
                 </div>
                 <div th:unless="${#lists.size(vaccineDrives)!=0}">
                     <div class="d-flex flex-row justify-content-center">
