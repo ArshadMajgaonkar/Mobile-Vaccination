@@ -63,7 +63,7 @@
             <div class="form-group">
                 <label for="prerequisite-select" class="form-control form-control-lg mb-1">Pre-requisite</label>
                 <select name="prerequisite" id="prerequisite-select" class="form-control form-control-lg mb-4">
-                    <option selected disabled>None</option>
+                    <option value="" selected>None</option>
                     <span th:each="vaccineCategory: ${vaccineCategories}">
                         <option selected th:value="${vaccineCategory.id}" th:text="${vaccineCategory.name}"
                                 th:if="${vaccineCategory.id == vaccineCategoryInstance.id}"></option>
@@ -72,6 +72,12 @@
                     </span>
                 </select>
             </div>
+
+            <label>Is this category mandatory for all?</label>
+            <input type="radio" id="true-isMandatory" name="isMandatory" value="1" />
+            <label for="true-isMandatory">Yes</label>
+            <input type="radio" id="false-isMandatory" name="isMandatory" value="0" />
+            <label for="false-isMandatory">No</label>
             
 
             <a class="btn btn-light col-10 col-md-5 mb-4 offset-md-1" th:href="@{/staff/vaccine/category}">Back</a>

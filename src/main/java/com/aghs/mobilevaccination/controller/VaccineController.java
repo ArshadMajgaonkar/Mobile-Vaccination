@@ -4,6 +4,7 @@ import com.aghs.mobilevaccination.auth.StaffDetails;
 import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccineCategory;
+import com.aghs.mobilevaccination.data.repository.DiseaseRepository;
 import com.aghs.mobilevaccination.data.repository.StaffRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
@@ -25,6 +26,8 @@ import java.util.List;
 @RequestMapping("/staff/vaccine")
 public class VaccineController {
     @Autowired
+    DiseaseRepository diseaseRepository;
+    @Autowired
     StaffRepository staffRepository;
     @Autowired
     StaffUserDetailService staffService;
@@ -41,16 +44,23 @@ public class VaccineController {
     }
 
     @GetMapping("/add-vaccine")
-    public String getAddVaccine() {
+    public String getAddVaccine(Model model) {
+        model.addAttribute("diseases", diseaseRepository.findAll());
         return "add-vaccine";
     }
 
     @PostMapping("/add-vaccine")
-    public String postAddVaccine(Model model, @ModelAttribute("vaccine")Vaccine vaccine) {
+    public String postAddVaccine(@ModelAttribute("vaccine")Vaccine vaccine,
+                                 @ModelAttribute("selectedDiseaseId")Long diseaseId,
+                                 Model model) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
+        model.addAttribute("diseases", diseaseRepository.findAll());
         Staff staff = staffService.getCurrentStaff();
-        if(staff != null) {
+        if(diseaseId==null)
+            messages.add("Disease cannot be empty.");
+        else if(staff != null) {
+            vaccine.setOfDisease(diseaseRepository.findById(diseaseId).orElse(null));
             vaccine.setAddedBy(staff);
             vaccine.setAddedAt(new Date());
             vaccineRepository.save(vaccine);
@@ -81,17 +91,18 @@ public class VaccineController {
                                          @ModelAttribute("vaccineCategoryInstance")VaccineCategory vaccineCategory) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
-        model.addAttribute("vaccines", vaccineRepository.findAll());
-        model.addAttribute("vaccineCategories", vaccineCategoryRepository.findAll());
+        System.out.println(vaccineCategory.isMandatory());
         Staff staff = staffService.getCurrentStaff();
         if(staff != null) {
             vaccineCategory.setAddedBy(staff);
             vaccineCategory.setAddedAt(new Date());
             vaccineCategoryRepository.save(vaccineCategory);
             messages.add("New Vaccine Category added: " + vaccineCategory.getName());
-            vaccineCategory = new VaccineCategory();
+            model.addAttribute("vaccineCategoryInstance", new VaccineCategory());
         }
         else messages.add("Access Denied: No staff user found.");
+        model.addAttribute("vaccines", vaccineRepository.findAll());
+        model.addAttribute("vaccineCategories", vaccineCategoryRepository.findAll());
         return "add-vaccine-category";
     }
 

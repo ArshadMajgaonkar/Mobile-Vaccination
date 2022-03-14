@@ -19,12 +19,31 @@
                 <input type="submit" value="Search" class="btn btn-primary p-2 btn-lg"/>
             </form>
 
-            <div th:unless="${vaccineDrives}">
-                <div class="d-flex flex-row justify-content-center">
-                    <label class="font-italic form-control m-4 bg-warning col-10 col-md-5">
-                        Please select City.
-                    </label> 
-                </div>
+            
+                
+        <div th:unless="${vaccineDrives}">
+            <div class="d-flex flex-row justify-content-center">
+                <label class="font-italic form-control m-4 bg-warning col-10 col-md-5">
+                    Please select City.
+                </label> 
+            </div>
+        </div>
+        <div th:if="${vaccineDrives}">
+            <div th:if="${#lists.size(vaccineDrives)>0}">
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Spots</th>
+                    </tr>
+                    <tr th:each="drive: ${vaccineDrives}">
+                        <td th:text="${drive.id}"></td>
+                        <td>
+                            <div th:each="spot: ${drive.vaccinationSpots}"
+                                 th:text="${spot.ward+':'+spot.localityNames +'; '}">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div th:if="${vaccineDrives}">
                 <div th:if="${#lists.size(vaccineDrives)!=0}">

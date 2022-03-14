@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Disease</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3>Add Disease</h3>
+        <form method="post" action="/staff/disease/add">
+            <input type="text" name="diseaseName" placeholder="Name"
+                   th:value="${disease.name}" />
+            <input type="submit" value="Add Disease" />
+        </form>
+    </div>
+</body>
+</html>

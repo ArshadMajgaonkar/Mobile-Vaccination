@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Disease</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <h3>Disease</h3>
+        <a href="/staff/disease/add">Add</a>
+        <div th:if="${diseases} AND ${#lists.size(diseases)>0}">
+                <table>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Added By</th>
+                        <th>Added At</th>
+                    </tr>
+                    <tr th:each="disease : ${diseases}">
+                        <td th:text="${disease.name}"></td>
+                        <td th:text="${disease.addedBy.fullName}"></td>
+                        <td th:text="${disease.addedAt}"></td>
+                    </tr>
+                </table>
+        </div>
+        <div th:unless="${diseases} AND ${#lists.size(diseases)>0}">
+            <h6>No disease added.</h6>
+        </div>
+    </div>
+</body>
+</html>
