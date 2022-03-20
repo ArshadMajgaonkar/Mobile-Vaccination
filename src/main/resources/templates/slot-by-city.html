@@ -40,7 +40,9 @@
                         <form method="post" id="spot-form" th:action="@{/spot/get-by-city}" >
 
                             <div class="form-group pb-2">
-                                <h4 th:text="${'Slot Count for '+minRegistrationDate}"></h4>
+                                <label for="drive-date">Drive Date:</label>
+                                <input type="date" name="selectedDate" id="drive-date"
+                                       th:attr="min=${minRegistrationDate}" th:value="${selectedDate}" />
                             </div>
                             <div class="form-group pb-4">
                                 <label for="state-select">Select State/UT:</label>
@@ -137,11 +139,33 @@
 <!--            <p th:if="${spots==null and cityDto.cityId!=null}">No spots available for above city.</p>-->
 <!--        </div>-->
 
+            <h3 class="col-8 pb-3">
+                <span class="badge badge-pill badge-success">Slots</span>
+            </h3>
+            <div th:if="${slotDtoList}">
+                <div th:if="${#lists.size(slotDtoList)>0}">
+                    <table id="slot-count-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Vaccine</th>
+                                <th scope="col">Remaining</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="dto: ${slotDtoList}">
+                                <td th:text="${dto.vaccineName}"></td>
+                                <td th:text="${dto.remainingSlot}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p th:unless="${#lists.size(slotDtoList)>0}"></p>
+            </div>
+
+
             <div class="result col-10 pb-4 offset-1">
                 <h3 class="col-8 pb-3">
                     <span class="badge badge-pill badge-success">Spots </span>
-                    &nbsp;
-                    <span th:if="${remainingSlots}" th:text="${'Remaining Slots: ' + remainingSlots}"></span>
                 </h3>
                 <div class="card-deck" th:if="${spots}">
                     <div class="card" th:each="spot: ${spots}">
@@ -160,6 +184,9 @@
         function submitspotForm() {
             document.getElementById('spot-form').submit();
         }
+        $(document).ready(function() {
+            $('#slot-count-table').DataTable();
+        });
     </script>
 </body>
 </html>

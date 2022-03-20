@@ -41,7 +41,9 @@
                         <form method="post" th:action="@{/spot/get-by-pin-code}" th:object="${pinCodeDto}">
 
                             <div class="form-group pb-2">
-                                <h4 th:text="${'Slot Count for '+minRegistrationDate}"></h4>
+                                <label for="drive-date">Drive Date:</label>
+                                <input type="date" name="selectedDate" id="drive-date"
+                                       th:attr="min=${minRegistrationDate}" th:value="${selectedDate}" />
                             </div>
                             <div class="form-group pb-4">
                                 <label for="pincode">Enter pincode : </label>
@@ -69,6 +71,34 @@
 <!--            <p th:if="${spots==null and pinCodeDto.pinCode!=null}">No spots found for above Pin Code.</p>-->
 <!--        </div>-->
 
+        <!--Remaining Slots-->
+
+        <h3 class="col-8 pb-3">
+            <span class="badge badge-pill badge-success">Slots</span>
+        </h3>
+        <div th:if="${slotDtoList}">
+            <div th:if="${#lists.size(slotDtoList)>0}">
+                <table id="slot-count-table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Vaccine</th>
+                        <th scope="col">Remaining</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="dto: ${slotDtoList}">
+                        <td th:text="${dto.vaccineName}"></td>
+                        <td th:text="${dto.remainingSlot}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p th:unless="${#lists.size(slotDtoList)>0}"></p>
+        </div>
+
+
+        <!--Spots-->
+
         <div class="result col-10 pb-4 offset-1">
             <h3 class="col-4 pb-3">
                 <span class="badge badge-pill badge-success">Spots </span>
@@ -86,4 +116,9 @@
 
     </div>
 </body>
+<script layout:fragment="script">
+    $(document).ready(function() {
+            $('#slot-count-table').DataTable();
+        });
+</script>
 </html>

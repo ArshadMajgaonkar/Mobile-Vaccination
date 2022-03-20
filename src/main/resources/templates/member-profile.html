@@ -22,12 +22,43 @@
             <span th:text="${member.birthYear}"></span>
         </p>
 
-        <div>
+        <!--<div>
             <h6>Vaccinated:</h6>
             <span th:if="${vaccinatedList}">
 
             </span>
+        </div>-->
+
+        <div th:if="${appointments}">
+            <h6>Upcoming Appointments</h6>
+            <div th:if="${#lists.size(appointments)>0}">
+                <table>
+                    <tr>
+                        <th>Date</th>
+                        <th>Vaccine</th>
+                        <th>Ward</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr th:each="appoint : ${appointments}">
+                        <td th:text="${appoint.vaccineDrive.driveDate}"></td>
+                        <td th:text="${appoint.vaccineDrive.vaccine.name}"></td>
+                        <td th:text="${appoint.vaccinationSpot.ward+' : '+appoint.vaccinationSpot.localityNames}"></td>
+                        <td th:text="${appoint.status}"></td>
+                    </tr>
+                </table>
+            </div>
+            <p th:unless="${#lists.size(appointments)>0}">No new appointments for Vaccination.</p>
         </div>
+        <h6 th:unless="${appointments}">Appointment section didn't load. Please reload or try again later.</h6>
+
+        <form method="post" th:action="@{/user/member/to-check-slot}">
+            <input type="hidden" name="memberId" th:value="${member.userId}">
+            <a href="#"><button type="submit" class="btn btn-primary m-4">Book New Slot</button></a>
+        </form>
+
+        <h6>Vaccination Status</h6>
+        <!--Update status-->
+        <p>No status update</p>
 
     </div>
 </body>

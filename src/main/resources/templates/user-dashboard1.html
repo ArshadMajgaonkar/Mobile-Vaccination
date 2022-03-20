@@ -86,7 +86,6 @@ lang="en">
                         <div class="d-flex flex-column">
                             <div>
                                 <span th:text="'Year of Birth : ' + ${member.birthYear}"></span>
-                                <span onload="this.innerHtml=new Date().getFullYear - ${member.birthYear}"></span>
                             </div>
                             <div>
                                 <a href="#"><button type="submit" class="btn btn-primary col-10">Book Slot</button></a>

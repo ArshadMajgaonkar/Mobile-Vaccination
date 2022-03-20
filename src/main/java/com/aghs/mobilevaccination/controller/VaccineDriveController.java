@@ -21,6 +21,7 @@ import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import com.aghs.mobilevaccination.service.AlgorithmDeployService;
 import com.aghs.mobilevaccination.service.StaffUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +56,7 @@ public class VaccineDriveController extends  DefaultController{
     private static final String GET_REGISTRATIONS_URL = "/staff/vaccine-drive/get-registrations";
     private static final String DEPLOY_ALGORITHM = "/staff/vaccine-drive/deploy-algorithm";
     private static final String SAVE_VACCINE_DRIVE = "/staff/vaccine-drive/save";
-    private static final int ADD_DRIVE_DAYS_AHEAD = 4;
+    @Value("${drive.add.day.ahead}") private int ADD_DRIVE_DAYS_AHEAD;
 
 
     // Private Methods
@@ -180,7 +181,7 @@ public class VaccineDriveController extends  DefaultController{
         model.addAttribute("vaccines", vaccineRepository.findAll());
         model.addAttribute("states", stateRepository.findAll());
         model.addAttribute("slotCount", 0);
-        model.addAttribute("minDriveDate", LocalDate.now().plusDays(ADD_DRIVE_DAYS_AHEAD));
+        model.addAttribute("minDriveDate", LocalDate.now().plusDays(ADD_DRIVE_DAYS_AHEAD+1));
         return "add-drive";
     }
 
@@ -220,7 +221,7 @@ public class VaccineDriveController extends  DefaultController{
         else
             messages.add("Please select a City.");
         model.addAttribute("vaccines", vaccineRepository.findAll());
-        model.addAttribute("minDriveDate", LocalDate.now().plusDays(ADD_DRIVE_DAYS_AHEAD));
+        model.addAttribute("minDriveDate", LocalDate.now().plusDays(ADD_DRIVE_DAYS_AHEAD+1));
         return "add-drive";
     }
     @GetMapping(GET_REGISTRATIONS_URL)

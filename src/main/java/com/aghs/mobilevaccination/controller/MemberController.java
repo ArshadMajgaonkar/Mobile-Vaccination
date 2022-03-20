@@ -2,8 +2,11 @@ package com.aghs.mobilevaccination.controller;
 
 import com.aghs.mobilevaccination.data.model.Account;
 import com.aghs.mobilevaccination.data.model.Member;
+import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
 import com.aghs.mobilevaccination.data.repository.AccountRepository;
 import com.aghs.mobilevaccination.data.repository.MemberRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 import com.aghs.mobilevaccination.service.GeneralUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +27,8 @@ public class MemberController {
     private AccountRepository accountRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Autowired
+    private MemberVaccinationRepository vaccinationRepository;
     @Autowired
     private GeneralUserDetailService userService;
 
@@ -71,6 +76,10 @@ public class MemberController {
             messages.add("No such member exists");
         else {
             model.addAttribute("member", member);
+            List<MemberVaccination> appointments = vaccinationRepository.findByRecipientAndStatus(
+                    member, VaccinationStatus.REGISTERED);
+            /*TODO: add rejected or IN_CENTRED as well in appointments after finalizing flow of vaccine_drive*/
+            model.addAttribute("appointments", appointments);
             return "member-profile";
         }
         return "user-dashboard1";
