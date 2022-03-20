@@ -37,24 +37,24 @@
                 <div class="col-10 col-md-5 ml-auto pt-4">
                     <div class="d-flex flex-column">
                         <div class="h3 mb-4">Registration</div>
+                        <div class="h5 mb-3" th:text="'Name: '+${memberName}"></div>
                         <div class="form-container">
     
-                            <form method="post" id="spot-form" th:action="@{/user/member/book-slot}" th:object="${spotDto}">
+                            <form method="post" id="spot-form" th:action="@{/user/member/check-slot}" th:object="${cityDto}">
                                 
-                                <input type="hidden" name="userId" th:value="${userId}" class="form-control form-control-lg mb-4"/>
+                                <input type="hidden" name="memberId" th:value="${memberId}" class="form-control form-control-lg mb-4"/>
                                 <input type="date" name="selectedDate" required th:attr="min=${minRegistrationDate}" th:value="${selectedDate}" class="form-control form-control-lg mb-4"/>
                                 
 
-                                <div th:replace="fragments/form::spot-select-elements"></div>
+                                <div th:replace="fragments/form::city-select-elements"></div>
 
-                                <div class="font-italic col-10 mb-4">
+                                <!--<div class="font-italic col-10 mb-4">
                                     Remaining slot&nbsp;:&nbsp;
                                     <span th:if="${remainingSlots}" th:text="${remainingSlots}"></span>
                                     <span th:unless="${remainingSlots}" th:text="${'Please select a city.'}"></span>
-                                </div>
+                                </div>-->
 
-                                <input type="submit" value="Search" th:if="${spots==null}" class="btn btn-primary col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1"/>
-                                <input type="submit" value="Book Slot" th:unless="${spots==null}" class="btn btn-primary col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1"/>
+                                <input type="submit" value="Search" class="btn btn-primary col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1"/>
                                 <a th:href="@{/user/dashboard}"  class="btn btn-light col-10 col-md-3 ml-auto p-2 mb-4 offset-md-1">Back</a>
 
                                 <!-- <input type="text" name="name" placeholder="Vaccine Name" required
@@ -75,11 +75,37 @@
             </div>
         </div>
 
+
+        <div th:if="${cityDto.cityId!=null}">
+            <form method="post" action="/user/member/book-slot">
+                <input type="hidden" name="memberId" th:value="${memberId}" />
+                <div th:insert="fragments/form::spot-select"></div>
+                <table id="slot-table">
+                    <thead>
+                        <th scope="col">Select</th>
+                        <th scope="col">Vaccine</th>
+                        <th scope="col">Remaining Slots</th>
+                    </thead>
+                    <tbody th:each="dto: ${slotDtoList}">
+                        <td><input type="radio" name="driveId"
+                                   th:value="${dto.driveId}" th:attr="id='vaccine-name-'+${dto.vaccineName}" /></td>
+                        <td>
+                            <label th:text="${dto.vaccineName}" th:attr="for='vaccine-name-'+${dto.vaccineName}"></label>
+                        </td>
+                        <td>
+                            <label th:text="${dto.remainingSlot}" th:attr="for='vaccine-name-'+${dto.vaccineName}"></label>
+                        </td>
+                    </tbody>
+                </table>
+                <input type="submit" value="Book Slot" />
+            </form>
+        </div>
+
         <!-- mcends -->
         <!-- <form method="post" id="spot-form" th:action="@{/user/member/book-slot}" th:object="${spotDto}">
 
-            <input type="hidden" name="userId"
-                   th:value="${userId}" />
+            <input type="hidden" name="memberId"
+                   th:value="${memberId}" />
 
             <input type="date" name="selectedDate" required
                    th:attr="min=${minRegistrationDate}" th:value="${selectedDate}"/>

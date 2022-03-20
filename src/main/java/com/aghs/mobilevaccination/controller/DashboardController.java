@@ -6,8 +6,10 @@ import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccineDrive;
 import com.aghs.mobilevaccination.data.repository.location.SpotRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineDriveRepository;
 import com.aghs.mobilevaccination.service.StaffUserDetailService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,6 +43,8 @@ public class DashboardController extends DefaultController{
     @Autowired
     private SpotRepository spotRepository;
     @Autowired
+    private VaccineDriveRepository driveRepository;
+    @Autowired
     private StaffUserDetailService staffService;
 
     @GetMapping("/staff/admin-dashboard")
@@ -48,8 +52,14 @@ public class DashboardController extends DefaultController{
     public String adminDashboard(Model model) {
         LocalDate today = LocalDate.now();
         Staff admin = staffService.getCurrentStaff();
+        model.addAttribute("admin", admin);
         City workCity = admin.getCentre().getSpot().getCity();
-        List<MemberVaccination> vaccinations = getVaccinationByCityAndDate(workCity, today);
+        List<VaccineDrive> drives = driveRepository.findByDriveDateAndCity(today, workCity);
+        List<MemberVaccination> vaccinations = new ArrayList<>();
+        drives.forEach(drive -> {
+            vaccinations.addAll(vaccinationRepository.findByVaccineDrive(drive));
+        });
+        //List<MemberVaccination> vaccinations = getVaccinationByCityAndDate(workCity, today);
         model.addAttribute("selectedDate", today);
         CityDto workCityDto = workCity.toDto();
         model.addAttribute("cityDto", workCityDto);
@@ -64,10 +74,17 @@ public class DashboardController extends DefaultController{
                                      Model model) {
         City workCity = getCity(cityDto, model);
         if(selectedDate!=null && workCity!=null) {
-            List<MemberVaccination> vaccinations = getVaccinationByCityAndDate(workCity, selectedDate);
+            List<VaccineDrive> drives = driveRepository.findByDriveDateAndCity(selectedDate, workCity);
+            List<MemberVaccination> vaccinations = new ArrayList<>();
+            drives.forEach(drive -> {
+                vaccinations.addAll(vaccinationRepository.findByVaccineDrive(drive));
+            });
+            //List<MemberVaccination> vaccinations = getVaccinationByCityAndDate(workCity, selectedDate);
             model.addAttribute("vaccinations", vaccinations);
             model.addAttribute("selectedDate", selectedDate);
         }
+        Staff admin = staffService.getCurrentStaff();
+        model.addAttribute("admin", admin);
         return "admin-dashboard";
     }
 

@@ -1,7 +1,11 @@
 package com.aghs.mobilevaccination.data.model;
 
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
+import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
+import com.aghs.mobilevaccination.data.repository.DiseaseRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import com.google.common.hash.Hashing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -9,9 +13,7 @@ import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -120,6 +122,9 @@ public class Member {
         addedAt = new Date();
     }
 
+
+    // Validations
+
     public boolean isAadharIdValid() {
         return Pattern.matches("^[0-9]{12}$", aadharId);
     }
@@ -134,15 +139,57 @@ public class Member {
                 && LocalDate.now().minusYears(UPPER_AGE_LIMIT).getYear() < Integer.parseInt(birthYear);
     }
 
-    public boolean hasCompletedVaccinationInterval(MemberVaccinationRepository memberVaccinationRepository) {
-        List<MemberVaccination> memberVaccinations = memberVaccinationRepository.findByRecipient(this);
+
+    // Methods
+
+    public void discardUnvaccinatedRegistration(MemberVaccinationRepository vaccinationRepository) {
+        List<MemberVaccination> registrations =
+                vaccinationRepository.findByRecipientAndStatus(this, VaccinationStatus.REGISTERED);
+        for(MemberVaccination registration: registrations) {
+            registration.setStatus(VaccinationStatus.DISCARDED);
+        }
+    }
+
+    public int getAge() {
+        return LocalDate.now().getYear() - this.getAge();
+    }
+
+    public List<Vaccine> getEligibleVaccines(DiseaseRepository diseaseRepository,
+                                             MemberVaccinationRepository vaccinationRepository,
+                                             VaccineRepository vaccineRepository) {
+        Set<Vaccine> eligibleVaccines = new HashSet<>();
+        Set<Disease> vaccinatedDiseases = new HashSet<>();
+        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipient(this);
+        for(MemberVaccination vaccination: vaccinations) {
+            if(vaccination.getStatus() == VaccinationStatus.VACCINATED) {
+                eligibleVaccines.add(vaccination.getVaccineDrive().getVaccine());
+                vaccinatedDiseases.add(vaccination.getVaccineDrive().getVaccine().getOfDisease());
+            }
+        }
+        List<Disease> diseases = diseaseRepository.findAll();
+        for(Disease disease: diseases) {
+            if(!vaccinatedDiseases.contains(disease)) {
+                List<Vaccine> vaccines = vaccineRepository.findByOfDisease(disease);
+                eligibleVaccines.addAll(vaccines);
+            }
+        }
+        return new ArrayList<Vaccine>(eligibleVaccines);
+    }
+
+    public boolean hasCompletedVaccinationInterval(MemberVaccinationRepository vaccinationRepository) {
+        List<MemberVaccination> memberVaccinations = vaccinationRepository.findByRecipientAndStatusOrderByVaccinatedAt(
+                this, VaccinationStatus.VACCINATED);
+        System.out.println(memberVaccinations);
         if(memberVaccinations.size() > 0) {
-            for(MemberVaccination vaccination: memberVaccinations) {
+                MemberVaccination vaccination = memberVaccinations.get(memberVaccinations.size()-1);
                 if(!vaccination.hasCompletedVaccinationInterval())
                     return false;
-            }
             return true;
         }
         return true;
     }
+
+
+
+
 }

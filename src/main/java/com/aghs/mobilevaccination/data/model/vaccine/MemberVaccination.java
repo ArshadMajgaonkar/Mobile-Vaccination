@@ -25,6 +25,8 @@ public class MemberVaccination {
     @ManyToOne
     private VaccineDrive vaccineDrive;
     @ManyToOne
+    private VaccineCategory vaccineCategory;
+    @ManyToOne
     private Spot vaccinationSpot;
     @ManyToOne
     private Member recipient;
@@ -67,6 +69,14 @@ public class MemberVaccination {
         this.vaccineDrive = vaccineDrive;
     }
 
+    public VaccineCategory getVaccineCategory() {
+        return vaccineCategory;
+    }
+
+    public void setVaccineCategory(VaccineCategory vaccineCategory) {
+        this.vaccineCategory = vaccineCategory;
+    }
+
     public Spot getVaccinationSpot() {
         return vaccinationSpot;
     }
@@ -107,6 +117,22 @@ public class MemberVaccination {
         this.vaccinatedAt = vaccinatedAt;
     }
 
+    @Override
+    public String toString() {
+        return "MemberVaccination{" +
+                "id=" + id +
+                ", pin='" + pin + '\'' +
+                ", status=" + status +
+                ", vaccineDrive=" + vaccineDrive +
+                ", vaccineCategory=" + vaccineCategory +
+                ", vaccinationSpot=" + vaccinationSpot +
+                ", recipient=" + recipient +
+                ", registeredAt=" + registeredAt +
+                ", selectedDate=" + selectedDate +
+                ", vaccinatedAt=" + vaccinatedAt +
+                '}';
+    }
+
     public void generatePIN(int length) {
         Random random = new Random();
         pin = "";
@@ -120,7 +146,10 @@ public class MemberVaccination {
             LocalDate vaccinatedDate = this.getVaccinatedAt().toInstant().atZone(ZoneId.systemDefault())
                     .toLocalDate();
             Long interval = this.getVaccineDrive().getVaccine().getIntervalInDays();
-            return LocalDate.now().plusDays(interval).compareTo(vaccinatedDate) > 0;
+            System.out.println("Interval:");
+            System.out.println(LocalDate.now().compareTo(vaccinatedDate.plusDays(interval)));
+            LocalDate nextVaccination = vaccinatedDate.plusDays(interval);
+            return LocalDate.now().compareTo(nextVaccination) > 0;
         }
         return true;
     }

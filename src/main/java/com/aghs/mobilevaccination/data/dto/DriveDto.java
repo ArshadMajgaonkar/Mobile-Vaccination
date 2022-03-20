@@ -1,7 +1,10 @@
 package com.aghs.mobilevaccination.data.dto;
 
+import com.aghs.mobilevaccination.data.model.vaccine.VaccineDriveStatus;
+
 public class DriveDto {
     Long driveId;
+    VaccineDriveStatus status;
     String vehicleRegNo;
     String vaccineName;
     String vaccinatorUsername;
@@ -12,6 +15,14 @@ public class DriveDto {
 
     public void setDriveId(Long driveId) {
         this.driveId = driveId;
+    }
+
+    public VaccineDriveStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(VaccineDriveStatus status) {
+        this.status = status;
     }
 
     public String getVehicleRegNo() {

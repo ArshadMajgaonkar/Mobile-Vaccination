@@ -1,6 +1,7 @@
 package com.aghs.mobilevaccination.data.model.location;
 
 import com.aghs.mobilevaccination.data.dto.CityDto;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
 
 import javax.persistence.*;
@@ -67,16 +68,27 @@ public class City {
 
     // Static Methods
 
-    public static long getRemainingSlots(MemberVaccinationRepository memberVaccinationRepository,
+    public static long getBookedSlots(MemberVaccinationRepository memberVaccinationRepository,
                                          LocalDate selectedDate,
                                          List<Spot> spots) {
         AtomicLong bookedSlot = new AtomicLong(0L);
         spots.forEach(spot -> {
             bookedSlot.addAndGet(
-                    memberVaccinationRepository.findByVaccinationSpotAndSelectedDate(spot, selectedDate).size()
+                    memberVaccinationRepository.findByVaccinationSpotAndSelectedDateAndStatus(
+                            spot,
+                            selectedDate,
+                            VaccinationStatus.REGISTERED
+                    ).size()
             );
         });
         return bookedSlot.get();
+    }
+
+    public long getRemainingSlot(LocalDate selectedDate,
+                                 List<Spot> spots,
+                                 MemberVaccinationRepository vaccinationRepository) {
+        Long bookedSlot = City.getBookedSlots(vaccinationRepository, selectedDate, spots);
+        return this.getAllotedSlotsPerDay() - bookedSlot;
     }
 
 

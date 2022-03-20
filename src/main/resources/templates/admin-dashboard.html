@@ -5,7 +5,7 @@
       lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Dashboard</title>
+    <title>Admin Dashboard</title>
 </head>
 <body>
 <div layout:fragment="content">
@@ -61,7 +61,7 @@
                     <tbody>
                       <tr th:each="vaccination: ${vaccinations}">
                           <th scope="row" th:text="${vaccination.id}"></th>
-                          <td th:text="${vaccination.selectedDate}"></td>
+                          <td th:text="${vaccination.vaccineDrive.driveDate}"></td>
                           <td th:text="${vaccination.recipient.fullName}"></td>
                           <td th:text="${'****...'+vaccination.recipient.aadharLast4Digit}"></td>
                           <td th:text="${vaccination.vaccinationSpot.ward+' : '+vaccination.vaccinationSpot.localityNames}">
@@ -69,7 +69,7 @@
                           <!--TODO: update dose number-->
                           <td>2</td>
                           <td th:text="${vaccination.status}"></td>
-                          <td><button th:attr="onclick='updateStatus('+${vaccination.id}+')'" class="btn btn-danger">Change</button></td>
+                          <td><button th:attr="onclick='updateStatus('+${vaccination.id}+',\''+${admin.username}+'\')'" class="btn btn-danger">Change</button></td>
                       </tr>
 
                     </tbody>
@@ -97,7 +97,7 @@
         document.getElementById('registration-filter-form').submit();
     }
 
-    function updateStatus(vaccinationId) {
+    function updateStatus(vaccinationId, username) {
         var xmlHttpRequest = new XMLHttpRequest();
         xmlHttpRequest.onreadystatechange = function() {
             if(xmlHttpRequest.readyState == XMLHttpRequest.DONE){
@@ -114,7 +114,7 @@
                 addMessage('Error occurred while updating.');
         }
 
-        var data = {"vaccinationId": vaccinationId};
+        var data = {"vaccinationId": vaccinationId, "staffUsername": username};
         console.log(data);
 
         xmlHttpRequest.open('POST', '/staff/update-vaccination-status', true);

@@ -3,10 +3,17 @@ package com.aghs.mobilevaccination.controller;
 import com.aghs.mobilevaccination.data.dto.CentreSelectDto;
 import com.aghs.mobilevaccination.data.dto.CityDto;
 import com.aghs.mobilevaccination.data.dto.SpotDto;
+import com.aghs.mobilevaccination.data.model.Disease;
+import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.location.*;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
+import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccineCategory;
 import com.aghs.mobilevaccination.data.repository.location.*;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,6 +35,10 @@ public class DefaultController {
     protected SpotRepository spotRepository;
     @Autowired
     protected StateRepository stateRepository;
+    @Autowired
+    protected VaccineRepository vaccineRepository;
+    @Autowired
+    protected VaccineCategoryRepository vaccineCategoryRepository;
 
     protected Centre getCentre(CentreSelectDto centreSelectDto, Model model) {
         model.addAttribute("states", stateRepository.findAll());
@@ -117,5 +128,62 @@ public class DefaultController {
         for(Spot spot: citySpots)
             vaccinations.addAll(vaccinationRepository.findByVaccinationSpotAndSelectedDate(spot, date));
         return vaccinations;
+    }
+
+
+
+    // VaccinationCategory
+
+
+/*    public VaccinationStatus getVaccinationStatus(Disease disease, Member member) {
+        List<Vaccine> vaccines = vaccineRepository.findByOfDisease(disease);
+        VaccinationStatus status = VaccinationStatus.UNVACCINATED;
+        for(Vaccine vaccine: vaccines) {
+            List<VaccineCategory> categories = vaccineCategoryRepository.findByVaccine(vaccine);
+            for(VaccineCategory category: categories) {
+                List<MemberVaccination> vaccinations =
+                        vaccinationRepository.findByVaccineCategoryAndRecipient(category, member);
+                for(MemberVaccination vaccination: vaccinations) {
+                    if(vaccination.getStatus().ordinal() > status.ordinal()) {
+                        status = vaccination.getStatus();
+                    }
+                }
+            }
+        }
+        return status;
+    }*/
+
+    public VaccinationStatus getVaccinationStatus(Disease disease, Member member) {
+        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipient(member);
+        if(vaccinations.size() == 0)
+            return VaccinationStatus.UNVACCINATED;
+        for(int i=0; i<vaccinations.size(); i++) {
+            Vaccine vaccine = vaccinations.get(i).getVaccineCategory().getVaccine();
+            List<VaccineCategory> mandatoryCategories = getMandatoryCategories(vaccine, member.getAge());
+            for(MemberVaccination vaccination: vaccinations) {
+                if(!mandatoryCategories.contains(vaccination.getVaccineCategory())) {
+
+                }
+                else {
+                    vaccinations.remove(vaccination);
+                }
+            }
+        }
+        return VaccinationStatus.UNVACCINATED;
+    }
+
+    public List<VaccineCategory> getMandatoryCategories(Vaccine vaccine, int age) {
+        List<VaccineCategory> categories = vaccineCategoryRepository.findByVaccine(vaccine);
+        List<VaccineCategory> mandatoryCategory = new ArrayList<>();
+        for(VaccineCategory category: categories) {
+            if(category.isMandatory() && category.getMinAgeLimit() <= age && age <= category.getMaxAgeLimit()) {
+                mandatoryCategory.add(category);
+            }
+        }
+        return mandatoryCategory;
+    }
+
+    public List<VaccineCategory> getEligibleCategories() {
+        return null;
     }
 }

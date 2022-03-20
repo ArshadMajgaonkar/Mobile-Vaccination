@@ -69,6 +69,8 @@ lang="en">
                 <!-- divOne -->
                 <div class="box col-md-8 col-10 my-4" th:each="member: ${members}">
                     <a th:href="@{'/user/member/'+${member.userId}}">
+                    <form method="post" th:action="@{/user/member/to-check-slot}">
+                        <input type="hidden" name="memberId" th:value="${member.userId}">
                     <div class="d-flex flex-row justify-content-between">
                         <div class="d-flex flex-column align-items-center">
                             <div>
@@ -91,6 +93,7 @@ lang="en">
                             </div>
                         </div>
                     </div>
+                    </form>
                     </a>
                 </div>
             </div>

@@ -118,6 +118,21 @@
 
 
 
+    <div th:fragment="spot-select">
+        <label for="ss-spot-select" class="col-auto">Ward:</label>
+        <select id="ss-spot-select" name="spotId" class="form-control-lg form-control col-auto" required>
+            <option value="" selected disabled>--Select--</option>
+            <span th:each="spot: ${spots}">
+                        <option th:if="${spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward+' : '+spot.localityNames}">
+                        </option>
+                        <option th:unless="${spotId != spot.id}" th:value="${spot.id}" th:text="${spot.ward+' : '+spot.localityNames}"
+                                selected></option>
+                        </span>
+        </select>
+    </div>
+
+
+
     <div th:fragment="spot-select-elements">
         
         <div class="form-group mb-4">
@@ -183,7 +198,7 @@
 
 
     <div th:fragment="vaccine-category-select">
-        <label for="vaccine-category-select">Select Vaccine Category:</label>
+        <label for="vaccine-category-select">Vaccine Category:</label>
         <select id="vaccine-category-select" name="vaccineCategoryId">
             <option selected disabled>--Select--</option>
             <span th:each="vaccineCategory: ${vaccineCategories}">
@@ -198,7 +213,7 @@
     </div>
 
     <div th:fragment="vaccine-drive-status-select">
-        <label for="vaccine-drive-status-select">Select Vaccine Drive Status: <i>(Optional)</i></label>
+        <label for="vaccine-drive-status-select">Vaccine Drive Status: <i>(Optional)</i></label>
         <select id="vaccine-drive-status-select" name="selectedDriveStatus" onchange="submitForm()" class="form-control form-control-lg">
             <option selected disabled>--Select--</option>
             <span th:each="driveStatus: ${driveStatuses}">
@@ -213,9 +228,9 @@
     </div>
 
     <div th:fragment="vaccinator-select">
-        <label for="vaccinator-select">Select Vaccinator:</label>
+        <label for="vaccinator-select">Vaccinator:</label>
         <select id="vaccinator-select" name="vaccinatorUsername">
-            <option selected disabled>Select Vaccine</option>
+            <option selected disabled>--Select--</option>
             <span th:each="vaccinator: ${vaccinators}">
                 <option th:if="${vaccinator.username != vaccinatorUsername}"
                         th:value="${vaccinator.username}" th:text="${vaccinator.fullName}">
@@ -229,9 +244,9 @@
     </div>
 
     <div th:fragment="vaccine-select">
-        <label for="vaccine-select">Select Vaccine Category:</label>
+        <label for="vaccine-select">Vaccine:</label>
         <select id="vaccine-select" name="vaccineName">
-            <option selected disabled>Select Vaccine</option>
+            <option selected disabled>--Select--</option>
             <span th:each="vaccine: ${vaccines}">
                 <option th:if="${vaccineName != vaccine.name}" th:value="${vaccine.name}" th:text="${vaccine.name}">
                 </option>
@@ -243,9 +258,9 @@
     </div>
 
     <div th:fragment="vehicle-select">
-        <label for="vehicle-select">Select Vehicle:</label>
+        <label for="vehicle-select">Vehicle:</label>
         <select id="vehicle-select" name="vehicleRegNo">
-            <option selected disabled>Select Vehicle</option>
+            <option selected disabled>--Select--</option>
             <span th:each="vehicle: ${vehicles}">
                 <option th:if="${vehicle.registrationNumber != vehicleRegNo}"
                         th:value="${vehicle.registrationNumber}"

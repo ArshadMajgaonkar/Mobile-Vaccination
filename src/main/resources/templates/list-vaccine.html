@@ -32,6 +32,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Code</th>
                             <th scope="col">Disease</th>
+                            <th scope="col">Interval (in Days)</th>
                             <th scope="col">Added by</th>
                             <th scope="col">Added at</th>
                         </tr>
@@ -41,6 +42,7 @@
                             <td th:text="${vaccine.name}"></td>
                             <td th:text="${vaccine.code}"></td>
                             <td th:if="${vaccine.ofDisease}" th:text="${vaccine.ofDisease.name}"></td>
+                            <td th:text="${vaccine.intervalInDays}"></td>
                             <td th:unless="${vaccine.ofDisease}" th:text="${'-'}"></td>
                             <td th:text="${vaccine.addedBy.fullName}"></td>
                             <td th:text="${vaccine.addedAt}"></td>

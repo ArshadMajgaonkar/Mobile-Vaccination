@@ -1,7 +1,7 @@
 package com.aghs.mobilevaccination.data.model.vaccine;
 
 public enum VaccineDriveStatus {
-    INADEQUATE_DATA, UPCOMING, ON_GOING, COMPLETED, CANCELLED;
+    BOOKING, INADEQUATE_DATA, UPCOMING, ON_GOING, COMPLETED, CANCELLED;
 
 
     /*@Override

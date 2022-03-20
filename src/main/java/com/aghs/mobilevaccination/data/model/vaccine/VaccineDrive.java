@@ -1,6 +1,7 @@
 package com.aghs.mobilevaccination.data.model.vaccine;
 
 import com.aghs.mobilevaccination.data.dto.DriveDto;
+import com.aghs.mobilevaccination.data.dto.SlotDto;
 import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.model.Vehicle;
 import com.aghs.mobilevaccination.data.model.location.City;
@@ -12,6 +13,7 @@ import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -133,6 +135,9 @@ public class VaccineDrive {
         this.addedAt = addedAt;
     }
 
+
+    // Validation
+
     public boolean isUpdateValid() {
         if(this.id != null &&
                 this.addedAt != null &&
@@ -147,6 +152,15 @@ public class VaccineDrive {
                 this.vehicle != null)
             return true;
         return false;
+    }
+
+
+    // Method
+
+    public Long getRemainingSlot(MemberVaccinationRepository vaccinationRepository) {
+        Integer bookedCount = vaccinationRepository.findByVaccineDriveAndStatus(this, VaccinationStatus.REGISTERED)
+                .size();
+        return this.getSlotCount() - bookedCount;
     }
 
     public void updateFromDto(DriveDto driveDto,
@@ -168,4 +182,21 @@ public class VaccineDrive {
             }
         }
     }
+
+
+    // Static Methods
+
+    public static List<SlotDto> toDto(MemberVaccinationRepository vaccinationRepository,List<VaccineDrive> drives) {
+        List<SlotDto> dtoList = new ArrayList<>();
+        for(VaccineDrive drive: drives) {
+            Long remainingSlot = drive.getRemainingSlot(vaccinationRepository);
+            SlotDto dto = new SlotDto();
+            dto.setVaccineName(drive.getVaccine().getName());
+            dto.setRemainingSlot(remainingSlot);
+            dto.setDriveId(drive.id);
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
 }

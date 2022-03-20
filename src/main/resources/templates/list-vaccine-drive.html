@@ -44,37 +44,37 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Date</th>
-                        <th scope="col">Doses</th>
-                        <th scope="col">Vaccine</th>
-                        <th scope="col">Vehicle</th>
-                        <th scope="col">Vaccinator</th>
                         <th scope="col">City</th>
-                        <th scope="col">Spots</th>
+                        <th scope="col">Vaccine</th>
+                        <th scope="col">Vaccinator</th>
+                        <th scope="col">Doses</th>
+                        <th scope="col">Vehicle</th>
+                        <th scope="col">Selected Spots</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                     <tr th:each="vaccineDrive: ${vaccineDrives}">
                         <td th:text="${vaccineDrive.id}"></td>
                         <td th:text="${vaccineDrive.driveDate}"></td>
+                        <td th:text="${vaccineDrive.city.name}"></td>
+                        <td th:text="${vaccineDrive.vaccine.name}"></td>
+
+                        <td th:if="${vaccineDrive.vaccinator}" th:text="${vaccineDrive.vaccinator.fullName}"></td>
+                        <td th:unless="${vaccineDrive.vaccinator}" th:text="${'-'}"></td>
+
                         <td th:text="${vaccineDrive.slotCount}"></td>
-    
-                        <td th:if="${vaccineDrive.vaccine}" th:text="${vaccineDrive.vaccine.name}"></td>
-                        <td th:unless="${vaccineDrive.vaccine}" th:text="${'-'}"></td>
-    
+
                         <td th:if="${vaccineDrive.vehicle}"
                             th:text="${vaccineDrive.vehicle.registrationNumber}"></td>
                         <td th:unless="${vaccineDrive.vehicle}"
                             th:text="${'-'}"></td>
-    
-                        <td th:if="${vaccineDrive.vaccinator}" th:text="${vaccineDrive.vaccinator.fullName}"></td>
-                        <td th:unless="${vaccineDrive.vaccinator}" th:text="${'-'}"></td>
-    
-                        <td th:text="${vaccineDrive.city.name}"></td>
+
                         <td>
                             <div th:each="spot: ${vaccineDrive.vaccinationSpots}"
                                   th:text="${spot.ward+':'+spot.localityNames +'; '}">
                             </div>
                         </td>
+
                         <td th:text="${vaccineDrive.status}"></td>
                         <td>
                             <form method="post" target="_blank"

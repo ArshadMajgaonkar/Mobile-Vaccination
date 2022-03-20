@@ -30,19 +30,22 @@
         </div>
         <div th:if="${vaccineDrives}">
             <div th:if="${#lists.size(vaccineDrives)>0}">
-                <table>
-                    <tr>
-                        <th>Id</th>
-                        <th>Spots</th>
-                    </tr>
-                    <tr th:each="drive: ${vaccineDrives}">
-                        <td th:text="${drive.id}"></td>
+                <table class="table table-hover table-striped text-center" id="myTable">
+                    <thead>
+                        <th scope="col">Vaccine</th>
+                        <th scope="col">Vehicle</th>
+                        <th scope="col">Spots</th>
+                    </thead>
+                    <tbody th:each="drive: ${vaccineDrives}">
+                        <td th:text="${drive.vaccine.name}"></td>
+                        <td th:if="${drive.vehicle}" th:text="${drive.vehicle.registrationNumber}"></td>
+                        <td th:unless="${drive.vehicle}">-</td>
                         <td>
                             <div th:each="spot: ${drive.vaccinationSpots}"
-                                 th:text="${spot.ward+':'+spot.localityNames +'; '}">
+                                 th:text="${spot.ward+' : '+spot.localityNames}">
                             </div>
                         </td>
-                    </tr>
+                    </tbody>
                 </table>
             </div>
             <div th:if="${vaccineDrives}">
@@ -73,37 +76,6 @@
                 </div>
             </div>
         </div>
-        <table class="table table-hover table-striped text-center" id="myTable">
-            <thead>
-              <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Spots</th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>101</td>
-                    <td>Area 1, area 24, Sector2</td>
-                </tr>
-                <tr>
-                    <td>521</td>
-                    <td>Area 1, area 24, Sector2</td>
-                </tr>
-                <tr>
-                    <td>156</td>
-                    <td>Area 1, area 24, Sector2</td>
-                </tr>
-                <tr>
-                    <td>181</td>
-                    <td>Area 1, area 24, Sector2</td>
-                </tr>
-                <tr>
-                    <td>122</td>
-                    <td>Area 1, area 24, Sector2</td>
-                </tr>
-
-            </tbody>
-        </table>
     </div>
 </body>
 <script layout:fragment="script">

@@ -9,6 +9,7 @@ import com.aghs.mobilevaccination.data.model.location.Centre;
 import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
+import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccineDrive;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccineDriveStatus;
 import com.aghs.mobilevaccination.data.repository.StaffRepository;
@@ -18,14 +19,12 @@ import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepos
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineDriveRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import com.aghs.mobilevaccination.service.AlgorithmDeployService;
-import org.json.JSONObject;
+import com.aghs.mobilevaccination.service.StaffUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.ConnectException;
 import java.time.LocalDate;
@@ -47,6 +46,8 @@ public class VaccineDriveController extends  DefaultController{
     VaccineDriveRepository vaccineDriveRepository;
     @Autowired
     VehicleRepository vehicleRepository;
+    @Autowired
+    StaffUserDetailService staffService;
 
     @Autowired
     AlgorithmDeployService algorithmDeployService;
@@ -54,6 +55,7 @@ public class VaccineDriveController extends  DefaultController{
     private static final String GET_REGISTRATIONS_URL = "/staff/vaccine-drive/get-registrations";
     private static final String DEPLOY_ALGORITHM = "/staff/vaccine-drive/deploy-algorithm";
     private static final String SAVE_VACCINE_DRIVE = "/staff/vaccine-drive/save";
+    private static final int ADD_DRIVE_DAYS_AHEAD = 4;
 
 
     // Private Methods
@@ -148,9 +150,12 @@ public class VaccineDriveController extends  DefaultController{
     }
 
 
+
     // Controllers
 
+
     // Public
+
     @GetMapping("/vaccine-drive")
     public String getPublicDrive(Model model) {
         model.addAttribute("states", stateRepository.findAll());
@@ -161,14 +166,63 @@ public class VaccineDriveController extends  DefaultController{
     public String postPublicDrive(@ModelAttribute("cityDto") CityDto cityDto, Model model) {
         City city = getCity(cityDto, model);
         if(city!=null) {
-            List<VaccineDrive> drives = vaccineDriveRepository.findByDriveDateAndCity(LocalDate.now().minusDays(2), city);
+            List<VaccineDrive> drives = vaccineDriveRepository.findByDriveDateAndCity(LocalDate.now(), city);
             model.addAttribute("vaccineDrives", drives);
         }
         return "list-drive-public";
     }
 
+
     // Staff
 
+    @GetMapping("/staff/vaccine-drive/add")
+    public String getAddDrive(Model model) {
+        model.addAttribute("vaccines", vaccineRepository.findAll());
+        model.addAttribute("states", stateRepository.findAll());
+        model.addAttribute("slotCount", 0);
+        model.addAttribute("minDriveDate", LocalDate.now().plusDays(ADD_DRIVE_DAYS_AHEAD));
+        return "add-drive";
+    }
+
+    @PostMapping("/staff/vaccine-drive/add")
+    public String postAddDrive(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate driveDate,
+                               @ModelAttribute("cityDto") CityDto cityDto,
+                               @ModelAttribute("vaccineName") String vaccineName,
+                               @ModelAttribute("slotCount") Long slotCount,
+                               Model model) {
+        List<String> messages = new ArrayList<>();
+        model.addAttribute("messages", messages);
+        City selectedCity = getCity(cityDto, model);
+        model.addAttribute("driveDate", driveDate);
+        if(driveDate==null)
+            messages.add("Please select a Drive Date.");
+        else if(vaccineName==null || vaccineName.equals(""))
+            messages.add("Please select a Vaccine.");
+        else if(slotCount<1)
+            messages.add("Please enter Slot Count.");
+        else if(selectedCity!=null) {
+            VaccineDrive drive = new VaccineDrive();
+            drive.setAddedAt(new Date());
+            drive.setAddedBy(staffService.getCurrentStaff());
+            drive.setCity(selectedCity);
+            drive.setDriveDate(driveDate);
+            drive.setSlotCount(slotCount);
+            drive.setStatus(VaccineDriveStatus.BOOKING);
+            drive.setVaccine(vaccineRepository.findById(vaccineName).orElse(null));
+            vaccineDriveRepository.save(drive);
+            messages.add("New Vaccine Drive added");
+            // removing values from html form
+            model.addAttribute("driveDate", null);
+            model.addAttribute("vaccineName", null);
+            model.addAttribute("slotCount", 0);
+            model.addAttribute("cityDto", new CityDto());
+        }
+        else
+            messages.add("Please select a City.");
+        model.addAttribute("vaccines", vaccineRepository.findAll());
+        model.addAttribute("minDriveDate", LocalDate.now().plusDays(ADD_DRIVE_DAYS_AHEAD));
+        return "add-drive";
+    }
     @GetMapping(GET_REGISTRATIONS_URL)
     public String getRegistrations(Model model) {
         model.addAttribute("minDriveDate", LocalDate.now().plusDays(1));
@@ -247,7 +301,6 @@ public class VaccineDriveController extends  DefaultController{
     @GetMapping({"/staff/vaccine-drive/", "/staff/vaccine-drive" })
     public String getListVaccineDrive(Model model) {
         LocalDate today = LocalDate.now();
-        model.addAttribute("maxDriveDate", LocalDate.now().plusDays(2));
         model.addAttribute("states", stateRepository.findAll());
         model.addAttribute("driveStatuses", VaccineDriveStatus.values());
         return "list-vaccine-drive";
@@ -272,10 +325,10 @@ public class VaccineDriveController extends  DefaultController{
             if(status == null)
                 vaccineDrives = vaccineDriveRepository.findByDriveDateAndCity(driveDate, driveCity);
             else
-                vaccineDrives = vaccineDriveRepository.findByDriveDateAndStatusAndCity(
+                vaccineDrives = vaccineDriveRepository.findByDriveDateAndCityAndStatus(
                         driveDate,
-                        status,
-                        driveCity
+                        driveCity,
+                        status
                 );
             model.addAttribute("vaccineDrives", vaccineDrives);
         }
@@ -283,7 +336,6 @@ public class VaccineDriveController extends  DefaultController{
         model.addAttribute("driveDate", driveDate);
         model.addAttribute("driveStatuses", VaccineDriveStatus.values());
         model.addAttribute("selectedDriveStatus", status);
-        model.addAttribute("maxDriveDate", LocalDate.now().plusDays(2));
         return "list-vaccine-drive";
     }
 
@@ -326,7 +378,7 @@ public class VaccineDriveController extends  DefaultController{
                 vaccineDriveRepository.save(vaccineDrive);
                 messages.add("Vaccine Drive Updated Successfully");
             }
-            else messages.add("Select valid Vehicle, Vaccine and Vaccinator.");
+            else messages.add("Select valid Vehicle and Vaccinator.");
             model.addAttribute("vaccineDrive", vaccineDrive);
             model.addAttribute("vehicles", getVehicleFromCity(vaccineDrive.getCity()));
             model.addAttribute("vaccines", vaccineRepository.findAll());
