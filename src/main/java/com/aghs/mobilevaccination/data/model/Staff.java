@@ -35,12 +35,12 @@ public class Staff {
     private String emailId;
     @Column(nullable = false)
     private LocalDateTime addedAt;
-    // TODO: Self join of added by
     /*@Column(nullable = false)
     @JoinColumns(value = @JoinColumn(
             table = "staff",
-            referencedColumnName = "username"))
-    private Staff addedBy;*/
+            referencedColumnName = "username"))*/
+    @ManyToOne
+    private Staff addedBy;
 
     public Staff() {
     }

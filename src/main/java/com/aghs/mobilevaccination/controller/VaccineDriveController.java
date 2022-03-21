@@ -278,7 +278,6 @@ public class VaccineDriveController extends  DefaultController{
             City city = cityRepository.findById(cityId).orElse(null);
             if( city != null) {
                 HashMap<Long, Long> spotWiseRegistrations = new HashMap<>();
-                // TODO: vaccination count which are yet to be added to drive
                 getUnlinkedRegistrationWithId(driveDate, city, spotWiseRegistrations);
                 try {
                     List<List<?>> spotDistribution =

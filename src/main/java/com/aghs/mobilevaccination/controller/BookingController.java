@@ -16,7 +16,9 @@ import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepos
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineDriveRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import com.aghs.mobilevaccination.service.GeneralUserDetailService;
+import com.twilio.rest.preview.bulkExports.export.Day;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,8 +47,10 @@ public class BookingController extends DefaultController{
     GeneralUserDetailService userService;
     DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    @Value("${registration.add.day.ahead}") private Integer ADD_REGISTRATION_DAY_AHEAD;
+
     private LocalDate addMinRegistrationDate(Model model) {
-        LocalDate minRegistrationDate = LocalDate.now().plusDays(3);
+        LocalDate minRegistrationDate = LocalDate.now().plusDays(ADD_REGISTRATION_DAY_AHEAD+1);
         model.addAttribute("minRegistrationDate", minRegistrationDate);
         return  minRegistrationDate;
     }
@@ -55,6 +59,7 @@ public class BookingController extends DefaultController{
     public String getSlotBookingPage(@ModelAttribute("memberId") Long memberId, Model model) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
+        addMinRegistrationDate(model);
         Member member = memberRepository.findById(memberId).orElse(null);
         if(member!=null) {
             if(!member.hasCompletedVaccinationInterval(vaccinationRepository))
@@ -76,6 +81,7 @@ public class BookingController extends DefaultController{
                                       Model model) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
+        addMinRegistrationDate(model);
         Member member = memberRepository.findById(memberId).orElse(null);
         if(member!=null) {
             City selectedCity = getCity(cityDto, model);
@@ -125,7 +131,6 @@ public class BookingController extends DefaultController{
             messages.add("No such Vaccine Drive exists.");
         else if(!currentMember.hasCompletedVaccinationInterval(memberVaccinationRepository)) {
             messages.add("Please complete Interval Period of Previous Vaccination.");
-            //TODO: remaining slot update
         }
         else if(selectedSpot != null) {
             currentMember.discardUnvaccinatedRegistration(vaccinationRepository);
@@ -140,7 +145,6 @@ public class BookingController extends DefaultController{
                 memberVaccination.setVaccineDrive(drive);
                 memberVaccinationRepository.save(memberVaccination);
                 messages.add("Vaccination Slot Booked");
-                // TODO: get remaining slot
             }
             model.addAttribute("remainingSlots", remainingSlots);
             System.out.print("RemainingSlot");

@@ -61,7 +61,7 @@ public class VaccinationRestController {
         MemberVaccination vaccination = vaccinationRepository.findById(Long.valueOf(dto.getVaccinationId()))
                 .orElse(null);
         if(vaccination!=null){
-            // TODO: update vaccineDrive if null
+            // TODO: update vaccineDrive if null using vaccinator city
             /*if(vaccination.getVaccineDrive()==null) {
                 City city = staffRepository.findByUsername(dto.getStaffUsername()).getCentre().getSpot().getCity();
                 VaccineDrive drive = driveRepository.findByDriveDateAndStatusAndCityAndVaccine(
@@ -74,7 +74,7 @@ public class VaccinationRestController {
             }*/
             if(vaccination.getStatus() == VaccinationStatus.VACCINATED ||
                     vaccination.getStatus() == VaccinationStatus.DISCARDED) {
-                String message = "Status already update for " + vaccinationId;
+                String message = "Status cannot be updated for " + vaccinationId;
                 return new ResponseEntity<String>(message, HttpStatus.ALREADY_REPORTED);
             }
             vaccination.setStatus(VaccinationStatus.VACCINATED);

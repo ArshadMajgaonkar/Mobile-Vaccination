@@ -35,13 +35,17 @@
                 <table>
                     <tr>
                         <th>Date</th>
+                        <th>Disease</th>
                         <th>Vaccine</th>
+                        <th>City</th>
                         <th>Ward</th>
                         <th>Status</th>
                     </tr>
                     <tr th:each="appoint : ${appointments}">
                         <td th:text="${appoint.vaccineDrive.driveDate}"></td>
+                        <td th:text="${appoint.vaccineDrive.vaccine.ofDisease.name}"></td>
                         <td th:text="${appoint.vaccineDrive.vaccine.name}"></td>
+                        <td th:text="${appoint.vaccineDrive.city.name}"></td>
                         <td th:text="${appoint.vaccinationSpot.ward+' : '+appoint.vaccinationSpot.localityNames}"></td>
                         <td th:text="${appoint.status}"></td>
                     </tr>

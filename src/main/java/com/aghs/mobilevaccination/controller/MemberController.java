@@ -34,7 +34,6 @@ public class MemberController {
 
     @PostMapping("/user/add-member")
     public String addMember(@ModelAttribute("memberInstance")Member member, Model model) {
-        // TODO: Member Validation with proper message
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
         if( !member.isAadharIdValid()) {

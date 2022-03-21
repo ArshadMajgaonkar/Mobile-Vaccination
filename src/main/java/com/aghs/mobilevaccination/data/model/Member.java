@@ -146,7 +146,7 @@ public class Member {
         List<MemberVaccination> registrations =
                 vaccinationRepository.findByRecipientAndStatus(this, VaccinationStatus.REGISTERED);
         for(MemberVaccination registration: registrations) {
-            registration.setStatus(VaccinationStatus.DISCARDED);
+            registration.setStatus(VaccinationStatus.DISCARDED);            // auto-saves the state
         }
     }
 
