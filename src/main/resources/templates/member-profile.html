@@ -36,7 +36,7 @@
                     <tr>
                         <th>Date</th>
                         <th>Disease</th>
-                        <th>Vaccine</th>
+                        <th>Dose</th>
                         <th>City</th>
                         <th>Ward</th>
                         <th>Status</th>
@@ -44,7 +44,7 @@
                     <tr th:each="appoint : ${appointments}">
                         <td th:text="${appoint.vaccineDrive.driveDate}"></td>
                         <td th:text="${appoint.vaccineDrive.vaccine.ofDisease.name}"></td>
-                        <td th:text="${appoint.vaccineDrive.vaccine.name}"></td>
+                        <td th:text="${appoint.vaccineCategory.name}"></td>
                         <td th:text="${appoint.vaccineDrive.city.name}"></td>
                         <td th:text="${appoint.vaccinationSpot.ward+' : '+appoint.vaccinationSpot.localityNames}"></td>
                         <td th:text="${appoint.status}"></td>
@@ -64,6 +64,32 @@
         <!--Update status-->
         <p>No status update</p>
 
+        <h6>Previous Vaccination</h6>
+        <div th:if="${vaccinations}">
+            <h6>Upcoming Appointments</h6>
+            <div th:if="${#lists.size(vaccinations)>0}">
+                <table>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Dose</th>
+                        <th>Vaccinated At</th>
+                        <th>City</th>
+                        <th>Ward</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr th:each="vaccination : ${vaccinations}">
+                        <td th:text="${vaccination.vaccineDrive.vaccine.ofDisease.name}"></td>
+                        <td th:text="${vaccination.vaccineCategory.name}"></td>
+                        <td th:text="${vaccination.vaccinatedAt}"></td>
+                        <td th:text="${vaccination.vaccineDrive.city.name}"></td>
+                        <td th:if="${vaccination.vaccinationSpot}" th:text="${vaccination.vaccinationSpot.ward+' : '+vaccination.vaccinationSpot.localityNames}"></td>
+                        <td th:text="${vaccination.status}"></td>
+                    </tr>
+                </table>
+            </div>
+            <p th:unless="${#lists.size(vaccinations)>0}">No vaccination till now.</p>
+        </div>
+        <h6 th:unless="${appointments}">Vaccination section didn't load. Please reload or try again later.</h6>
     </div>
 </body>
 </html>

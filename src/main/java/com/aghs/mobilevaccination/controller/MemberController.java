@@ -79,6 +79,10 @@ public class MemberController {
                     member, VaccinationStatus.REGISTERED);
             /*TODO: add rejected or IN_CENTRED as well in appointments after finalizing flow of vaccine_drive*/
             model.addAttribute("appointments", appointments);
+            List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipientAndStatus(
+                    member, VaccinationStatus.VACCINATED);
+            model.addAttribute("vaccinations", vaccinations);
+            System.out.println(vaccinations);
             return "member-profile";
         }
         return "user-dashboard1";

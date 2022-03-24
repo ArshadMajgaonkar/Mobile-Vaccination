@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface VaccineCategoryRepository extends JpaRepository<VaccineCategory, Long> {
     List<VaccineCategory> findByVaccine(Vaccine vaccine);
+    List<VaccineCategory> findByVaccineAndPrerequisite(Vaccine vaccine, VaccineCategory prerequisite);
+
 }

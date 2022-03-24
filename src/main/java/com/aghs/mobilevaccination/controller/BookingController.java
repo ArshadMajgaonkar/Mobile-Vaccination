@@ -5,11 +5,9 @@ import com.aghs.mobilevaccination.data.dto.SlotDto;
 import com.aghs.mobilevaccination.data.dto.SpotDto;
 import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.location.City;
+import com.aghs.mobilevaccination.data.model.location.District;
 import com.aghs.mobilevaccination.data.model.location.Spot;
-import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
-import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
-import com.aghs.mobilevaccination.data.model.vaccine.VaccineDrive;
-import com.aghs.mobilevaccination.data.model.vaccine.VaccineDriveStatus;
+import com.aghs.mobilevaccination.data.model.vaccine.*;
 import com.aghs.mobilevaccination.data.repository.DiseaseRepository;
 import com.aghs.mobilevaccination.data.repository.MemberRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
@@ -88,18 +86,21 @@ public class BookingController extends DefaultController{
             if(selectedDate==null)
                 messages.add("Please select the date");
             if(selectedCity != null) {
-                List<Vaccine> eligibleVaccines = member.getEligibleVaccines(
+                List<VaccineCategory> eligibleCategories = member.getEligibleVaccineCategory(
                         diseaseRepository,
                         vaccinationRepository,
-                        vaccineRepository
+                        vaccineRepository,
+                        vaccineCategoryRepository
                 );
-                List<VaccineDrive> drives = driveRepository.findByDriveDateAndCityAndStatusAndVaccineIn(
+                List<SlotDto> slotDtoList = SlotDto.fromCategory(
                         selectedDate,
                         selectedCity,
-                        VaccineDriveStatus.BOOKING,
-                        eligibleVaccines
+                        eligibleCategories,
+                        driveRepository,
+                        vaccinationRepository
                 );
-                List<SlotDto> slotDtoList = VaccineDrive.toDto(vaccinationRepository, drives);
+                System.out.println(eligibleCategories);
+                //List<SlotDto> slotDtoList = VaccineDrive.toDto(vaccinationRepository, drives);
                 model.addAttribute("slotDtoList", slotDtoList);
                 model.addAttribute("spots", spotRepository.findByCity(selectedCity));
             } else
@@ -115,6 +116,7 @@ public class BookingController extends DefaultController{
     @PostMapping("/user/member/book-slot")
     public String bookSlot(@ModelAttribute("memberId") Long memberId,
                            @ModelAttribute("driveId") Long driveId,
+                           @ModelAttribute("categoryId") Long categoryId,
                            @ModelAttribute("spotId") Long spotId,
                            Model model) {
         List<String> messages = new ArrayList<>();
@@ -125,8 +127,11 @@ public class BookingController extends DefaultController{
         Member currentMember = memberRepository.findById(memberId).orElse(null);
         Spot selectedSpot = spotRepository.findById(spotId).orElse(null);
         VaccineDrive drive = driveRepository.findById(driveId).orElse(null);
+        VaccineCategory category = vaccineCategoryRepository.findById(categoryId).orElse(null);
         if(currentMember == null)
             messages.add("No such Member exist: " + String.valueOf(memberId));
+        else if(category==null)
+            messages.add("No such category exist");
         else if(drive==null)
             messages.add("No such Vaccine Drive exists.");
         else if(!currentMember.hasCompletedVaccinationInterval(memberVaccinationRepository)) {
@@ -143,6 +148,7 @@ public class BookingController extends DefaultController{
                 memberVaccination.setRecipient(currentMember);
                 memberVaccination.setVaccinationSpot(selectedSpot);
                 memberVaccination.setVaccineDrive(drive);
+                memberVaccination.setVaccineCategory(category);
                 memberVaccinationRepository.save(memberVaccination);
                 messages.add("Vaccination Slot Booked");
             }
@@ -150,6 +156,9 @@ public class BookingController extends DefaultController{
             System.out.print("RemainingSlot");
             System.out.println(remainingSlots);
             model.addAttribute("cityDto", selectedSpot.getCity().toDto());
+            District district = selectedSpot.getCity().getDistrict();
+            model.addAttribute("districts", districtRepository.findByState(district.getState()));
+            model.addAttribute("cities", cityRepository.findByDistrict(district));
             model.addAttribute("selectedDate", drive.getDriveDate());
             model.addAttribute("memberName", currentMember.getFullName());
         }

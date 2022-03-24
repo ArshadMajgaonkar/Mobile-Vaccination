@@ -81,21 +81,24 @@
                 <div th:if="${slotDtoList}">
                     <div th:if="${#lists.size(slotDtoList)>0}">
                         <input type="hidden" name="memberId" th:value="${memberId}" />
+                        <input type="hidden" name="categoryId" id="category-id" required />
                         <div th:insert="fragments/form::spot-select"></div>
                         <table id="slot-table">
                             <thead>
                                 <th scope="col">Select</th>
-                                <th scope="col">Vaccine</th>
+                                <th scope="col">Dose</th>
                                 <th scope="col">Remaining Slots</th>
                             </thead>
                             <tbody th:each="dto: ${slotDtoList}">
-                                <td><input type="radio" name="driveId"
-                                           th:value="${dto.driveId}" th:attr="id='vaccine-name-'+${dto.vaccineName}" /></td>
-                                <td>
-                                    <label th:text="${dto.vaccineName}" th:attr="for='vaccine-name-'+${dto.vaccineName}"></label>
+                                <td><input type="radio" name="driveId" required
+                                           th:value="${dto.driveId}"
+                                           th:attr="id='drive-'+${dto.driveId},onclick='setCategory('+${dto.vaccineCategory.id}+')'" />
                                 </td>
                                 <td>
-                                    <label th:text="${dto.remainingSlot}" th:attr="for='vaccine-name-'+${dto.vaccineName}"></label>
+                                    <label th:text="${dto.vaccineCategory.name}" th:attr="for='drive-'+${dto.driveId}"></label>
+                                </td>
+                                <td>
+                                    <label th:text="${dto.remainingSlot}" th:attr="for='drive-'+${dto.driveId}"></label>
                                 </td>
                             </tbody>
                         </table>
@@ -133,6 +136,11 @@
     </div>
 
     <script layout:fragment="script">
+        function setCategory(categoryId) {
+            var categoryInput = document.getElementById("category-id");
+            categoryInput.value = categoryId;
+        }
+
         function submitForm() {
             document.getElementById('spot-form').submit();
         }

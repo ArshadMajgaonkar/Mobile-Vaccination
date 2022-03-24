@@ -160,6 +160,7 @@ public class VaccineDrive {
     public Long getRemainingSlot(MemberVaccinationRepository vaccinationRepository) {
         Integer bookedCount = vaccinationRepository.findByVaccineDriveAndStatus(this, VaccinationStatus.REGISTERED)
                 .size();
+        // TODO: think to add about vaccinated as booked. It's illogical to happen practically.
         return this.getSlotCount() - bookedCount;
     }
 

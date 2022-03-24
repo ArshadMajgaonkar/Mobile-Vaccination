@@ -3,8 +3,10 @@ package com.aghs.mobilevaccination.data.model;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
 import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccineCategory;
 import com.aghs.mobilevaccination.data.repository.DiseaseRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import com.google.common.hash.Hashing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -151,29 +153,39 @@ public class Member {
     }
 
     public int getAge() {
-        return LocalDate.now().getYear() - this.getAge();
+        return LocalDate.now().getYear() - Integer.parseInt(this.getBirthYear());
     }
 
-    public List<Vaccine> getEligibleVaccines(DiseaseRepository diseaseRepository,
-                                             MemberVaccinationRepository vaccinationRepository,
-                                             VaccineRepository vaccineRepository) {
-        Set<Vaccine> eligibleVaccines = new HashSet<>();
-        Set<Disease> vaccinatedDiseases = new HashSet<>();
-        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipient(this);
+    public List<VaccineCategory> getEligibleVaccineCategory(DiseaseRepository diseaseRepository,
+                                                            MemberVaccinationRepository vaccinationRepository,
+                                                            VaccineRepository vaccineRepository,
+                                                            VaccineCategoryRepository categoryRepository) {
+        List<Vaccine> eligibleVaccines = new ArrayList<>();
+        List<Disease> vaccinatedDiseases = new ArrayList<>();
+        List<VaccineCategory> possibleVaccinationCategory = new ArrayList<>();
+        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipientAndStatus(
+                this, VaccinationStatus.VACCINATED);
         for(MemberVaccination vaccination: vaccinations) {
-            if(vaccination.getStatus() == VaccinationStatus.VACCINATED) {
-                eligibleVaccines.add(vaccination.getVaccineDrive().getVaccine());
+            Vaccine vaccine = vaccination.getVaccineDrive().getVaccine();
+            if(!eligibleVaccines.contains(vaccine)) {
+                eligibleVaccines.add(vaccine);
                 vaccinatedDiseases.add(vaccination.getVaccineDrive().getVaccine().getOfDisease());
+                possibleVaccinationCategory.addAll(VaccineCategory.getNextPossibleCategory(
+                        this, vaccine, vaccinations, categoryRepository));
             }
         }
+        // TODO: try showing possible vaccine category instead of vaccine
         List<Disease> diseases = diseaseRepository.findAll();
         for(Disease disease: diseases) {
             if(!vaccinatedDiseases.contains(disease)) {
                 List<Vaccine> vaccines = vaccineRepository.findByOfDisease(disease);
-                eligibleVaccines.addAll(vaccines);
+                for(Vaccine vaccine: vaccines) {
+                    eligibleVaccines.add(vaccine);
+                    possibleVaccinationCategory.addAll(categoryRepository.findByVaccineAndPrerequisite(vaccine, null));
+                }
             }
         }
-        return new ArrayList<Vaccine>(eligibleVaccines);
+        return possibleVaccinationCategory;
     }
 
     public boolean hasCompletedVaccinationInterval(MemberVaccinationRepository vaccinationRepository) {
@@ -189,7 +201,66 @@ public class Member {
         return true;
     }
 
+    public VaccineCategory getLatestVaccinatedCategory(Vaccine vaccine,
+                                                       List<MemberVaccination> vaccinations) {
+        MemberVaccination latestVaccinationOfVaccine = null;
+        // uniquely store disease, vaccine and category
+        for(MemberVaccination vaccination: vaccinations) {
+            Vaccine vaccinatedVaccine = vaccination.getVaccineCategory().getVaccine();
+            VaccineCategory category = vaccination.getVaccineCategory();
+            if (vaccinatedVaccine == vaccine && (latestVaccinationOfVaccine==null ||
+                    latestVaccinationOfVaccine.getVaccinatedAt().after(vaccination.getVaccinatedAt()) ))
+                latestVaccinationOfVaccine = vaccination;
+        }
+        return latestVaccinationOfVaccine.getVaccineCategory();
+    }
 
+    public VaccineCategory getLatestVaccinatedCategory(Vaccine vaccine,
+                                                             MemberVaccinationRepository vaccinationRepository) {
+        MemberVaccination latestVaccinationOfVaccine = null;
+        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipientAndStatus(
+                this, VaccinationStatus.VACCINATED);
+        // uniquely store disease, vaccine and category
+        for(MemberVaccination vaccination: vaccinations) {
+            Vaccine vaccinatedVaccine = vaccination.getVaccineCategory().getVaccine();;
+            VaccineCategory category = vaccination.getVaccineCategory();
+            if (vaccinatedVaccine == vaccine && (latestVaccinationOfVaccine==null ||
+                            latestVaccinationOfVaccine.getVaccinatedAt().after(vaccination.getVaccinatedAt()) ))
+                latestVaccinationOfVaccine = vaccination;
+        }
+        return latestVaccinationOfVaccine.getVaccineCategory();
+    }
+
+    /**
+     * Returns Vaccination Details
+     * @param vaccinationRepository To get Vaccination of Member
+     * @return List of Vaccinated Disease List, Vaccinated Vaccine List and Vaccinated VaccineCategory List
+     */
+    public List<List> getVaccinationDetails(MemberVaccinationRepository vaccinationRepository) {
+        List<Disease> vaccinatedDiseases = new ArrayList<>();
+        List<Vaccine> vaccinatedVaccine = new ArrayList<>();
+        List<VaccineCategory> vaccinatedCategory = new ArrayList<>();
+        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipientAndStatus(
+                this, VaccinationStatus.VACCINATED);
+        // uniquely store disease, vaccine and category
+        for(MemberVaccination vaccination: vaccinations) {
+            Disease disease = vaccination.getVaccineCategory().getVaccine().getOfDisease();
+            Vaccine vaccine = vaccination.getVaccineCategory().getVaccine();
+            VaccineCategory category = vaccination.getVaccineCategory();
+            if( !vaccinatedDiseases.contains(disease))
+                vaccinatedDiseases.add(disease);
+            if( !vaccinatedVaccine.contains(vaccine))
+                vaccinatedVaccine.add(vaccine);
+            if( !vaccinatedCategory.contains(category))
+                vaccinatedCategory.add(category);
+        }
+        // result list
+        List<List> result = new ArrayList<List>();
+        result.add(vaccinatedDiseases);
+        result.add(vaccinatedCategory);
+        result.add(vaccinatedVaccine);
+        return result;
+    }
 
 
 }

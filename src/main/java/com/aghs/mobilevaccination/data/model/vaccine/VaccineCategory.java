@@ -1,9 +1,15 @@
 package com.aghs.mobilevaccination.data.model.vaccine;
 
+import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.Staff;
+import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
+import org.springframework.util.AutoPopulatingList;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -99,5 +105,62 @@ public class VaccineCategory {
 
     public void setAddedBy(Staff addedBy) {
         this.addedBy = addedBy;
+    }
+
+    @Override
+    public String toString() {
+        return "VaccineCategory{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", vaccine=" + vaccine +
+                ", minAgeLimit=" + minAgeLimit +
+                ", maxAgeLimit=" + maxAgeLimit +
+                ", isMandatory=" + isMandatory +
+                ", prerequisite=" + prerequisite +
+                ", addedAt=" + addedAt +
+                ", addedBy=" + addedBy +
+                '}';
+    }
+
+    // Method
+
+    public List<VaccineCategory> getEligibleCategory(Vaccine vaccine, int age, VaccineCategoryRepository categoryRepository) {
+        List<VaccineCategory> eligibleCategories = new ArrayList<>();
+        /*for() {
+
+        }*/
+        return eligibleCategories;
+    }
+
+    /*public static VaccineCategory getNextCategory(Member member,
+                                           Vaccine vaccine,
+                                           MemberVaccinationRepository vaccinationRepository,
+                                           VaccineCategoryRepository categoryRepository) {
+        VaccineCategory latestCategoryOfVaccine = member.getLatestVaccinatedCategory(vaccine,vaccinationRepository);
+        List<VaccineCategory> vaccineCategories = categoryRepository.findByPrerequisite(latestCategoryOfVaccine);
+        List<VaccineCategory> possibleCategory = new ArrayList<>();
+        for(VaccineCategory category: vaccineCategories) {
+            if(category.isEligible(member.getAge())) {
+
+            }
+        }
+    }*/
+
+    public static List<VaccineCategory> getNextPossibleCategory(Member member,
+                                                                Vaccine vaccine,
+                                                                List<MemberVaccination> vaccinations,
+                                                                VaccineCategoryRepository categoryRepository) {
+        VaccineCategory latestCategoryOfVaccine = member.getLatestVaccinatedCategory(vaccine, vaccinations);
+        List<VaccineCategory> vaccineCategories = categoryRepository.findByVaccineAndPrerequisite(vaccine, latestCategoryOfVaccine);
+        List<VaccineCategory> possibleCategory = new ArrayList<>();
+        for(VaccineCategory category: vaccineCategories) {
+            if( category.isEligible(member.getAge()) )
+                possibleCategory.add(category);
+        }
+        return possibleCategory;
+    }
+
+    public boolean isEligible(int age) {
+        return this.getMinAgeLimit() <= age && age <= this.getMaxAgeLimit();
     }
 }
