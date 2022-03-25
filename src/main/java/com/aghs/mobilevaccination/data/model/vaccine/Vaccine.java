@@ -2,9 +2,12 @@ package com.aghs.mobilevaccination.data.model.vaccine;
 
 import com.aghs.mobilevaccination.data.model.Disease;
 import com.aghs.mobilevaccination.data.model.Staff;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -70,5 +73,16 @@ public class Vaccine {
 
     public void setAddedAt(Date addedAt) {
         this.addedAt = addedAt;
+    }
+
+    public List<VaccineCategory> getMandatoryCategories(VaccineCategoryRepository categoryRepository, int age) {
+        List<VaccineCategory> categories = categoryRepository.findByVaccine(this);
+        List<VaccineCategory> mandatoryCategory = new ArrayList<>();
+        for(VaccineCategory category: categories) {
+            if(category.isMandatory() && category.getMinAgeLimit() <= age && age <= category.getMaxAgeLimit()) {
+                mandatoryCategory.add(category);
+            }
+        }
+        return mandatoryCategory;
     }
 }

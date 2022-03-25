@@ -1,5 +1,6 @@
 package com.aghs.mobilevaccination.data.model;
 
+import com.aghs.mobilevaccination.data.dto.VaccinationStatusDto;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
 import com.aghs.mobilevaccination.data.model.vaccine.Vaccine;
@@ -9,12 +10,10 @@ import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepos
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 import com.google.common.hash.Hashing;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -260,6 +259,48 @@ public class Member {
         result.add(vaccinatedCategory);
         result.add(vaccinatedVaccine);
         return result;
+    }
+
+    public List<VaccinationStatusDto> getVaccinationStatus(DiseaseRepository diseaseRepository,
+                                                           MemberVaccinationRepository vaccinationRepository,
+                                                           VaccineCategoryRepository categoryRepository) {
+        // Unpacking Vaccination Details
+        List<List> vaccinationDetails = getVaccinationDetails(vaccinationRepository);
+        List<Disease> vaccinatedDiseases = vaccinationDetails.get(0);
+        List<VaccineCategory> vaccinatedCategory = vaccinationDetails.get(1);
+        List<Vaccine> vaccinatedVaccine = vaccinationDetails.get(2);
+        Map<Disease, VaccinationStatusDto> statusMap = new HashMap<>();
+        // adds vaccinated/partially_vaccinated status for vaccinated disease
+        for(Vaccine vaccine: vaccinatedVaccine) {
+            // checks if mandatory vaccination is completed
+            List<VaccineCategory> mandatoryCategories = vaccine.getMandatoryCategories(categoryRepository, this.getAge());
+            VaccinationStatus status = VaccinationStatus.FULLY_VACCINATED;
+            int vaccinationCount = 0;
+            for(VaccineCategory mandatoryCategory : mandatoryCategories) {
+                if( !vaccinatedCategory.contains(mandatoryCategory) )
+                    status = VaccinationStatus.PARTIALLY_VACCINATED;
+                else vaccinationCount++;
+            }
+            // Creating info dto and adding it into map
+            VaccinationStatusDto dto = new VaccinationStatusDto();
+            dto.setDisease(vaccine.getOfDisease());
+            dto.setVaccine(vaccine);
+            dto.setCount(vaccinationCount);
+            dto.setStatus(status);
+            statusMap.put(vaccine.getOfDisease(), dto);
+        }
+        // Unvaccinated Disease
+        List<Disease> diseases = diseaseRepository.findAll();
+        for(Disease disease: diseases) {
+            if( !statusMap.containsKey(disease) ) {
+                VaccinationStatusDto dto = new VaccinationStatusDto();
+                dto.setCount(0);
+                dto.setDisease(disease);
+                dto.setStatus(VaccinationStatus.UNVACCINATED);
+                statusMap.put(disease, dto);
+            }
+        }
+        return new ArrayList<>(statusMap.values());
     }
 
 

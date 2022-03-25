@@ -153,36 +153,6 @@ public class DefaultController {
         return status;
     }*/
 
-    public VaccinationStatus getVaccinationStatus(Disease disease, Member member) {
-        List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipient(member);
-        if(vaccinations.size() == 0)
-            return VaccinationStatus.UNVACCINATED;
-        for(int i=0; i<vaccinations.size(); i++) {
-            Vaccine vaccine = vaccinations.get(i).getVaccineCategory().getVaccine();
-            List<VaccineCategory> mandatoryCategories = getMandatoryCategories(vaccine, member.getAge());
-            for(MemberVaccination vaccination: vaccinations) {
-                if(!mandatoryCategories.contains(vaccination.getVaccineCategory())) {
-
-                }
-                else {
-                    vaccinations.remove(vaccination);
-                }
-            }
-        }
-        return VaccinationStatus.UNVACCINATED;
-    }
-
-    public List<VaccineCategory> getMandatoryCategories(Vaccine vaccine, int age) {
-        List<VaccineCategory> categories = vaccineCategoryRepository.findByVaccine(vaccine);
-        List<VaccineCategory> mandatoryCategory = new ArrayList<>();
-        for(VaccineCategory category: categories) {
-            if(category.isMandatory() && category.getMinAgeLimit() <= age && age <= category.getMaxAgeLimit()) {
-                mandatoryCategory.add(category);
-            }
-        }
-        return mandatoryCategory;
-    }
-
     public List<VaccineCategory> getEligibleCategories() {
         return null;
     }

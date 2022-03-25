@@ -68,9 +68,7 @@ lang="en">
             <div class="d-flex flex-column align-items-center py-4" th:if="${members != null}">
                 <!-- divOne -->
                 <div class="box col-md-8 col-10 my-4" th:each="member: ${members}">
-                    <a th:href="@{'/user/member/'+${member.userId}}">
-                    <form method="post" th:action="@{/user/member/to-check-slot}">
-                        <input type="hidden" name="memberId" th:value="${member.userId}">
+
                     <div class="d-flex flex-row justify-content-between">
                         <div class="d-flex flex-column align-items-center">
                             <div>
@@ -78,9 +76,7 @@ lang="en">
                                 <span th:text="${'Name : ' + member.fullName}"></span>
                             </div>
                             <div>
-                                <span class="badge badge-pill badge-warning">Partially vaccinated</span>
-                                <!-- <span class="badge badge-pill badge-success">Fully vaccinated</span>
-                                <span class="badge badge-pill badge-danger">Not vaccinated</span> -->
+                                <a th:href="@{'/user/member/'+${member.userId}}"><button type="submit" class="btn btn-primary">Profile</button></a>
                             </div>
                         </div>
                         <div class="d-flex flex-column">
@@ -88,12 +84,13 @@ lang="en">
                                 <span th:text="'Year of Birth : ' + ${member.birthYear}"></span>
                             </div>
                             <div>
-                                <a href="#"><button type="submit" class="btn btn-primary col-10">Book Slot</button></a>
+                                <form method="post" th:action="@{/user/member/to-check-slot}">
+                                    <input type="hidden" name="memberId" th:value="${member.userId}">
+                                    <a href="#"><button type="submit" class="btn btn-primary col-10">Book Slot</button></a>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    </form>
-                    </a>
                 </div>
             </div>
         </div>

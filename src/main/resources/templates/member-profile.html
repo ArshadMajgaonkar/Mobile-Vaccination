@@ -29,6 +29,10 @@
             </span>
         </div>-->
 
+
+
+        <!-- VACCINATIONS LIST-->
+
         <div th:if="${appointments}">
             <h6>Upcoming Appointments</h6>
             <div th:if="${#lists.size(appointments)>0}">
@@ -55,18 +59,56 @@
         </div>
         <h6 th:unless="${appointments}">Appointment section didn't load. Please reload or try again later.</h6>
 
+
+        <!-- Book Slot Button -->
+
         <form method="post" th:action="@{/user/member/to-check-slot}">
             <input type="hidden" name="memberId" th:value="${member.userId}">
             <a href="#"><button type="submit" class="btn btn-primary m-4">Book New Slot</button></a>
         </form>
 
-        <h6>Vaccination Status</h6>
-        <!--Update status-->
-        <p>No status update</p>
 
-        <h6>Previous Vaccination</h6>
+        <!-- VACCINATION STATUS -->
+
+        <h6>Vaccination Status</h6>
+        <div th:if="${vaccinationStatusList}">
+            <div th:if="${#lists.size(vaccinationStatusList)>0}">
+                <table>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Vaccine</th>
+                        <th>Doses</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr th:each="vaccinationStatus : ${vaccinationStatusList}">
+                        <td th:text="${vaccinationStatus.disease.name}"></td>
+                        <td th:if="${vaccinationStatus.vaccine}" th:text="${vaccinationStatus.vaccine.name}"></td>
+                        <td th:unless="${vaccinationStatus.vaccine}"> - </td>
+                        <td th:text="${vaccinationStatus.count}"></td>
+                        <td>
+                            <span class="badge badge-pill badge-danger"
+                                  th:if="${vaccinationStatus.status.name()=='UNVACCINATED'}"
+                                  th:text="${vaccinationStatus.status}"></span>
+                            <span class="badge badge-pill badge-warning"
+                                  th:if="${vaccinationStatus.status.name()=='PARTIALLY_VACCINATED'}"
+                                  th:text="${vaccinationStatus.status}"></span>
+                            <span class="badge badge-pill badge-success"
+                                  th:if="${vaccinationStatus.status.name()=='FULLY_VACCINATED'}"
+                                  th:text="${vaccinationStatus.status}"></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <p th:unless="${#lists.size(vaccinations)>0}">No vaccination till now.</p>
+        </div>
+        <h6 th:unless="${vaccinations}">Vaccination section didn't load. Please reload or try again later.</h6>
+
+
+
+        <!-- VACCINATION LIST -->
+
+        <h6>Previous Vaccinations</h6>
         <div th:if="${vaccinations}">
-            <h6>Upcoming Appointments</h6>
             <div th:if="${#lists.size(vaccinations)>0}">
                 <table>
                     <tr>
@@ -82,14 +124,15 @@
                         <td th:text="${vaccination.vaccineCategory.name}"></td>
                         <td th:text="${vaccination.vaccinatedAt}"></td>
                         <td th:text="${vaccination.vaccineDrive.city.name}"></td>
-                        <td th:if="${vaccination.vaccinationSpot}" th:text="${vaccination.vaccinationSpot.ward+' : '+vaccination.vaccinationSpot.localityNames}"></td>
+                        <td th:text="${vaccination.vaccinationSpot.ward+' : '+vaccination.vaccinationSpot.localityNames}"></td>
                         <td th:text="${vaccination.status}"></td>
                     </tr>
                 </table>
             </div>
             <p th:unless="${#lists.size(vaccinations)>0}">No vaccination till now.</p>
         </div>
-        <h6 th:unless="${appointments}">Vaccination section didn't load. Please reload or try again later.</h6>
+        <h6 th:unless="${vaccinations}">Vaccination section didn't load. Please reload or try again later.</h6>
+
     </div>
 </body>
 </html>

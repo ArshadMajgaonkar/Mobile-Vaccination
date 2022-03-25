@@ -1,12 +1,15 @@
 package com.aghs.mobilevaccination.controller;
 
+import com.aghs.mobilevaccination.data.dto.VaccinationStatusDto;
 import com.aghs.mobilevaccination.data.model.Account;
 import com.aghs.mobilevaccination.data.model.Member;
 import com.aghs.mobilevaccination.data.model.vaccine.MemberVaccination;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
 import com.aghs.mobilevaccination.data.repository.AccountRepository;
+import com.aghs.mobilevaccination.data.repository.DiseaseRepository;
 import com.aghs.mobilevaccination.data.repository.MemberRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineCategoryRepository;
 import com.aghs.mobilevaccination.service.GeneralUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +28,13 @@ public class MemberController {
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
+    private DiseaseRepository diseaseRepository;
+    @Autowired
     private MemberRepository memberRepository;
     @Autowired
     private MemberVaccinationRepository vaccinationRepository;
+    @Autowired
+    private VaccineCategoryRepository categoryRepository;
     @Autowired
     private GeneralUserDetailService userService;
 
@@ -79,6 +85,9 @@ public class MemberController {
                     member, VaccinationStatus.REGISTERED);
             /*TODO: add rejected or IN_CENTRED as well in appointments after finalizing flow of vaccine_drive*/
             model.addAttribute("appointments", appointments);
+            List<VaccinationStatusDto> vaccinationStatusList = member.getVaccinationStatus(
+                    diseaseRepository, vaccinationRepository, categoryRepository);
+            model.addAttribute("vaccinationStatusList", vaccinationStatusList);
             List<MemberVaccination> vaccinations = vaccinationRepository.findByRecipientAndStatus(
                     member, VaccinationStatus.VACCINATED);
             model.addAttribute("vaccinations", vaccinations);
