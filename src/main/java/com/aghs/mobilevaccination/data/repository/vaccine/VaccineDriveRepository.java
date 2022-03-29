@@ -12,17 +12,16 @@ import java.util.List;
 
 @Repository
 public interface VaccineDriveRepository extends JpaRepository<VaccineDrive, Long> {
+    List<VaccineDrive> findByCityAndStatusIn(City city, List<VaccineDriveStatus> statusList);
+
     List<VaccineDrive> findByDriveDateAndCity(LocalDate driveDate, City city);
     List<VaccineDrive> findByDriveDateAndCityAndStatusAndVaccineIn(LocalDate driveDate,
                                                                    City city,
                                                                    VaccineDriveStatus status,
                                                                    List<Vaccine> vaccineList
     );
-    List<VaccineDrive> findByDriveDateAndCityAndStatus(
-            LocalDate driveDate,
-            City city,
-            VaccineDriveStatus status
-    );
+    List<VaccineDrive> findByDriveDateAndCityAndStatus(LocalDate driveDate, City city, VaccineDriveStatus status);
+    List<VaccineDrive> findByDriveDateAndCityAndStatusIn(LocalDate driveDate, City city, List<VaccineDriveStatus> statusList);
     VaccineDrive findByDriveDateAndStatusAndCityAndVaccine(LocalDate driveDate,
                                                            VaccineDriveStatus status,
                                                            City city,

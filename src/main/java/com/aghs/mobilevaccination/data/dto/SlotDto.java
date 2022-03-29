@@ -63,8 +63,11 @@ public class SlotDto {
             VaccineDrive drive = driveRepository.findByDriveDateAndStatusAndCityAndVaccine(
                     driveDate,
                     VaccineDriveStatus.BOOKING,
-                    city, category.getVaccine()
+                    city,
+                    category.getVaccine()
             );
+            if(drive==null)
+                continue;
             long remainingSlot = drive.getRemainingSlot(vaccinationRepository);
             SlotDto dto = new SlotDto();
             dto.setDriveId(drive.getId());

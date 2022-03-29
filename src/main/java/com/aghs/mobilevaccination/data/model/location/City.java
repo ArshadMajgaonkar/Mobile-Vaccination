@@ -1,11 +1,21 @@
 package com.aghs.mobilevaccination.data.model.location;
 
 import com.aghs.mobilevaccination.data.dto.CityDto;
+import com.aghs.mobilevaccination.data.model.AuthGroup;
+import com.aghs.mobilevaccination.data.model.Staff;
+import com.aghs.mobilevaccination.data.model.Vehicle;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccinationStatus;
+import com.aghs.mobilevaccination.data.model.vaccine.VaccineDrive;
+import com.aghs.mobilevaccination.data.repository.StaffRepository;
+import com.aghs.mobilevaccination.data.repository.VehicleRepository;
+import com.aghs.mobilevaccination.data.repository.location.CentreRepository;
+import com.aghs.mobilevaccination.data.repository.location.SpotRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineDriveRepository;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -68,27 +78,27 @@ public class City {
 
     // Static Methods
 
-    public static long getBookedSlots(MemberVaccinationRepository memberVaccinationRepository,
-                                         LocalDate selectedDate,
-                                         List<Spot> spots) {
-        AtomicLong bookedSlot = new AtomicLong(0L);
-        spots.forEach(spot -> {
-            bookedSlot.addAndGet(
-                    memberVaccinationRepository.findByVaccinationSpotAndSelectedDateAndStatus(
-                            spot,
-                            selectedDate,
-                            VaccinationStatus.REGISTERED
-                    ).size()
-            );
-        });
-        return bookedSlot.get();
+    public List<Staff> getVaccinators(CentreRepository centreRepository,
+                                      SpotRepository spotRepository,
+                                      StaffRepository staffRepository) {
+        List<Spot> spots = spotRepository.findByCity(this);
+        List<Centre> centres = centreRepository.findBySpotIn(spots);
+        return staffRepository.findByRoleAndCentreIn(AuthGroup.VACCINATOR, centres);
     }
 
-    public long getRemainingSlot(LocalDate selectedDate,
-                                 List<Spot> spots,
-                                 MemberVaccinationRepository vaccinationRepository) {
-        Long bookedSlot = City.getBookedSlots(vaccinationRepository, selectedDate, spots);
-        return this.getAllotedSlotsPerDay() - bookedSlot;
+    public List<Vehicle> getVehicle(SpotRepository spotRepository,
+                                    CentreRepository centreRepository,
+                                    VehicleRepository vehicleRepository) {
+        // Listing all Vehicle in the City, spot by spot
+        List<Vehicle> vehiclesInCity = new ArrayList<>();
+        List<Spot> spotsInCity = spotRepository.findByCity(this);
+        for(Spot spot: spotsInCity) {
+            List<Centre> centresInCity = centreRepository.findBySpot(spot);
+            for (Centre centre : centresInCity) {
+                vehiclesInCity.addAll(vehicleRepository.findByCentre(centre));
+            }
+        }
+        return vehiclesInCity;
     }
 
 

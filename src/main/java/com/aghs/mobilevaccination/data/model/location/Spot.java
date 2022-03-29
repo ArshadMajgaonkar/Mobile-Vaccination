@@ -1,9 +1,12 @@
 package com.aghs.mobilevaccination.data.model.location;
 
 import com.aghs.mobilevaccination.data.model.Staff;
+import com.aghs.mobilevaccination.data.repository.location.SpotRepository;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -92,5 +95,20 @@ public class Spot {
                 ", addedAt=" + addedAt +
                 ", addedBy=" + addedBy +
                 '}';
+    }
+
+    public static List<Spot> getSpots(List<?> spotIds, SpotRepository spotRepository) {
+        List<Spot> spots = new ArrayList<>();
+        for(Object spotId: spotIds) {
+            Long spotIdLong;
+            if(spotId instanceof Integer)
+                spotIdLong = Long.valueOf((Integer) spotId);
+            else if(spotId instanceof Long)
+                spotIdLong = (Long) spotId;
+            else
+                throw new IllegalArgumentException("spotId is not a Integer");
+            spotRepository.findById(spotIdLong).ifPresent(spots::add);
+        }
+        return spots;
     }
 }

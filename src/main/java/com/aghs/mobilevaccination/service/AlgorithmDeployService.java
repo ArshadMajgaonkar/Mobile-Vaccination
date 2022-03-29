@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.ConnectException;
@@ -17,7 +18,7 @@ public class AlgorithmDeployService {
     @Value("${algorithm.port}") private String port;
     @Value("${algorithm.path}") private String path;
 
-    private <T> T getResponse(String url, JSONObject object, Class<T> responseType) throws ConnectException {
+    private <T> T getResponse(String url, JSONObject object, Class<T> responseType) throws RestClientException {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_JSON);
         header.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -27,8 +28,7 @@ public class AlgorithmDeployService {
         return result.getBody();
     }
 
-    public List<List<?>> getSlotDistribution(Integer dosesPerVan, HashMap<Long, Long> slotsPerSpot)
-            throws ConnectException {
+    public List<List<?>> getSlotDistribution(Integer dosesPerVan, HashMap<Long, Long> slotsPerSpot) throws RestClientException{
         String url = String.format("http://%s:%s%s", domain, port, path);
         System.out.println("url: " + url);
         System.out.println(slotsPerSpot);

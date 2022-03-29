@@ -10,11 +10,18 @@
 <body>
     <div layout:fragment="content">
         <div class="container p-4">
-            <div class="h4 mb-4 text-center">
-                Registration Data
-            </div>
+
+            <h4>Vaccine Drive</h4>
+            <div>Date: <span th:text="${drive.driveDate}"></span></div>
+            <div>Vaccine: <span th:text="${drive.driveDate}"></span> </div>
+            <div>City: <span th:text="${drive.city.name}"></span> </div>
+            <div>Status: <span th:text="${drive.status}"></span> </div>
+            <div>Added by: <span th:text="${drive.addedBy.fullName}"></span></div>
+            <div>Added at: <span th:text="${drive.addedAt}"></span></div>
+
+
     
-            <form method="post" id="drive-form" th:action="@{/staff/vaccine-drive/get-registrations}">
+            <!--<form method="post" id="drive-form" th:action="@{/staff/vaccine-drive/get-registrations}">
     
                 <div class="form-group d-flex flex-row justify-content-center my-4">  
                     <input type="date" name="driveDate" class="form-control col-10 col-md-3"
@@ -25,9 +32,12 @@
     
                 <input type="submit" value="Get Registrations" class="btn btn-primary btn-lg col-md-3 col-10 mb-4"/>
     
-            </form>
+            </form>-->
     
             <div th:if="${hasReport}">
+                <div class="h4 mb-4 text-center">
+                    Registration Data
+                </div>
                 <table class="table table-hover table-striped text-center my-4" id="myTable">
                     <tr>
                         <th scope="col">Ward</th>
@@ -39,7 +49,7 @@
                     </tr>
                         <tr>
                             <td><b>Total</b></td>
-                            <td><b th:text="${totalRegistration}"></b></td>
+                            <td><b th:text="${registrationCount}"></b></td>
                         </tr>
                     </b>
                 </table>
@@ -47,18 +57,17 @@
     
                 <form method="post" th:action="@{/staff/vaccine-drive/deploy-algorithm}" class="d-flex flex-row justify-content-between my-4">
     
-                    <input type="hidden" name="driveDate" th:value="${driveDate}" />
-                    <input type="hidden" name="cityId" th:value="${cityDto.cityId}" />
+                    <input type="hidden" name="driveId" th:value="${drive.id}" />
     
                     <div class="form-group">
-                        <label for="cityCapacity">Registration Limit</label>
-                        <input type="number" id="cityCapacity" th:value="${cityCapacity}" class="form-control form-control-lg" readonly />
+                        <label for="cityCapacity">Slot Count</label>
+                        <input type="number" id="cityCapacity" th:value="${slotCount}" class="form-control form-control-lg" readonly />
                     </div>
                     
                     <div class="form-group">
                         <label>Vehicle Count</label>
                         <select name="selectedVehicleCount" onchange="calculateDosePerVan(this)" class="form-control form-control-lg" required>
-                            <option selected disabled>--Select--</option>
+                            <option selected disabled value="">--Select--</option>
                             <span th:each="number: ${#numbers.sequence(1, vehicleCount)}">
                                 <option th:if="${number == selectedVehicleCount}" th:value="${number}" th:text="${number}"
                                         selected></option>
@@ -70,7 +79,7 @@
     
                     <div class="form-group">
                         <label for="dosesPerVehicle">Dose per Vehicle</label>
-                        <input type="number" name="dosesPerVehicle" id="dosesPerVehicle" class="form-control form-control-lg" readonly
+                        <input type="number" name="dosesPerVehicle" id="dosesPerVehicle" class="form-control form-control-lg" readonly required
                             th:value="${dosesPerVehicle}" />
                     </div>
 
@@ -90,8 +99,8 @@
             <div th:if="${hasAddedDrives}">
                 Please update newly added Vaccine Drives.
                 <form method="post" th:action="@{/staff/vaccine-drive/list-inadequate}">
-                    <input type="hidden" name="driveDate" th:value="${driveDate}" />
-                    <input type="hidden" name="cityId" th:value="${cityId}" />
+                    <input type="hidden" name="driveDate" th:value="${drive.driveDate}" />
+                    <input type="hidden" name="cityId" th:value="${drive.city.id}" />
                     <input type="submit" value="Update Vaccine Drives" />
                 </form>
             </div>

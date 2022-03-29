@@ -6,7 +6,6 @@ public class DriveDto {
     Long driveId;
     VaccineDriveStatus status;
     String vehicleRegNo;
-    String vaccineName;
     String vaccinatorUsername;
 
     public Long getDriveId() {
@@ -33,14 +32,6 @@ public class DriveDto {
         this.vehicleRegNo = vehicleRegNo;
     }
 
-    public String getVaccineName() {
-        return vaccineName;
-    }
-
-    public void setVaccineName(String vaccineName) {
-        this.vaccineName = vaccineName;
-    }
-
     public String getVaccinatorUsername() {
         return vaccinatorUsername;
     }
@@ -54,12 +45,11 @@ public class DriveDto {
         return "DriveDto{" +
                 "driveId=" + driveId +
                 ", vehicleRegNo='" + vehicleRegNo + '\'' +
-                ", vaccineName='" + vaccineName + '\'' +
                 ", vaccinatorUsername='" + vaccinatorUsername + '\'' +
                 '}';
     }
 
     public boolean isValid() {
-        return driveId != null && vehicleRegNo != null && vaccineName != null && vaccinatorUsername != null;
+        return driveId != null && vehicleRegNo != null && vaccinatorUsername != null;
     }
 }

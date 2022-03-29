@@ -20,13 +20,11 @@ public interface MemberVaccinationRepository extends JpaRepository<MemberVaccina
     List<MemberVaccination> findByRecipientAndStatus(Member recipient, VaccinationStatus status);
 
 
-    List<MemberVaccination> findByVaccinationSpotAndSelectedDate(Spot VaccinationSpot, LocalDate selectedDate);
-    List<MemberVaccination> findByVaccinationSpotAndSelectedDateAndStatus(Spot VaccinationSpot,
-                                                                          LocalDate selectedDate,
-                                                                          VaccinationStatus status);
-    List<MemberVaccination> findByVaccinationSpotAndSelectedDateAndVaccineDrive(Spot VaccinationSpot,
-                                                                                LocalDate selectedDate,
-                                                                                VaccineDrive vaccineDrive);
+    List<MemberVaccination> findByVaccinationSpotAndVaccineDrive(Spot VaccinationSpot,
+                                                                 VaccineDrive vaccineDrive);
 
     List<MemberVaccination> findByVaccineDrive(VaccineDrive vaccineDrive);
+    List<MemberVaccination> findByVaccineDriveAndVaccinationSpotAndStatus(VaccineDrive vaccineDrive,
+                                                                          Spot VaccinationSpot,
+                                                                          VaccinationStatus status);
 }

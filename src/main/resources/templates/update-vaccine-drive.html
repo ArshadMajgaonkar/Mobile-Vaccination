@@ -9,13 +9,11 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <form method="post"
-              th:action="@{/staff/vaccine-drive/update}" th:object="${driveDto}">
             <table width="80%">
                 <tr>
                     <td><label for="vaccine-drive-id">ID</label></td>
                     <td>
-                        <input type="text" name="driveId" id="vaccine-drive-id" readonly
+                        <input type="text" id="vaccine-drive-id" readonly
                                th:value="${vaccineDrive.id}"/>
                     </td>
                 </tr>
@@ -70,7 +68,31 @@
                                th:value="${vaccineDrive.slotCount}" />
                     </td>
                 </tr>
+                <tr>
+                    <td><label for="drive-vaccinator">Vaccinator</label></td>
+                    <td>
+                        <input type="text" id="drive-vaccinator" readonly
+                               th:if="${vaccineDrive.vaccinator}"
+                               th:value="${vaccineDrive.vaccinator.fullName}" />
+                        <input type="text" id="drive-vaccinator" value="-" readonly style="text-align=center;"
+                               th:unless="${vaccineDrive.vaccinator}"/>
+                    </td>
+                </tr><tr>
+                <td><label for="drive-vehicle">Vehicle</label></td>
+                <td>
+                    <input type="text" id="drive-vehicle" readonly
+                           th:if="${vaccineDrive.vehicle}"
+                           th:value="${vaccineDrive.vehicle.registrationNumber}" />
+                    <input type="text" id="drive-vehicle" value="-" readonly style="text-align=center;"
+                           th:unless="${vaccineDrive.vehicle}"/>
+                </td>
+            </tr>
             </table>
+
+        <form method="post" action="/staff/vaccine-drive/update"
+              th:if="${vaccineDrive.status.name()=='INADEQUATE_DATA'}" th:object="${driveDto}">
+            <input type="hidden" name="driveId"
+                   th:value="${vaccineDrive.id}"/>
 
             <div th:insert="fragments/form::vehicle-select"></div>
 
@@ -79,7 +101,7 @@
 
             <div th:insert="fragments/form::vaccinator-select"></div>
 
-            <input type="submit" value="submit" />
+            <input type="submit" value="Update" />
         </form>
     </div>
 </body>

@@ -100,6 +100,7 @@ public class BookingController extends DefaultController{
                         vaccinationRepository
                 );
                 System.out.println(eligibleCategories);
+                System.out.println(slotDtoList);
                 //List<SlotDto> slotDtoList = VaccineDrive.toDto(vaccinationRepository, drives);
                 model.addAttribute("slotDtoList", slotDtoList);
                 model.addAttribute("spots", spotRepository.findByCity(selectedCity));

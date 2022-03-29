@@ -8,15 +8,15 @@ import com.aghs.mobilevaccination.data.model.location.City;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 import com.aghs.mobilevaccination.data.repository.StaffRepository;
 import com.aghs.mobilevaccination.data.repository.VehicleRepository;
+import com.aghs.mobilevaccination.data.repository.location.CityRepository;
+import com.aghs.mobilevaccination.data.repository.location.SpotRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.MemberVaccinationRepository;
+import com.aghs.mobilevaccination.data.repository.vaccine.VaccineDriveRepository;
 import com.aghs.mobilevaccination.data.repository.vaccine.VaccineRepository;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table
@@ -157,6 +157,37 @@ public class VaccineDrive {
 
     // Method
 
+    public long getRegistration(Map<String, Long> spotWiseRegistrations,
+                                 SpotRepository spotRepository,
+                                 MemberVaccinationRepository vaccinationRepository) {
+        List<Spot> spots = spotRepository.findByCity(city);
+        long registrationCount = 0;
+        for(Spot spot: spots) {
+            List<MemberVaccination> memberVaccinations =
+                    vaccinationRepository.findByVaccineDriveAndVaccinationSpotAndStatus(
+                            this, spot, VaccinationStatus.REGISTERED);
+            String location = spot.getWard() + " : " + spot.getLocalityNames();
+            spotWiseRegistrations.put(location, (long) memberVaccinations.size());
+            registrationCount += memberVaccinations.size();
+        }
+        return registrationCount;
+    }
+
+    public long getRegistrationCountWithSpotId(Map<Long, Long> spotWiseRegistrations,
+                                               SpotRepository spotRepository,
+                                               MemberVaccinationRepository vaccinationRepository) {
+        List<Spot> spots = spotRepository.findByCity(this.getCity());
+        long registrationCount = 0;
+        for(Spot spot: spots) {
+            List<MemberVaccination> memberVaccinations =
+                    vaccinationRepository.findByVaccineDriveAndVaccinationSpotAndStatus(
+                            this, spot, VaccinationStatus.REGISTERED);
+            spotWiseRegistrations.put(spot.getId(), (long) memberVaccinations.size());
+            registrationCount += memberVaccinations.size();
+        }
+        return registrationCount;
+    }
+
     public Long getRemainingSlot(MemberVaccinationRepository vaccinationRepository) {
         Integer bookedCount = vaccinationRepository.findByVaccineDriveAndStatus(this, VaccinationStatus.REGISTERED)
                 .size();
@@ -164,19 +195,118 @@ public class VaccineDrive {
         return this.getSlotCount() - bookedCount;
     }
 
+    public static boolean isDuplicate(LocalDate driveDate,
+                                      Long cityId,
+                                      String vaccineName,
+                                      CityRepository cityRepository,
+                                      VaccineRepository vaccineRepository,
+                                      VaccineDriveRepository driveRepository) {
+        if(cityId!=null && vaccineName!=null) {
+            City city = cityRepository.findById(cityId).orElse(null);
+            Vaccine vaccine = vaccineRepository.findById(vaccineName).orElse(null);
+            if (city != null && vaccine != null) {
+                return driveRepository.findByDriveDateAndStatusAndCityAndVaccine(
+                        driveDate,
+                        VaccineDriveStatus.BOOKING,
+                        city,
+                        vaccine
+                )!=null;
+            }
+        }
+        return false;
+    }
+
+    private void moveToInCentre(Set<Long> spots,
+                                SpotRepository spotRepository,
+                                MemberVaccinationRepository vaccinationRepository) {
+        for(Long spotId: spots) {
+            Spot spot = spotRepository.findById(spotId).orElse(null);
+            if(spot!=null) {
+                List<MemberVaccination> vaccinations =
+                        vaccinationRepository.findByVaccineDriveAndVaccinationSpotAndStatus(
+                                this, spot, VaccinationStatus.REGISTERED
+                        );
+                for(MemberVaccination vaccination : vaccinations) {
+                    vaccination.setStatus(VaccinationStatus.IN_CENTRE);
+                    vaccinationRepository.save(vaccination);
+                }
+            }
+        }
+    }
+
+    public void removeAllocatedVehicleAndStaff(List<Staff> staffList,
+                                               List<Vehicle> vehicles,
+                                               VaccineDriveRepository driveRepository) {
+        List<VaccineDriveStatus> validStatus =
+                Arrays.asList(VaccineDriveStatus.UPCOMING, VaccineDriveStatus.ON_GOING, VaccineDriveStatus.COMPLETED);
+        List<VaccineDrive> drives =
+                driveRepository.findByDriveDateAndCityAndStatusIn(this.getDriveDate(), this.getCity(), validStatus);
+        for(VaccineDrive drive: drives) {
+            staffList.remove(drive.getVaccinator());
+            vehicles.remove(drive.getVehicle());
+        }
+    }
+
+    /**
+     * Saves VaccineDrive as well as updates respective MemberVaccination
+     * @param spotDistribution List of Spot distributed in list based on different drives
+     * @param driveDate VaccineDrive conduction date
+     * @param city The city in which VaccineDrive will be conducted.
+     * @param dosesPerVehicle Vaccine Doses Count for vehicle.
+     */
+    public void saveVaccineDrives(List<List<?>> spotDistribution,
+                                  int dosesPerVehicle,
+                                  Set<Long> allVaccinationSpot,
+                                  MemberVaccinationRepository vaccinationRepository,
+                                  SpotRepository spotRepository,
+                                  StaffRepository staffRepository,
+                                  VaccineDriveRepository driveRepository) {
+        // Add first spotList to this drive
+        int firstElement = 0;
+        List<Spot> firstSpotList = Spot.getSpots(spotDistribution.get(firstElement), spotRepository);
+        this.setStatus(VaccineDriveStatus.INADEQUATE_DATA);
+        this.setSlotCount((long)dosesPerVehicle);
+        this.setVaccinationSpots(new HashSet<>(firstSpotList));
+        driveRepository.save(this);
+        spotDistribution.remove(firstElement);
+        // removing spot to trace unselected spots
+        firstSpotList.forEach( spot -> { allVaccinationSpot.remove(spot.getId()); } );
+        // Add other drives
+        for(List<?> spotIdList: spotDistribution) {
+            List<Spot> spots = Spot.getSpots(spotIdList, spotRepository);
+            VaccineDrive vaccineDrive = new VaccineDrive();
+            vaccineDrive.setDriveDate(this.getDriveDate());
+            vaccineDrive.setVaccine(this.getVaccine());
+            vaccineDrive.setStatus(VaccineDriveStatus.INADEQUATE_DATA);
+            vaccineDrive.setCity(this.getCity());
+            vaccineDrive.setVaccinationSpots(new HashSet<>(spots));
+            vaccineDrive.setSlotCount((long)dosesPerVehicle);
+            vaccineDrive.setAddedAt(new Date());
+            // TODO: update AddedBy using session user
+            vaccineDrive.setAddedBy(staffRepository.findByUsername("admin"));
+            driveRepository.save(vaccineDrive);
+            // updating vaccineDrive
+            vaccineDrive.updateMemberVaccinations(this, vaccinationRepository);
+            // removing spot to trace unselected spots
+            spots.forEach( spot -> { allVaccinationSpot.remove(spot.getId()); } );
+        }
+        // processing vaccination of unselected spots
+        this.moveToInCentre(allVaccinationSpot, spotRepository, vaccinationRepository);
+    }
+
     public void updateFromDto(DriveDto driveDto,
                               StaffRepository staffRepository,
-                              VehicleRepository vehicleRepository,
-                              VaccineRepository vaccineRepository) {
+                              VehicleRepository vehicleRepository) {
         this.setVehicle(vehicleRepository.findByRegistrationNumber(driveDto.getVehicleRegNo()));
-        this.setVaccine(vaccineRepository.findById(driveDto.getVaccineName()).orElse(null));
         this.setVaccinator(staffRepository.findByUsername(driveDto.getVaccinatorUsername()));
     }
 
-    public void updateMemberVaccinations(MemberVaccinationRepository memberVaccinationRepository) {
+    public void updateMemberVaccinations(VaccineDrive parentDrive, MemberVaccinationRepository memberVaccinationRepository) {
+        // TODO : update vaccination of unselected Spot
         for(Spot spot: this.getVaccinationSpots()) {
-            List<MemberVaccination> vaccinations = memberVaccinationRepository.findByVaccinationSpotAndSelectedDate(
-                    spot, this.getDriveDate());
+            List<MemberVaccination> vaccinations = memberVaccinationRepository.findByVaccinationSpotAndVaccineDrive(
+                    spot, parentDrive);
+            System.out.println(vaccinations);
             for (MemberVaccination vaccination : vaccinations) {
                 vaccination.setVaccineDrive(this);
                 memberVaccinationRepository.save(vaccination);

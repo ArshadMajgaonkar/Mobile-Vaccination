@@ -113,47 +113,4 @@ public class DefaultController {
         }
         return null;
     }
-
-
-    // MemberVaccination
-
-    public long getRemainingSlot(City city, LocalDate date) {
-        long registrationCount = getVaccinationByCityAndDate(city, date).size();
-        return city.getAllotedSlotsPerDay() - registrationCount;
-    }
-
-    public List<MemberVaccination> getVaccinationByCityAndDate(City city, LocalDate date) {
-        List<Spot> citySpots = spotRepository.findByCity(city);
-        List<MemberVaccination> vaccinations = new ArrayList<>();
-        for(Spot spot: citySpots)
-            vaccinations.addAll(vaccinationRepository.findByVaccinationSpotAndSelectedDate(spot, date));
-        return vaccinations;
-    }
-
-
-
-    // VaccinationCategory
-
-
-/*    public VaccinationStatus getVaccinationStatus(Disease disease, Member member) {
-        List<Vaccine> vaccines = vaccineRepository.findByOfDisease(disease);
-        VaccinationStatus status = VaccinationStatus.UNVACCINATED;
-        for(Vaccine vaccine: vaccines) {
-            List<VaccineCategory> categories = vaccineCategoryRepository.findByVaccine(vaccine);
-            for(VaccineCategory category: categories) {
-                List<MemberVaccination> vaccinations =
-                        vaccinationRepository.findByVaccineCategoryAndRecipient(category, member);
-                for(MemberVaccination vaccination: vaccinations) {
-                    if(vaccination.getStatus().ordinal() > status.ordinal()) {
-                        status = vaccination.getStatus();
-                    }
-                }
-            }
-        }
-        return status;
-    }*/
-
-    public List<VaccineCategory> getEligibleCategories() {
-        return null;
-    }
 }

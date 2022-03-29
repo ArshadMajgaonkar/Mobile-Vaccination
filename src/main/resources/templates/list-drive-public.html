@@ -11,7 +11,7 @@
     <div layout:fragment="content">
         <div class="container p-4">
             <div class="h4 mb-4">
-                Today's Vaccine Drives
+                City-wise Vaccine Drives
             </div>
             <form method="post" id="drive-form" action="/vaccine-drive"
                 th:object="${cityDto}">
@@ -33,11 +33,13 @@
             <div th:if="${#lists.size(vaccineDrives)>0}">
                 <table class="table table-hover table-striped text-center" id="myTable">
                     <thead>
+                        <th scope="col">Date</th>
                         <th scope="col">Vaccine</th>
                         <th scope="col">Vehicle</th>
                         <th scope="col">Spots</th>
                     </thead>
                     <tbody th:each="drive: ${vaccineDrives}">
+                        <td th:text="${drive.driveDate}"></td>
                         <td th:text="${drive.vaccine.name}"></td>
                         <td th:if="${drive.vehicle}" th:text="${drive.vehicle.registrationNumber}"></td>
                         <td th:unless="${drive.vehicle}">-</td>

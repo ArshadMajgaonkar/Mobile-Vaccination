@@ -153,13 +153,4 @@ public class MemberVaccination {
         }
         return true;
     }
-
-    public static List<MemberVaccination> getBySpotsAndDate(MemberVaccinationRepository vaccinationRepository,
-                                                            List<Spot> spots,
-                                                            LocalDate date) {
-        List<MemberVaccination> memberVaccinations = new ArrayList<>();
-        for(Spot spot: spots)
-            memberVaccinations.addAll(vaccinationRepository.findByVaccinationSpotAndSelectedDate(spot, date));
-        return memberVaccinations;
-    }
 }
