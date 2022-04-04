@@ -241,6 +241,7 @@ public class VaccineDriveController extends  DefaultController{
             model.addAttribute("vaccineDrives", vaccineDrives);
         }
         model.addAttribute("formUrl", "/list-vaccine-drive");
+        model.addAttribute("today", LocalDate.now());
         model.addAttribute("driveDate", driveDate);
         model.addAttribute("driveStatuses", VaccineDriveStatus.values());
         model.addAttribute("selectedDriveStatus", status);
@@ -259,6 +260,32 @@ public class VaccineDriveController extends  DefaultController{
         if(city!=null) {
             CityDto dto = city.toDto();
             return postListVaccineDrive(driveDate, dto, VaccineDriveStatus.INADEQUATE_DATA, model);
+        }
+        return "error";
+    }
+
+    @PostMapping("/staff/vaccine-drive/set-on-going")
+    public String setToOnGoing(@ModelAttribute("driveId") Long driveId, Model model) {
+        VaccineDrive drive = vaccineDriveRepository.findById(driveId).orElse(null);
+        if(drive!=null) {
+            drive.setStatus(VaccineDriveStatus.ON_GOING);
+            vaccineDriveRepository.save(drive);
+            CityDto cityDto = drive.getCity().toDto();
+            model.addAttribute("cityDto", cityDto);
+            return postListVaccineDrive(drive.getDriveDate(), cityDto, null, model);
+        }
+        return "error";
+    }
+
+    @PostMapping("/staff/vaccine-drive/set-completed")
+    public String setToCompleted(@ModelAttribute("driveId") Long driveId, Model model) {
+        VaccineDrive drive = vaccineDriveRepository.findById(driveId).orElse(null);
+        if(drive!=null) {
+            drive.setStatus(VaccineDriveStatus.COMPLETED);
+            vaccineDriveRepository.save(drive);
+            CityDto cityDto = drive.getCity().toDto();
+            model.addAttribute("cityDto", cityDto);
+            return postListVaccineDrive(drive.getDriveDate(), cityDto, null, model);
         }
         return "error";
     }

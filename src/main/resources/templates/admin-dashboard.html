@@ -52,6 +52,7 @@
                           <th scope="col">Appoint. Date</th>
                           <th scope="col">Full Name</th>
                           <th scope="col">Aadhar No.</th>
+                          <th scope="col">Drive ID</th>
                           <th scope="col">Location</th>
                           <th scope="col">Dose</th>
                           <th scope="col">Status</th>
@@ -64,6 +65,7 @@
                           <td th:text="${vaccination.vaccineDrive.driveDate}"></td>
                           <td th:text="${vaccination.recipient.fullName}"></td>
                           <td th:text="${'****...'+vaccination.recipient.aadharLast4Digit}"></td>
+                          <td th:text="${vaccination.vaccineDrive.id}"></td>
                           <td th:text="${vaccination.vaccinationSpot.ward+' : '+vaccination.vaccinationSpot.localityNames}">
                           </td>
                           <!--TODO: instead of dose number, add vaccine-category-->

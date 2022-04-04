@@ -90,6 +90,20 @@
                                 <input type="hidden" name="driveId" th:value="${drive.id}">
                                 <input type="submit" value="Deploy">
                             </form>
+                            <!-- SET ON_GOING -->
+                            <form method="post"
+                                  th:if="${drive.status.name()=='UPCOMING' and drive.driveDate==today}"
+                                  th:action="@{/staff/vaccine-drive/set-on-going}" th:object="${driveDto}">
+                                <input type="hidden" name="driveId" th:value="${drive.id}"/>
+                                <input type="submit" value="Set ON GOING" />
+                            </form>
+                            <!-- SET COMPLETED -->
+                            <form method="post"
+                                  th:if="${drive.status.name()=='ON_GOING' and drive.driveDate==today}"
+                                  th:action="@{/staff/vaccine-drive/set-completed}" th:object="${driveDto}">
+                                <input type="hidden" name="driveId" th:value="${drive.id}"/>
+                                <input type="submit" value="Set COMPLETED" />
+                            </form>
                         </td>
                     </tr>
                 </table>
