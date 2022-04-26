@@ -289,14 +289,14 @@ public class Member {
             dto.setStatus(status);
             statusMap.put(vaccine.getOfDisease(), dto);
         }
-        // Unvaccinated Disease
+        // Not Vaccinated Disease
         List<Disease> diseases = diseaseRepository.findAll();
         for(Disease disease: diseases) {
             if( !statusMap.containsKey(disease) ) {
                 VaccinationStatusDto dto = new VaccinationStatusDto();
                 dto.setCount(0);
                 dto.setDisease(disease);
-                dto.setStatus(VaccinationStatus.UNVACCINATED);
+                dto.setStatus(VaccinationStatus.NOT_VACCINATED);
                 statusMap.put(disease, dto);
             }
         }

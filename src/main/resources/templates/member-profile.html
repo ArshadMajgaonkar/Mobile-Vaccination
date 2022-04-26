@@ -87,7 +87,7 @@
                         <td th:text="${vaccinationStatus.count}"></td>
                         <td>
                             <span class="badge badge-pill badge-danger"
-                                  th:if="${vaccinationStatus.status.name()=='UNVACCINATED'}"
+                                  th:if="${vaccinationStatus.status.name()=='NOT_VACCINATED'}"
                                   th:text="${vaccinationStatus.status}"></span>
                             <span class="badge badge-pill badge-warning"
                                   th:if="${vaccinationStatus.status.name()=='PARTIALLY_VACCINATED'}"

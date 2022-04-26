@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 class VaccinationDto{
     private Integer vaccinationId;
@@ -76,6 +77,10 @@ public class VaccinationRestController {
                     vaccination.getStatus() == VaccinationStatus.DISCARDED) {
                 String message = "Status cannot be updated for " + vaccinationId;
                 return new ResponseEntity<String>(message, HttpStatus.ALREADY_REPORTED);
+            }
+            if(!Objects.equals(vaccination.getVaccineDrive().getDriveDate(), LocalDate.now())) {
+                String message = "Vaccination Status can be only updated on the Registered Drive Date.";
+                return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
             }
             vaccination.setStatus(VaccinationStatus.VACCINATED);
             vaccination.setVaccinatedAt(new Date());

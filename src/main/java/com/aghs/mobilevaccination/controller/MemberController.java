@@ -42,6 +42,8 @@ public class MemberController {
     public String addMember(@ModelAttribute("memberInstance")Member member, Model model) {
         List<String> messages = new ArrayList<>();
         model.addAttribute("messages", messages);
+        String mobileNumber = SecurityContextHolder.getContext().getAuthentication().getName();
+        Account linkedAccount = accountRepository.findByMobileNumber(mobileNumber);
         if( !member.isAadharIdValid()) {
             messages.add("Aadhar number is not valid");
         }
@@ -52,8 +54,6 @@ public class MemberController {
             messages.add("Birth Year is not valid");
         }
         else {
-            String mobileNumber = SecurityContextHolder.getContext().getAuthentication().getName();
-            Account linkedAccount = accountRepository.findByMobileNumber(mobileNumber);
             member.setLinkedAccount(linkedAccount);
             member.processData();
             try{
@@ -61,10 +61,10 @@ public class MemberController {
                 messages.add("New Member added.");
             }
             catch(Exception e){
-                messages.add("Member already exist with same Aaddhar Number.");
+                messages.add("Member already exist with the same Aaddhar Number.");
             }
-            model.addAttribute("members", memberRepository.findByLinkedAccount(linkedAccount));
         }
+        model.addAttribute("members", memberRepository.findByLinkedAccount(linkedAccount));
         return "user-dashboard1";
     }
 

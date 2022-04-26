@@ -131,36 +131,38 @@ public class BookingController extends DefaultController{
         VaccineCategory category = vaccineCategoryRepository.findById(categoryId).orElse(null);
         if(currentMember == null)
             messages.add("No such Member exist: " + String.valueOf(memberId));
-        else if(category==null)
-            messages.add("No such category exist");
-        else if(drive==null)
-            messages.add("No such Vaccine Drive exists.");
-        else if(!currentMember.hasCompletedVaccinationInterval(memberVaccinationRepository)) {
-            messages.add("Please complete Interval Period of Previous Vaccination.");
-        }
-        else if(selectedSpot != null) {
-            currentMember.discardUnvaccinatedRegistration(vaccinationRepository);
-            Long remainingSlots = drive.getRemainingSlot(vaccinationRepository);
-            if(remainingSlots <= 0)
-                messages.add("All slots are booked for selected city.");
-            else {
-                MemberVaccination memberVaccination = new MemberVaccination();
-                memberVaccination.setRegisteredAt(new Date());
-                memberVaccination.setRecipient(currentMember);
-                memberVaccination.setVaccinationSpot(selectedSpot);
-                memberVaccination.setVaccineDrive(drive);
-                memberVaccination.setVaccineCategory(category);
-                memberVaccinationRepository.save(memberVaccination);
-                messages.add("Vaccination Slot Booked");
+        else {
+            if(category==null)
+                messages.add("No such category exist");
+            else if(drive==null)
+                messages.add("No such Vaccine Drive exists.");
+            else if(!currentMember.hasCompletedVaccinationInterval(memberVaccinationRepository)) {
+                messages.add("Please complete Interval Period of Previous Vaccination.");
             }
-            model.addAttribute("remainingSlots", remainingSlots);
-            System.out.print("RemainingSlot");
-            System.out.println(remainingSlots);
-            model.addAttribute("cityDto", selectedSpot.getCity().toDto());
-            District district = selectedSpot.getCity().getDistrict();
-            model.addAttribute("districts", districtRepository.findByState(district.getState()));
-            model.addAttribute("cities", cityRepository.findByDistrict(district));
-            model.addAttribute("selectedDate", drive.getDriveDate());
+            else if(selectedSpot != null) {
+                currentMember.discardUnvaccinatedRegistration(vaccinationRepository);
+                Long remainingSlots = drive.getRemainingSlot(vaccinationRepository);
+                if(remainingSlots <= 0)
+                    messages.add("All slots are booked for selected city.");
+                else {
+                    MemberVaccination memberVaccination = new MemberVaccination();
+                    memberVaccination.setRegisteredAt(new Date());
+                    memberVaccination.setRecipient(currentMember);
+                    memberVaccination.setVaccinationSpot(selectedSpot);
+                    memberVaccination.setVaccineDrive(drive);
+                    memberVaccination.setVaccineCategory(category);
+                    memberVaccinationRepository.save(memberVaccination);
+                    messages.add("Vaccination Slot Booked");
+                }
+                model.addAttribute("remainingSlots", remainingSlots);
+                System.out.print("RemainingSlot");
+                System.out.println(remainingSlots);
+                model.addAttribute("cityDto", selectedSpot.getCity().toDto());
+                District district = selectedSpot.getCity().getDistrict();
+                model.addAttribute("districts", districtRepository.findByState(district.getState()));
+                model.addAttribute("cities", cityRepository.findByDistrict(district));
+                model.addAttribute("selectedDate", drive.getDriveDate());
+            }
             model.addAttribute("memberName", currentMember.getFullName());
         }
         addMinRegistrationDate(model);

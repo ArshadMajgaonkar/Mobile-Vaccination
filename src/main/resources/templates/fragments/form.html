@@ -42,7 +42,7 @@
         </select>
 
         <label for="c-centre-select">Select Centre:</label>
-        <select id="c-centre-select" name="centreId" onchange="submitForm()">
+        <select id="c-centre-select" name="centreId">
             <option selected disabled>Select Centre</option>
             <span th:each="centre: ${centres}">
                     <option th:if="${centreSelectDto.centreId!=centre.id}" th:value="${centre.id}"
