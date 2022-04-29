@@ -9,12 +9,21 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Add Disease</h3>
-        <form method="post" action="/staff/disease/add">
-            <input type="text" name="diseaseName" placeholder="Name"
-                   th:value="${disease.name}" />
-            <input type="submit" value="Add Disease" />
-        </form>
+        <div class="container">
+            <div class="h3 mb-4 p-4 text-uppercase text-center">Add Disease</div>
+
+            <form method="post" action="/staff/disease/add">
+                <div class="form-group row">
+                    <div class="col-xs-3 mx-auto">
+                        <input type="text" name="diseaseName" placeholder="Disease Name" class="form-control mb-2"
+                               th:value="${disease.name}" />
+                    </div>
+                </div>
+                <div class="text-center">
+                    <input type="submit" class="btn btn-primary p-2 mb-4" value="Add Disease" />
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

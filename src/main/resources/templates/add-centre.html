@@ -83,7 +83,7 @@
                                 
                                 <div class="form-group">
                                     <label for="spot-select" class="mb-2">Select Spot:</label>
-                                    <select id="spot-select" name="spotId" onchange="submitCentreForm()" class="form-control form-control-lg mb-4">
+                                    <select id="spot-select" name="spotId" class="form-control form-control-lg mb-4">
                                         <option selected disabled>Select Spot</option>
                                         <span th:each="spot: ${spots}">
                                             <option th:if="${centreDto.spotId!=spot.id}" th:value="${spot.id}" th:text="${spot.ward}"></option>

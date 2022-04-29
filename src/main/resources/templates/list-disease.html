@@ -9,25 +9,41 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <h3>Disease</h3>
-        <a href="/staff/disease/add">Add</a>
-        <div th:if="${diseases} AND ${#lists.size(diseases)>0}">
-                <table>
-                    <tr>
-                        <th>Disease</th>
-                        <th>Added By</th>
-                        <th>Added At</th>
-                    </tr>
-                    <tr th:each="disease : ${diseases}">
-                        <td th:text="${disease.name}"></td>
-                        <td th:text="${disease.addedBy.fullName}"></td>
-                        <td th:text="${disease.addedAt}"></td>
-                    </tr>
-                </table>
-        </div>
-        <div th:unless="${diseases} AND ${#lists.size(diseases)>0}">
-            <h6>No disease added.</h6>
+        <div class="container">
+            <div class="d-flex flex-column py-4">
+                <div class="h3 text-center">Disease</div>
+                <div class="d-flex flex-row p-2">
+                    <a href="/staff/disease/add" class="btn btn-info">Add</a>
+                </div>
+            </div>
+            <div th:if="${diseases} AND ${#lists.size(diseases)>0}">
+                    <table class="table table-hover table-striped text-center" id="disease-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Disease</th>
+                            <th scope="col">Added By</th>
+                            <th scope="col">Added At</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="disease : ${diseases}">
+                            <td th:text="${disease.name}"></td>
+                            <td th:text="${disease.addedBy.fullName}"></td>
+                            <td th:text="${disease.addedAt}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+            </div>
+            <div th:unless="${diseases} AND ${#lists.size(diseases)>0}">
+                <h6>No disease added.</h6>
+            </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#disease-table').DataTable();
+        });
+    </script>
 </body>
 </html>

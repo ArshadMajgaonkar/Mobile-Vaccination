@@ -7,6 +7,7 @@ import com.aghs.mobilevaccination.data.model.Staff;
 import com.aghs.mobilevaccination.data.model.Vehicle;
 import com.aghs.mobilevaccination.data.model.location.Centre;
 import com.aghs.mobilevaccination.data.model.location.City;
+import com.aghs.mobilevaccination.data.model.location.District;
 import com.aghs.mobilevaccination.data.model.location.Spot;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccineDrive;
 import com.aghs.mobilevaccination.data.model.vaccine.VaccineDriveStatus;
@@ -207,10 +208,26 @@ public class VaccineDriveController extends  DefaultController{
 
     @GetMapping({"/staff/vaccine-drive/", "/staff/vaccine-drive" })
     public String getListVaccineDrive(Model model) {
+        // Required Details
         LocalDate today = LocalDate.now();
         model.addAttribute("driveDate", today);
         model.addAttribute("states", stateRepository.findAll());
         model.addAttribute("driveStatuses", VaccineDriveStatus.values());
+        model.addAttribute("formUrl", "/list-vaccine-drive");
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("driveDate", today);
+        model.addAttribute("driveStatuses", VaccineDriveStatus.values());
+        model.addAttribute("selectedDriveStatus", null);
+        model.addAttribute("minDeployDate", LocalDate.now());
+        model.addAttribute("maxDeployDate", LocalDate.now().plusDays(DEPLOY_DRIVE_DAYS_AHEAD+2));
+        // Automatic selection of staff's working city
+        City staffCity = staffService.getCurrentStaff().getCentre().getSpot().getCity();
+        model.addAttribute("cityDto", staffCity.toDto());
+        model.addAttribute("districts", districtRepository.findByState(staffCity.getDistrict().getState()));
+        model.addAttribute("cities", cityRepository.findByDistrict(staffCity.getDistrict()));
+        // Adding result of staff's city
+        List<VaccineDrive> vaccineDrives = vaccineDriveRepository.findByDriveDateAndCity(today, staffCity);
+        model.addAttribute("vaccineDrives", vaccineDrives);
         return "list-vaccine-drive";
     }
 

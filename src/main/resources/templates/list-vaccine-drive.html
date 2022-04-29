@@ -99,7 +99,7 @@
                             </form>
                             <!-- SET COMPLETED -->
                             <form method="post"
-                                  th:if="${drive.status.name()=='ON_GOING' and drive.driveDate==today}"
+                                  th:if="${drive.status.name()=='ON_GOING'}"
                                   th:action="@{/staff/vaccine-drive/set-completed}" th:object="${driveDto}">
                                 <input type="hidden" name="driveId" th:value="${drive.id}"/>
                                 <input type="submit" value="Set COMPLETED" />
